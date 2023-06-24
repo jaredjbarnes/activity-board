@@ -1,13 +1,22 @@
 import { WeakPromise } from "@m/hex/weak_promise";
-import { EventTemplateTypesPort } from "src/services/event_template_type_port";
-import { Event } from "src/models/event";
-import { Range } from "src/models/event_template_types/range";
+import { EventTemplateTypesPort } from "src/services/event_template_types_port.ts";
+import { Event } from "src/models/event.ts";
+import { Range } from "src/models/event_template_types/range.ts";
+import { EventTemplate } from "src/models/event_template.ts";
 
-export class RangeService {
+export class RangeEventsService {
   private _eventsPort: EventTemplateTypesPort<Range>;
 
   constructor(eventsPort: EventTemplateTypesPort<Range>) {
     this._eventsPort = eventsPort;
+  }
+
+  saveEvent(template: EventTemplate<Range>): WeakPromise<EventTemplate<Range>> {
+    return this._eventsPort.saveEvent(template);
+  }
+
+  deleteEvent(template: EventTemplate<Range>): WeakPromise<void> {
+    return this._eventsPort.deleteEvent(template);
   }
 
   getEvents(startDate: Date, endDate: Date): WeakPromise<Event<Range>[]> {

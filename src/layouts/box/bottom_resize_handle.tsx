@@ -1,5 +1,5 @@
 import React from 'react';
-import { createVerticalResizeHandler } from './resize_handlers';
+import { createVerticalResizeHandler } from './resize_handlers.ts';
 const bottomResizeHandleStyle: React.CSSProperties = {
   position: 'absolute',
   bottom: '-5px',

@@ -1,7 +1,6 @@
-import { EventTemplateType } from "src/models/event_template_type";
+import { EventTemplateType } from "src/models/event_template_type.ts";
 
 export interface Daily extends EventTemplateType {
-  name: "daily";
   hour: number;
   minute: number;
   duration: number;

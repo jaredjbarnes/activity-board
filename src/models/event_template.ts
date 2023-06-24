@@ -1,4 +1,4 @@
-import { EventTemplateType } from "src/models/event_template_type";
+import { EventTemplateType } from "src/models/event_template_type.ts";
 
 export interface EventTemplate<T extends EventTemplateType> {
   id: string;
@@ -9,5 +9,5 @@ export interface EventTemplate<T extends EventTemplateType> {
   startOn: number;
   createdOn: number;
   updatedOn: number;
-  deletedOn: number;
+  deletedOn: number | null;
 }

@@ -1,13 +1,22 @@
 import { WeakPromise } from "@m/hex/weak_promise";
-import { EventTemplateTypesPort } from "src/services/event_template_type_port";
-import { Event } from "src/models/event";
-import { Weekly } from "src/models/event_template_types/weekly";
+import { EventTemplateTypesPort } from "src/services/event_template_types_port.ts";
+import { Event } from "src/models/event.ts";
+import { Weekly } from "src/models/event_template_types/weekly.ts";
+import { EventTemplate } from "src/models/event_template.ts";
 
 export class WeeklyEventsService {
   private _eventsPort: EventTemplateTypesPort<Weekly>;
 
   constructor(eventsPort: EventTemplateTypesPort<Weekly>) {
     this._eventsPort = eventsPort;
+  }
+
+  saveEvent(template: EventTemplate<Weekly>): WeakPromise<EventTemplate<Weekly>> {
+    return this._eventsPort.saveEvent(template);
+  }
+
+  deleteEvent(template: EventTemplate<Weekly>): WeakPromise<void> {
+    return this._eventsPort.deleteEvent(template);
   }
 
   getEvents(startDate: Date, endDate: Date): WeakPromise<Event<Weekly>[]> {

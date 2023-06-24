@@ -1,9 +1,9 @@
 import React, { HTMLAttributes, useRef } from 'react';
-import { useForkRef } from 'src/hooks/use_fork_ref';
-import { BottomResizeHandle } from './bottom_resize_handle';
-import { LeftResizeHandle } from './left_resize_handle';
-import { RightResizeHandle } from './right_resize_handle';
-import { TopResizeHandle } from './top_resize_handle';
+import { useForkRef } from 'src/hooks/use_fork_ref.ts';
+import { BottomResizeHandle } from './bottom_resize_handle.tsx';
+import { LeftResizeHandle } from './left_resize_handle.tsx';
+import { RightResizeHandle } from './right_resize_handle.tsx';
+import { TopResizeHandle } from './top_resize_handle.tsx';
 export interface BoxProps extends HTMLAttributes<HTMLElement> {
   as?: string;
   fullHeight?: boolean;

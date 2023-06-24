@@ -1,13 +1,22 @@
 import { WeakPromise } from "@m/hex/weak_promise";
-import { EventTemplateTypesPort } from "src/services/event_template_type_port";
-import { Event } from "src/models/event";
-import { Daily } from "src/models/event_template_types/daily";
+import { EventTemplateTypesPort } from "src/services/event_template_types_port.ts";
+import { Event } from "src/models/event.ts";
+import { Daily } from "src/models/event_template_types/daily.ts";
+import { EventTemplate } from "src/models/event_template.ts";
 
-export class DailyService {
+export class DailyEventsService {
   private _eventsPort: EventTemplateTypesPort<Daily>;
 
   constructor(eventsPort: EventTemplateTypesPort<Daily>) {
     this._eventsPort = eventsPort;
+  }
+
+  saveEvent(template: EventTemplate<Daily>): WeakPromise<EventTemplate<Daily>> {
+    return this._eventsPort.saveEvent(template);
+  }
+
+  deleteEvent(template: EventTemplate<Daily>): WeakPromise<void> {
+    return this._eventsPort.deleteEvent(template);
   }
 
   getEvents(startDate: Date, endDate: Date): WeakPromise<Event<Daily>[]> {
@@ -23,6 +32,8 @@ export class DailyService {
             eventDate.getTime() >= startDate.getTime() &&
             eventDate.getTime() < endDate.getTime()
           ) {
+            eventDate.setHours(template.type.hour);
+            eventDate.setMinutes(template.type.minute);
             const event: Event<Daily> = {
               template: template,
               startTimestamp: eventDate.getTime(),
@@ -44,6 +55,8 @@ export class DailyService {
 
           // Jump directly to the next occurrence of the event
           eventDate.setDate(eventDate.getDate() + daysToNextEvent);
+          eventDate.setHours(template.type.hour);
+          eventDate.setMinutes(template.type.minute);
 
           while (eventDate.getTime() < endDate.getTime()) {
             const event: Event<Daily> = {

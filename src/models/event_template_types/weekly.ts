@@ -1,4 +1,4 @@
-import { EventTemplateType } from "src/models/event_template_type";
+import { EventTemplateType } from "src/models/event_template_type.ts";
 
 enum DayOfWeek {
   Sunday = 0,
@@ -11,7 +11,6 @@ enum DayOfWeek {
 } 
 
 export interface Weekly extends EventTemplateType{
-  name: "weekly";
   dayOfWeek: DayOfWeek;
   hour:number;
   minute: number;

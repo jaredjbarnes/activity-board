@@ -1,6 +1,6 @@
 import { WeakPromise } from "@m/hex/weak_promise";
-import { EventTemplate } from "src/models/event_template";
-import { EventTemplateType } from "src/models/event_template_type";
+import { EventTemplate } from "src/models/event_template.ts";
+import { EventTemplateType } from "src/models/event_template_type.ts";
 
 export interface EventTemplateTypesPort<T extends EventTemplateType> {
   getEvents(): WeakPromise<EventTemplate<T>[]>;

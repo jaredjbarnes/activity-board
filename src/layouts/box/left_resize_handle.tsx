@@ -1,5 +1,5 @@
 import React from 'react';
-import { createHorizontalResizeHandler } from './resize_handlers';
+import { createHorizontalResizeHandler } from './resize_handlers.ts';
 const leftResizeHandleStyle: React.CSSProperties = {
   position: 'absolute',
   top: '0px',

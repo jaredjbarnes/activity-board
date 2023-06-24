@@ -1,4 +1,4 @@
-import { checkAllValuesForAuto } from 'src/layouts/stacks/stack_utils';
+import { checkAllValuesForAuto } from 'src/layouts/stacks/stack_utils.ts';
 import React, { HTMLAttributes } from 'react';
 const justifyContentMap = {
   start: 'flex-start',

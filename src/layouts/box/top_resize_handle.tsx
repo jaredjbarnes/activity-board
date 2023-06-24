@@ -1,5 +1,5 @@
 import React from 'react';
-import { createVerticalResizeHandler } from './resize_handlers';
+import { createVerticalResizeHandler } from './resize_handlers.ts';
 const topResizeHandleStyle: React.CSSProperties = {
   position: 'absolute',
   top: '-5px',

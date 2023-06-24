@@ -1,7 +1,6 @@
-import { EventTemplateType } from "src/models/event_template_type";
+import { EventTemplateType } from "src/models/event_template_type.ts";
 
 export interface Range extends EventTemplateType {
-  name: "range";
   startTimestamp: number;
   endTimestamp: number;
 }
