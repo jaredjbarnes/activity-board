@@ -3,6 +3,7 @@ import { EventTemplateTypesPort } from "src/services/event_template_types_port.t
 import { Event } from "src/models/event.ts";
 import { Daily } from "src/models/event_template_types/daily.ts";
 import { EventTemplate } from "src/models/event_template.ts";
+import { DailyEventsGenerator } from "src/services/daily_events_generator.ts";
 
 export class DailyEventsService {
   private _eventsPort: EventTemplateTypesPort<Daily>;
@@ -24,57 +25,13 @@ export class DailyEventsService {
       const events: Event<Daily>[] = [];
 
       for (let template of templates) {
-        // If the template has been deleted
-        if (template.deletedOn != null) {
-          continue;
-        }
-
-        const eventDate = new Date(template.startOn);
-
-        if (template.type.repeatEvery === 0) {
-          // If repeatEvery is 0, the event only occurs once on the startOn date
-          if (
-            eventDate.getTime() >= startDate.getTime() &&
-            eventDate.getTime() < endDate.getTime()
-          ) {
-            eventDate.setHours(template.type.hour);
-            eventDate.setMinutes(template.type.minute);
-            const event: Event<Daily> = {
-              template: template,
-              startTimestamp: eventDate.getTime(),
-              endTimestamp: eventDate.getTime() + template.type.duration,
-            };
-            events.push(event);
-          }
-        } else {
-          // Find the number of days since the startOn date
-          const daysSinceStart = Math.floor(
-            (startDate.getTime() - eventDate.getTime()) / (1000 * 60 * 60 * 24)
-          );
-
-          // Calculate the number of days to the next occurrence of the event
-          let daysToNextEvent = daysSinceStart % template.type.repeatEvery;
-          if (daysToNextEvent !== 0) {
-            daysToNextEvent = template.type.repeatEvery - daysToNextEvent;
-          }
-
-          // Jump directly to the next occurrence of the event
-          eventDate.setDate(eventDate.getDate() + daysToNextEvent);
-          eventDate.setHours(template.type.hour);
-          eventDate.setMinutes(template.type.minute);
-
-          while (eventDate.getTime() < endDate.getTime()) {
-            const event: Event<Daily> = {
-              template: template,
-              startTimestamp: eventDate.getTime(),
-              endTimestamp: eventDate.getTime() + template.type.duration,
-            };
-            events.push(event);
-
-            // Jump to the next occurrence of the event
-            eventDate.setDate(eventDate.getDate() + template.type.repeatEvery);
-          }
-        }
+        const generator = new DailyEventsGenerator(
+          template,
+          startDate,
+          endDate
+        );
+        const templateEvents = generator.generate();
+        events.push(...templateEvents);
       }
 
       return events;

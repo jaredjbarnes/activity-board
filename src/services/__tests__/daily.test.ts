@@ -107,6 +107,36 @@ describe('DailyService', () => {
     expect(events.length).toBe(0);
   });
 
+  test('does not create events before startOn date, start in the middle of range', async () => {
+    // arrange
+    const template = {
+      id: "some_guid",
+      type: {
+        name: "daily",
+        hour: 8,
+        minute: 0,
+        duration: 60 * 60 * 1000, // 60 minutes in milliseconds
+        repeatEvery: 1,
+        isAllDay: false,
+      },
+      label: "Single Event",
+      notes: "This is a single, non-repeating event.",
+      iconName: "Event",
+      startOn: new Date(2023, 0, 2).getTime(), // January 1, 2023
+      createdOn: new Date(2023, 0, 1).getTime(),
+      updatedOn: new Date(2023, 0, 1).getTime(),
+      deletedOn: null,
+    };
+    await service.saveEvent(template);
+
+    // act
+    const events = await service.getEvents(new Date(2023, 0, 1), new Date(2023, 0, 4)); // January 1 to 2, 2023
+
+    // assert
+    // Check that no events are returned
+    expect(events.length).toBe(2);
+  });
+
   test('does not create events when template is deleted', async () => {
     // arrange
     const template = {
