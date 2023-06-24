@@ -1,12 +1,12 @@
 import { WeakPromise } from "@m/hex/weak_promise";
-import { EventsPort } from "src/services/events_port";
+import { EventTemplateTypesPort } from "src/services/event_template_type_port";
 import { Event } from "src/models/event";
 import { Daily } from "src/models/event_template_types/daily";
 
 export class DailyService {
-  private _eventsPort: EventsPort<Daily>;
+  private _eventsPort: EventTemplateTypesPort<Daily>;
 
-  constructor(eventsPort: EventsPort<Daily>) {
+  constructor(eventsPort: EventTemplateTypesPort<Daily>) {
     this._eventsPort = eventsPort;
   }
 

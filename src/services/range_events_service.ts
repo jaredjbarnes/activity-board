@@ -1,12 +1,12 @@
 import { WeakPromise } from "@m/hex/weak_promise";
-import { EventsPort } from "src/services/events_port";
+import { EventTemplateTypesPort } from "src/services/event_template_type_port";
 import { Event } from "src/models/event";
 import { Range } from "src/models/event_template_types/range";
 
 export class RangeService {
-  private _eventsPort: EventsPort<Range>;
+  private _eventsPort: EventTemplateTypesPort<Range>;
 
-  constructor(eventsPort: EventsPort<Range>) {
+  constructor(eventsPort: EventTemplateTypesPort<Range>) {
     this._eventsPort = eventsPort;
   }
 
