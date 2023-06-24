@@ -3,18 +3,19 @@ import { Event } from "src/models/event.ts";
 import { Daily } from "src/models/event_template_types/daily.ts";
 
 export class DailyEventsGenerator {
-  private _template: EventTemplate<Daily>;
+  private _template!: EventTemplate<Daily>;
   private _events: Event<Daily>[] = [];
-  private _startDate: Date;
-  private _endDate: Date;
+  private _startDate!: Date;
+  private _endDate!: Date;
 
-  constructor(template: EventTemplate<Daily>, startDate: Date, endDate: Date) {
+  generate(
+    template: EventTemplate<Daily>,
+    startDate: Date,
+    endDate: Date
+  ): Event<Daily>[] {
     this._template = template;
     this._startDate = startDate;
     this._endDate = endDate;
-  }
-
-  generate(): Event<Daily>[] {
     this._events = [];
 
     if (this._template.deletedOn != null) {
