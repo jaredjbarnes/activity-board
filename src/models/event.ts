@@ -1,11 +1,8 @@
-import { EventType } from "src/models/event_type";
+import { EventTemplate } from "src/models/event_template";
+import { EventTemplateType } from "src/models/event_template_type";
 
-export interface Event {
-  id: string;
-  type: EventType;
-  label: string;
-  iconName: string;
-  createdOn: number;
-  updatedOn: number;
-  deletedOn: number;
-}
+export interface Event<T extends EventTemplateType = EventTemplateType> {
+  template: EventTemplate<T>;
+  startTimestamp: number;
+  endTimestamp: number;
+} 

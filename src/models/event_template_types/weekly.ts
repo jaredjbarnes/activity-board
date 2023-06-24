@@ -1,4 +1,4 @@
-import { EventType } from "src/models/event_type";
+import { EventTemplateType } from "src/models/event_template_type";
 
 enum DayOfWeek {
   Sunday = 0,
@@ -10,9 +10,11 @@ enum DayOfWeek {
   Saturday
 } 
 
-export interface WeeklyEventType extends EventType{
+export interface Weekly extends EventTemplateType{
+  name: "weekly";
   dayOfWeek: DayOfWeek;
   hour:number;
   minute: number;
+  duration: number;
   repeatEvery: number;
 }
