@@ -21,10 +21,15 @@ export class DailyEventsService {
 
   getEvents(startDate: Date, endDate: Date): WeakPromise<Event<Daily>[]> {
     return this._eventsPort.getEvents().then((templates) => {
-      let events: Event<Daily>[] = [];
+      const events: Event<Daily>[] = [];
 
       for (let template of templates) {
-        let eventDate = new Date(template.startOn);
+        // If the template has been deleted
+        if (template.deletedOn != null) {
+          continue;
+        }
+
+        const eventDate = new Date(template.startOn);
 
         if (template.type.repeatEvery === 0) {
           // If repeatEvery is 0, the event only occurs once on the startOn date
@@ -43,7 +48,7 @@ export class DailyEventsService {
           }
         } else {
           // Find the number of days since the startOn date
-          let daysSinceStart = Math.floor(
+          const daysSinceStart = Math.floor(
             (startDate.getTime() - eventDate.getTime()) / (1000 * 60 * 60 * 24)
           );
 

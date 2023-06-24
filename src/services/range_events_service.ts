@@ -21,9 +21,14 @@ export class RangeEventsService {
 
   getEvents(startDate: Date, endDate: Date): WeakPromise<Event<Range>[]> {
     return this._eventsPort.getEvents().then((templates) => {
-      let events: Event<Range>[] = [];
+      const events: Event<Range>[] = [];
 
       for (let template of templates) {
+        // If the template has been deleted
+        if (template.deletedOn != null) {
+          continue;
+        }
+
         // If the range of the event intersects with the start and end dates
         if (
           (template.type.startTimestamp <= endDate.getTime() &&

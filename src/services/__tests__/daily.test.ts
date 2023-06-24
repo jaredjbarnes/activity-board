@@ -92,7 +92,7 @@ describe('DailyService', () => {
       label: "Single Event",
       notes: "This is a single, non-repeating event.",
       iconName: "Event",
-      startOn: new Date(2023, 0, 1).getTime(), // January 1, 2023
+      startOn: new Date(2023, 0, 2).getTime(), // January 1, 2023
       createdOn: new Date(2023, 0, 1).getTime(),
       updatedOn: new Date(2023, 0, 1).getTime(),
       deletedOn: null,
@@ -107,5 +107,4 @@ describe('DailyService', () => {
     expect(events.length).toBe(0);
   });
 
-  // ... Remaining tests with adjusted templates ...
 });

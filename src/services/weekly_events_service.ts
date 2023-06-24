@@ -21,10 +21,15 @@ export class WeeklyEventsService {
 
   getEvents(startDate: Date, endDate: Date): WeakPromise<Event<Weekly>[]> {
     return this._eventsPort.getEvents().then((templates) => {
-      let events: Event<Weekly>[] = [];
+      const events: Event<Weekly>[] = [];
 
       for (let template of templates) {
-        let eventDate = new Date(template.startOn * 1000);
+         // If the template has been deleted
+         if (template.deletedOn != null) {
+          continue;
+        }
+
+        let eventDate = new Date(template.startOn);
 
         if (template.type.repeatEvery === 0) {
           // If repeatEvery is 0, the event only occurs once on the startOn date
@@ -41,7 +46,7 @@ export class WeeklyEventsService {
           }
         } else {
           // Find the number of weeks since the startOn date
-          let weeksSinceStart = Math.floor(
+          const weeksSinceStart = Math.floor(
             (startDate.getTime() - eventDate.getTime()) /
               (1000 * 60 * 60 * 24 * 7)
           );

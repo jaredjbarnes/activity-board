@@ -21,10 +21,15 @@ export class DayEventsService {
 
   getEvents(startDate: Date, endDate: Date): WeakPromise<Event<Day>[]> {
     return this._eventsPort.getEvents().then((templates) => {
-      let events: Event<Day>[] = [];
+      const events: Event<Day>[] = [];
 
       for (let template of templates) {
-        let eventDate = new Date(template.startOn);
+        // If the template has been deleted
+        if (template.deletedOn != null) {
+          continue;
+        }
+
+        const eventDate = new Date(template.startOn);
         eventDate.setMonth(template.type.month);
         eventDate.setDate(template.type.day);
         eventDate.setHours(template.type.hour);
