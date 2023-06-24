@@ -7,12 +7,12 @@ enum DayOfWeek {
   Wednesday,
   Thursday,
   Friday,
-  Saturday
-} 
+  Saturday,
+}
 
-export interface Weekly extends EventTemplateType{
+export interface Weekly extends EventTemplateType {
   dayOfWeek: DayOfWeek;
-  hour:number;
+  hour: number;
   minute: number;
   duration: number;
   repeatEvery: number;

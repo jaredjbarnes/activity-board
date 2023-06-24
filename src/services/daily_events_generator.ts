@@ -2,6 +2,8 @@ import { EventTemplate } from "src/models/event_template.ts";
 import { Event } from "src/models/event.ts";
 import { Daily } from "src/models/event_template_types/daily.ts";
 
+const DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
+
 export class DailyEventsGenerator {
   private _template!: EventTemplate<Daily>;
   private _events: Event<Daily>[] = [];
@@ -30,14 +32,19 @@ export class DailyEventsGenerator {
 
     return this._events;
   }
-
   private generateNonRepeatingEvents(): void {
     const events = this._events;
     const eventDate = new Date(this._template.startOn);
-    const eventEnd = new Date(eventDate);
-    const isWithinSpan =
-      eventDate.getTime() >= this._startDate.getTime() &&
-      eventDate.getTime() < this._endDate.getTime();
+    const eventEnd = new Date(
+      eventDate.getTime() + this._template.type.duration
+    );
+
+    const isWithinSpan = this.doRangesIntersect(
+      eventDate.getTime(),
+      eventEnd.getTime(),
+      this._startDate.getTime(),
+      this._endDate.getTime()
+    );
 
     if (isWithinSpan) {
       if (this._template.type.isAllDay) {
@@ -62,28 +69,63 @@ export class DailyEventsGenerator {
     }
   }
 
+  private doRangesIntersect(
+    start1: number,
+    end1: number,
+    start2: number,
+    end2: number
+  ) {
+    const start = Math.max(start1, start2);
+    const end = Math.min(end1, end2);
+    return end > start;
+  }
+
   private generateRepeatingEvents(): void {
     const events = this._events;
     const eventDate = new Date(this._template.startOn);
     const daysSinceStart = Math.floor(
-      (this._startDate.getTime() - eventDate.getTime()) / (1000 * 60 * 60 * 24)
+      (this._startDate.getTime() - eventDate.getTime()) / DAY_IN_MILLISECONDS
     );
+
     let daysToNextEvent = daysSinceStart % this._template.type.repeatEvery;
     if (daysToNextEvent !== 0) {
       daysToNextEvent = this._template.type.repeatEvery - daysToNextEvent;
     }
 
-    eventDate.setDate(eventDate.getDate() + daysToNextEvent);
-    eventDate.setHours(this._template.type.hour);
-    eventDate.setMinutes(this._template.type.minute);
+    if (this._template.type.isAllDay) {
+      eventDate.setHours(0, 0, 0, 0);
+    } else {
+      eventDate.setHours(this._template.type.hour);
+      eventDate.setMinutes(this._template.type.minute);
+      eventDate.setSeconds(0);
+      eventDate.setMilliseconds(0);
+    }
 
     while (eventDate.getTime() < this._endDate.getTime()) {
-      const event: Event<Daily> = {
-        template: this._template,
-        startTimestamp: eventDate.getTime(),
-        endTimestamp: eventDate.getTime() + this._template.type.duration,
-      };
-      events.push(event);
+      let eventEnd = new Date(eventDate);
+
+      if (this._template.type.isAllDay) {
+        eventEnd.setHours(23, 59, 59, 999);
+      } else {
+        eventEnd = new Date(eventDate.getTime() + this._template.type.duration);
+      }
+
+      const isWithinSpan = this.doRangesIntersect(
+        eventDate.getTime(),
+        eventEnd.getTime(),
+        this._startDate.getTime(),
+        this._endDate.getTime()
+      );
+
+      if (isWithinSpan) {
+        const event: Event<Daily> = {
+          template: this._template,
+          startTimestamp: eventDate.getTime(),
+          endTimestamp: eventEnd.getTime(),
+        };
+
+        events.push(event);
+      }
 
       eventDate.setDate(eventDate.getDate() + this._template.type.repeatEvery);
     }

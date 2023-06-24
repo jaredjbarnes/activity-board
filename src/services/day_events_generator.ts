@@ -39,11 +39,18 @@ export class DayEventsGenerator {
     eventDate.setHours(this._template.type.hour);
     eventDate.setMinutes(this._template.type.minute);
 
-    if (eventDate.getTime() >= this._startDate.getTime() && eventDate.getTime() < this._endDate.getTime()) {
+    const eventEnd = eventDate.getTime() + this._template.type.duration;
+
+    if (
+      (eventDate.getTime() >= this._startDate.getTime() &&
+        eventDate.getTime() < this._endDate.getTime()) ||
+      (this._startDate.getTime() >= eventDate.getTime() &&
+        this._startDate.getTime() < eventEnd)
+    ) {
       const event: Event<Day> = {
         template: this._template,
         startTimestamp: eventDate.getTime(),
-        endTimestamp: eventDate.getTime() + this._template.type.duration,
+        endTimestamp: eventEnd,
       };
       events.push(event);
     }
@@ -57,17 +64,25 @@ export class DayEventsGenerator {
     eventDate.setHours(this._template.type.hour);
     eventDate.setMinutes(this._template.type.minute);
 
-    let yearsSinceStart = this._startDate.getFullYear() - eventDate.getFullYear();
+    let yearsSinceStart =
+      this._startDate.getFullYear() - eventDate.getFullYear();
 
     // If the current year is a repeat year, calculate the event date for this year
     if (yearsSinceStart % this._template.type.repeatEvery === 0) {
       eventDate.setFullYear(this._startDate.getFullYear());
 
-      if (eventDate.getTime() >= this._startDate.getTime() && eventDate.getTime() < this._endDate.getTime()) {
+      const eventEnd = eventDate.getTime() + this._template.type.duration;
+
+      if (
+        (eventDate.getTime() >= this._startDate.getTime() &&
+          eventDate.getTime() < this._endDate.getTime()) ||
+        (this._startDate.getTime() >= eventDate.getTime() &&
+          this._startDate.getTime() < eventEnd)
+      ) {
         const event: Event<Day> = {
           template: this._template,
           startTimestamp: eventDate.getTime(),
-          endTimestamp: eventDate.getTime() + this._template.type.duration,
+          endTimestamp: eventEnd,
         };
         events.push(event);
       }
