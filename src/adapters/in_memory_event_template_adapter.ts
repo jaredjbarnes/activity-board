@@ -3,7 +3,7 @@ import { EventTemplateType } from "src/models/event_template_type.ts";
 import { EventTemplateTypesPort } from "src/services/event_template_types_port.ts";
 import { WeakPromise } from "@m/hex/weak_promise";
 
-export class InMemoryEventTemplatePort<T extends EventTemplateType> implements EventTemplateTypesPort<T> {
+export class InMemoryEventTemplateAdapter<T extends EventTemplateType> implements EventTemplateTypesPort<T> {
   private events: EventTemplate<T>[] = [];
 
   getEvents(): WeakPromise<EventTemplate<T>[]> {

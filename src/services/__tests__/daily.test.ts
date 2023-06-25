@@ -1,5 +1,5 @@
 import { EventsService } from "src/services/events_service.ts";
-import { InMemoryEventTemplatePort } from "src/adapters/in_memory_event_template_port.ts";
+import { InMemoryEventTemplateAdapter } from "src/adapters/in_memory_event_template_adapter.ts";
 import { Daily } from "src/models/event_template_types/daily.ts";
 import { DailyEventsGenerator } from "src/services/daily_events_generator.ts";
 import { TemplateName } from "src/models/event_template_types/template_name.ts";
@@ -7,12 +7,12 @@ import { EventTemplate } from "src/models/event_template.ts";
 
 describe("DailyService", () => {
   let service: EventsService<Daily>;
-  let eventsPort: InMemoryEventTemplatePort<Daily>;
+  let eventsPort: InMemoryEventTemplateAdapter<Daily>;
   let generator: DailyEventsGenerator;
 
   beforeEach(() => {
     generator = new DailyEventsGenerator();
-    eventsPort = new InMemoryEventTemplatePort<Daily>();
+    eventsPort = new InMemoryEventTemplateAdapter<Daily>();
     service = new EventsService<Daily>(eventsPort, generator);
   });
 
