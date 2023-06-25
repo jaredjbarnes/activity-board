@@ -1,10 +1,12 @@
-import { EventsService } from 'src/services/events_service.ts';
-import { InMemoryEventTemplatePort } from 'src/adapters/in_memory_event_template_port.ts';
-import { Daily } from 'src/models/event_template_types/daily.ts';
-import { DailyEventsGenerator } from 'src/services/daily_events_generator.ts';
+import { EventsService } from "src/services/events_service.ts";
+import { InMemoryEventTemplatePort } from "src/adapters/in_memory_event_template_port.ts";
+import { Daily } from "src/models/event_template_types/daily.ts";
+import { DailyEventsGenerator } from "src/services/daily_events_generator.ts";
+import { TemplateName } from "src/models/event_template_types/template_name.ts";
+import { EventTemplate } from "src/models/event_template.ts";
 
-describe('DailyService', () => {
-  let service:  EventsService<Daily>;
+describe("DailyService", () => {
+  let service: EventsService<Daily>;
   let eventsPort: InMemoryEventTemplatePort<Daily>;
   let generator: DailyEventsGenerator;
 
@@ -15,12 +17,12 @@ describe('DailyService', () => {
   });
 
   // Single non-repeating event
-  test('creates single event for non-repeating template', async () => {
+  test("creates single event for non-repeating template", async () => {
     // arrange
-    const template = {
+    const template: EventTemplate<Daily> = {
       id: "some_guid",
       type: {
-        name: "daily",
+        name: TemplateName.DAILY,
         hour: 8,
         minute: 0,
         duration: 60 * 60 * 1000, // 60 minutes in milliseconds
@@ -39,7 +41,10 @@ describe('DailyService', () => {
     await service.saveEvent(template);
 
     // act
-    const events = await service.getEvents(new Date(2023, 0, 1), new Date(2023, 0, 2)); // January 1 to 2, 2023
+    const events = await service.getEvents(
+      new Date(2023, 0, 1),
+      new Date(2023, 0, 2)
+    ); // January 1 to 2, 2023
 
     // assert
     // Check that exactly one event is returned
@@ -48,12 +53,12 @@ describe('DailyService', () => {
   });
 
   // Multiple repeating events
-  test('creates multiple events for repeating template', async () => {
+  test("creates multiple events for repeating template", async () => {
     // arrange
-    const template = {
+    const template: EventTemplate<Daily> = {
       id: "some_guid",
       type: {
-        name: "daily",
+        name: TemplateName.DAILY,
         hour: 8,
         minute: 0,
         duration: 60 * 60 * 1000, // 60 minutes in milliseconds
@@ -71,21 +76,62 @@ describe('DailyService', () => {
     await service.saveEvent(template);
 
     // act
-    const events = await service.getEvents(new Date(2023, 0, 1), new Date(2023, 0, 4)); // January 1 to 4, 2023
+    const events = await service.getEvents(
+      new Date(2023, 0, 1),
+      new Date(2023, 0, 4)
+    ); // January 1 to 4, 2023
 
     // assert
     // Check that three events are returned
     expect(events.length).toBe(3);
-    expect(events.every(event => event.template.id === template.id)).toBeTruthy();
+    expect(
+      events.every((event) => event.template.id === template.id)
+    ).toBeTruthy();
+  });
+
+  test("creates multiple events for repeating template with all day", async () => {
+    // arrange
+    const template: EventTemplate<Daily> = {
+      id: "some_guid",
+      type: {
+        name: TemplateName.DAILY,
+        hour: 8,
+        minute: 0,
+        duration: 60 * 60 * 1000, // 60 minutes in milliseconds
+        repeatEvery: 1,
+        isAllDay: true,
+      },
+      label: "Single Event",
+      notes: "This is a single, non-repeating event.",
+      iconName: "Event",
+      startOn: new Date(2023, 0, 1).getTime(), // January 1, 2023
+      createdOn: new Date(2023, 0, 1).getTime(),
+      updatedOn: new Date(2023, 0, 1).getTime(),
+      deletedOn: null,
+    };
+    await service.saveEvent(template);
+
+    // act
+    const events = await service.getEvents(
+      new Date(2023, 0, 1),
+      new Date(2023, 0, 4)
+    ); // January 1 to 4, 2023
+
+    // assert
+    // Check that three events are returned
+    expect(events.length).toBe(3);
+    expect(
+      events.every((event) => event.template.id === template.id)
+    ).toBeTruthy();
   });
 
   // No events before startOn date
-  test('does not create events before startOn date', async () => {
+  test("does not create events before startOn date", async () => {
     // arrange
-    const template = {
+    const template: EventTemplate<Daily> = {
       id: "some_guid",
       type: {
-        name: "daily",
+        name: TemplateName.DAILY,
         hour: 8,
         minute: 0,
         duration: 60 * 60 * 1000, // 60 minutes in milliseconds
@@ -103,19 +149,22 @@ describe('DailyService', () => {
     await service.saveEvent(template);
 
     // act
-    const events = await service.getEvents(new Date(2023, 0, 1), new Date(2023, 0, 2)); // January 1 to 2, 2023
+    const events = await service.getEvents(
+      new Date(2023, 0, 1),
+      new Date(2023, 0, 2)
+    ); // January 1 to 2, 2023
 
     // assert
     // Check that no events are returned
     expect(events.length).toBe(0);
   });
 
-  test('does not create events before startOn date, start in the middle of range', async () => {
+  test("does not create events before startOn date, start in the middle of range", async () => {
     // arrange
-    const template = {
+    const template: EventTemplate<Daily> = {
       id: "some_guid",
       type: {
-        name: "daily",
+        name: TemplateName.DAILY,
         hour: 8,
         minute: 0,
         duration: 60 * 60 * 1000, // 60 minutes in milliseconds
@@ -133,19 +182,22 @@ describe('DailyService', () => {
     await service.saveEvent(template);
 
     // act
-    const events = await service.getEvents(new Date(2023, 0, 1), new Date(2023, 0, 4)); // January 1 to 2, 2023
+    const events = await service.getEvents(
+      new Date(2023, 0, 1),
+      new Date(2023, 0, 4)
+    ); // January 1 to 2, 2023
 
     // assert
     // Check that no events are returned
     expect(events.length).toBe(2);
   });
 
-  test('creates event if the start is in the middle of the event', async () => {
+  test("creates event if the start is in the middle of the event", async () => {
     // arrange
-    const template = {
+    const template: EventTemplate<Daily> = {
       id: "some_guid",
       type: {
-        name: "daily",
+        name: TemplateName.DAILY,
         hour: 8,
         minute: 0,
         duration: 60 * 60 * 1000, // 60 minutes in milliseconds
@@ -163,20 +215,22 @@ describe('DailyService', () => {
     await service.saveEvent(template);
 
     // act
-    const events = await service.getEvents(new Date(2023, 0, 1, 8, 30, 0, 0), new Date(2023, 0, 4)); // January 1 to 2, 2023
+    const events = await service.getEvents(
+      new Date(2023, 0, 1, 8, 30, 0, 0),
+      new Date(2023, 0, 4)
+    ); // January 1 to 2, 2023
 
     // assert
     // Check that no events are returned
     expect(events.length).toBe(3);
   });
 
-
-  test('does not create events when template is deleted', async () => {
+  test("does not create events when template is deleted", async () => {
     // arrange
-    const template = {
+    const template: EventTemplate<Daily> = {
       id: "some_guid",
       type: {
-        name: "daily",
+        name: TemplateName.DAILY,
         hour: 8,
         minute: 0,
         duration: 60 * 60 * 1000, // 60 minutes in milliseconds
@@ -194,11 +248,13 @@ describe('DailyService', () => {
     await service.saveEvent(template);
 
     // act
-    const events = await service.getEvents(new Date(2023, 0, 1), new Date(2023, 0, 2)); // January 1 to 2, 2023
+    const events = await service.getEvents(
+      new Date(2023, 0, 1),
+      new Date(2023, 0, 2)
+    ); // January 1 to 2, 2023
 
     // assert
     // Check that no events are returned
     expect(events.length).toBe(0);
   });
-
 });

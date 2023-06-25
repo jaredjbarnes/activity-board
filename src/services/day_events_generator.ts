@@ -1,18 +1,19 @@
 import { EventTemplate } from "src/models/event_template.ts";
 import { Event } from "src/models/event.ts";
-import { Day } from "src/models/event_template_types/day.ts";
+import { Yearly } from "src/models/event_template_types/yearly.ts";
+import { doRangesIntersect } from "src/services/do_ranges_intersect.ts";
 
 export class DayEventsGenerator {
-  private _template!: EventTemplate<Day>;
-  private _events: Event<Day>[] = [];
+  private _template!: EventTemplate<Yearly>;
+  private _events: Event<Yearly>[] = [];
   private _startDate!: Date;
   private _endDate!: Date;
 
   generate(
-    template: EventTemplate<Day>,
+    template: EventTemplate<Yearly>,
     startDate: Date,
     endDate: Date
-  ): Event<Day>[] {
+  ): Event<Yearly>[] {
     this._template = template;
     this._startDate = startDate;
     this._endDate = endDate;
@@ -41,13 +42,15 @@ export class DayEventsGenerator {
 
     const eventEnd = eventDate.getTime() + this._template.type.duration;
 
-    if (
-      (eventDate.getTime() >= this._startDate.getTime() &&
-        eventDate.getTime() < this._endDate.getTime()) ||
-      (this._startDate.getTime() >= eventDate.getTime() &&
-        this._startDate.getTime() < eventEnd)
-    ) {
-      const event: Event<Day> = {
+    const isWithinRange = doRangesIntersect(
+      eventDate.getTime(),
+      eventEnd,
+      this._startDate.getTime(),
+      this._endDate.getTime()
+    );
+
+    if (isWithinRange) {
+      const event: Event<Yearly> = {
         template: this._template,
         startTimestamp: eventDate.getTime(),
         endTimestamp: eventEnd,
@@ -73,13 +76,15 @@ export class DayEventsGenerator {
 
       const eventEnd = eventDate.getTime() + this._template.type.duration;
 
-      if (
-        (eventDate.getTime() >= this._startDate.getTime() &&
-          eventDate.getTime() < this._endDate.getTime()) ||
-        (this._startDate.getTime() >= eventDate.getTime() &&
-          this._startDate.getTime() < eventEnd)
-      ) {
-        const event: Event<Day> = {
+      const isWithinRange = doRangesIntersect(
+        eventDate.getTime(),
+        eventEnd,
+        this._startDate.getTime(),
+        this._endDate.getTime()
+      );
+  
+      if (isWithinRange) {
+        const event: Event<Yearly> = {
           template: this._template,
           startTimestamp: eventDate.getTime(),
           endTimestamp: eventEnd,

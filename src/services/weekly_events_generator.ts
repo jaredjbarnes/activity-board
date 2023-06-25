@@ -1,6 +1,7 @@
 import { EventTemplate } from "src/models/event_template.ts";
 import { Event } from "src/models/event.ts";
 import { Weekly } from "src/models/event_template_types/weekly.ts";
+import { doRangesIntersect } from "src/services/do_ranges_intersect.ts";
 
 const WEEK_IN_MILLISECONDS = 1000 * 60 * 60 * 24 * 7;
 
@@ -31,10 +32,16 @@ export class WeeklyEventsGenerator {
   }
 
   private generateNonRepeating(eventDate: Date): void {
-    if (
-      eventDate.getTime() >= this.startDate.getTime() &&
-      eventDate.getTime() < this.endDate.getTime()
-    ) {
+    const endEvent = eventDate.getTime() + this.template.type.duration;
+
+    const isWithinRange = doRangesIntersect(
+      eventDate.getTime(),
+      endEvent,
+      this.startDate.getTime(),
+      this.endDate.getTime()
+    );
+
+    if (isWithinRange) {
       this.events.push(this.createEvent(eventDate));
     }
   }
@@ -56,7 +63,19 @@ export class WeeklyEventsGenerator {
     eventDate.setDate(eventDate.getDate() + daysToNextEvent);
 
     while (eventDate.getTime() < this.endDate.getTime()) {
-      this.events.push(this.createEvent(eventDate));
+      const endEvent = eventDate.getTime() + this.template.type.duration;
+
+      const isWithinRange = doRangesIntersect(
+        eventDate.getTime(),
+        endEvent,
+        this.startDate.getTime(),
+        this.endDate.getTime()
+      );
+
+      if (isWithinRange) {
+        this.events.push(this.createEvent(eventDate));
+      }
+
       eventDate.setDate(
         eventDate.getDate() + this.template.type.repeatEvery * 7
       );

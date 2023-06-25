@@ -1,6 +1,7 @@
 import { EventTemplate } from "src/models/event_template.ts";
 import { Event } from "src/models/event.ts";
 import { Daily } from "src/models/event_template_types/daily.ts";
+import { doRangesIntersect } from "src/services/do_ranges_intersect.ts";
 
 const DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
 
@@ -39,7 +40,7 @@ export class DailyEventsGenerator {
       eventDate.getTime() + this._template.type.duration
     );
 
-    const isWithinSpan = this.doRangesIntersect(
+    const isWithinSpan = doRangesIntersect(
       eventDate.getTime(),
       eventEnd.getTime(),
       this._startDate.getTime(),
@@ -67,17 +68,6 @@ export class DailyEventsGenerator {
 
       events.push(event);
     }
-  }
-
-  private doRangesIntersect(
-    start1: number,
-    end1: number,
-    start2: number,
-    end2: number
-  ) {
-    const start = Math.max(start1, start2);
-    const end = Math.min(end1, end2);
-    return end > start;
   }
 
   private generateRepeatingEvents(): void {
@@ -110,14 +100,14 @@ export class DailyEventsGenerator {
         eventEnd = new Date(eventDate.getTime() + this._template.type.duration);
       }
 
-      const isWithinSpan = this.doRangesIntersect(
+      const isWithinRange = doRangesIntersect(
         eventDate.getTime(),
         eventEnd.getTime(),
         this._startDate.getTime(),
         this._endDate.getTime()
       );
 
-      if (isWithinSpan) {
+      if (isWithinRange) {
         const event: Event<Daily> = {
           template: this._template,
           startTimestamp: eventDate.getTime(),
