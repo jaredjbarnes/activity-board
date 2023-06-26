@@ -21,7 +21,9 @@ export class DailyEventsGenerator {
     this._endDate = endDate;
     this._events = [];
 
-    if (this._template.deletedOn != null) {
+    const isDeleted = this._template.deletedOn != null;
+    
+    if (isDeleted) {
       return this._events;
     }
 
@@ -35,7 +37,7 @@ export class DailyEventsGenerator {
   }
   private generateNonRepeatingEvents(): void {
     const events = this._events;
-    const eventDate = new Date(this._template.startOn);
+    const eventDate = new Date(this._template.start);
     const eventEnd = new Date(
       eventDate.getTime() + this._template.type.duration
     );
@@ -70,9 +72,18 @@ export class DailyEventsGenerator {
     }
   }
 
+  private getEndTime() {
+    if (this._template.end == null) {
+      return this._endDate.getTime();
+    } else {
+      return Math.min(this._endDate.getTime(), this._template.end);
+    }
+  }
+
   private generateRepeatingEvents(): void {
     const events = this._events;
-    const eventDate = new Date(this._template.startOn);
+    const eventDate = new Date(this._template.start);
+    const end = this.getEndTime();
     const daysSinceStart = Math.floor(
       (this._startDate.getTime() - eventDate.getTime()) / DAY_IN_MILLISECONDS
     );
@@ -91,7 +102,7 @@ export class DailyEventsGenerator {
       eventDate.setMilliseconds(0);
     }
 
-    while (eventDate.getTime() < this._endDate.getTime()) {
+    while (eventDate.getTime() < end) {
       let eventEnd = new Date(eventDate);
 
       if (this._template.type.isAllDay) {

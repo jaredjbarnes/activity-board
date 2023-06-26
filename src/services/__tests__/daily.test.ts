@@ -25,14 +25,15 @@ describe("DailyService", () => {
         name: TemplateName.DAILY,
         hour: 8,
         minute: 0,
-        duration: 60 * 60 * 1000, // 60 minutes in milliseconds
+        duration: 60 * 60 * 1000,
         repeatEvery: 0,
         isAllDay: false,
       },
       label: "Single Event",
       notes: "This is a single, non-repeating event.",
       iconName: "Event",
-      startOn: new Date(2023, 0, 1).getTime(), // January 1, 2023
+      start: new Date(2023, 0, 1).getTime(),
+      end: new Date(2024, 0, 1).getTime(),
       createdOn: new Date(2023, 0, 1).getTime(),
       updatedOn: new Date(2023, 0, 1).getTime(),
       deletedOn: null,
@@ -65,10 +66,11 @@ describe("DailyService", () => {
         repeatEvery: 1,
         isAllDay: false,
       },
-      label: "Single Event",
-      notes: "This is a single, non-repeating event.",
+      label: "Multiple Event",
+      notes: "This is multiple, repeating event.",
       iconName: "Event",
-      startOn: new Date(2023, 0, 1).getTime(), // January 1, 2023
+      start: new Date(2023, 0, 1).getTime(),
+      end: new Date(2024, 0, 1).getTime(),
       createdOn: new Date(2023, 0, 1).getTime(),
       updatedOn: new Date(2023, 0, 1).getTime(),
       deletedOn: null,
@@ -101,10 +103,11 @@ describe("DailyService", () => {
         repeatEvery: 1,
         isAllDay: true,
       },
-      label: "Single Event",
-      notes: "This is a single, non-repeating event.",
+      label: "Multiple Event",
+      notes: "This is multiple, repeating event.",
       iconName: "Event",
-      startOn: new Date(2023, 0, 1).getTime(), // January 1, 2023
+      start: new Date(2023, 0, 1).getTime(),
+      end: new Date(2024, 0, 1).getTime(),
       createdOn: new Date(2023, 0, 1).getTime(),
       updatedOn: new Date(2023, 0, 1).getTime(),
       deletedOn: null,
@@ -138,10 +141,11 @@ describe("DailyService", () => {
         repeatEvery: 1,
         isAllDay: false,
       },
-      label: "Single Event",
-      notes: "This is a single, non-repeating event.",
+      label: "Event",
+      notes: "This is an event.",
       iconName: "Event",
-      startOn: new Date(2023, 0, 2).getTime(), // January 1, 2023
+      start: new Date(2023, 0, 2).getTime(),
+      end: new Date(2024, 0, 1).getTime(),
       createdOn: new Date(2023, 0, 1).getTime(),
       updatedOn: new Date(2023, 0, 1).getTime(),
       deletedOn: null,
@@ -159,7 +163,7 @@ describe("DailyService", () => {
     expect(events.length).toBe(0);
   });
 
-  test("does not create events before startOn date, start in the middle of range", async () => {
+  test("does not create events before startOn date, but starts in the middle of range", async () => {
     // arrange
     const template: EventTemplate<Daily> = {
       id: "some_guid",
@@ -171,10 +175,11 @@ describe("DailyService", () => {
         repeatEvery: 1,
         isAllDay: false,
       },
-      label: "Single Event",
-      notes: "This is a single, non-repeating event.",
+      label: "Multiple Event",
+      notes: "This is multiple, repeating event.",
       iconName: "Event",
-      startOn: new Date(2023, 0, 2).getTime(), // January 1, 2023
+      start: new Date(2023, 0, 2).getTime(),
+      end: new Date(2024, 0, 1).getTime(),
       createdOn: new Date(2023, 0, 1).getTime(),
       updatedOn: new Date(2023, 0, 1).getTime(),
       deletedOn: null,
@@ -185,10 +190,42 @@ describe("DailyService", () => {
     const events = await service.getEvents(
       new Date(2023, 0, 1),
       new Date(2023, 0, 4)
-    ); // January 1 to 2, 2023
+    ); 
 
     // assert
     // Check that no events are returned
+    expect(events.length).toBe(2);
+  });
+
+  test("stop repeating if the end has past", async () => {
+    // arrange
+    const template: EventTemplate<Daily> = {
+      id: "some_guid",
+      type: {
+        name: TemplateName.DAILY,
+        hour: 8,
+        minute: 0,
+        duration: 60 * 60 * 1000, // 60 minutes in milliseconds
+        repeatEvery: 1,
+        isAllDay: false,
+      },
+      label: "Repeat Event",
+      notes: "This is a repeating event",
+      iconName: "Event",
+      start: new Date(2023, 0, 1).getTime(),
+      end: new Date(2023, 0, 3).getTime(),
+      createdOn: new Date(2023, 0, 1).getTime(),
+      updatedOn: new Date(2023, 0, 1).getTime(),
+      deletedOn: null,
+    };
+    await service.saveEvent(template);
+
+    // act
+    const events = await service.getEvents(
+      new Date(2023, 0, 1),
+      new Date(2023, 0, 4)
+    ); 
+    // assert
     expect(events.length).toBe(2);
   });
 
@@ -204,10 +241,11 @@ describe("DailyService", () => {
         repeatEvery: 1,
         isAllDay: false,
       },
-      label: "Single Event",
-      notes: "This is a single, non-repeating event.",
+      label: "Multiple Event",
+      notes: "This is multiple, repeating event.",
       iconName: "Event",
-      startOn: new Date(2023, 0, 1).getTime(), // January 1, 2023
+      start: new Date(2023, 0, 1).getTime(),
+      end: new Date(2024, 0, 1).getTime(),
       createdOn: new Date(2023, 0, 1).getTime(),
       updatedOn: new Date(2023, 0, 1).getTime(),
       deletedOn: null,
@@ -240,7 +278,8 @@ describe("DailyService", () => {
       label: "Single Event",
       notes: "This is a single, non-repeating event.",
       iconName: "Event",
-      startOn: new Date(2023, 0, 1).getTime(), // January 1, 2023
+      start: new Date(2023, 0, 1).getTime(),
+      end: new Date(2024, 0, 1).getTime(),
       createdOn: new Date(2023, 0, 1).getTime(),
       updatedOn: new Date(2023, 0, 1).getTime(),
       deletedOn: new Date(2023, 0, 1).getTime(),

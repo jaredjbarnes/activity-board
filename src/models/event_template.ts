@@ -6,7 +6,8 @@ export interface EventTemplate<T extends EventTemplateType> {
   label: string;
   notes: string;
   iconName: string;
-  startOn: number;
+  start: number;
+  end: number | null;
   createdOn: number;
   updatedOn: number;
   deletedOn: number | null;
