@@ -71,20 +71,18 @@ export class YearlyEventsGenerator {
 
   private generateRepeatingEvents(): void {
     const events = this._events;
-    const end = this.getEndTime();
+    const endDate = new Date(this.getEndTime());
     const start = this._startDate.getTime();
 
-    const millisecondsPerYear = 1000 * 60 * 60 * 24 * 365.25; // milliseconds in an average year
+    let currentDate = new Date(this._startDate.getTime());
 
-    let currentTime = this._startDate.getTime();
-
-    while (currentTime <= end) {
-      const currentYear = new Date(currentTime).getFullYear();
+    while (currentDate.getFullYear() <= endDate.getFullYear()) {
+      const currentYear = currentDate.getFullYear();
       const eventYear = new Date(this._template.start).getFullYear();
 
       // Check if the current year is a repeat year
       if ((currentYear - eventYear) % this._template.type.repeatEvery === 0) {
-        const eventDate = new Date(currentTime);
+        const eventDate = new Date(currentDate);
         eventDate.setMonth(this._template.type.month);
         eventDate.setDate(this._template.type.day);
         eventDate.setHours(this._template.type.hour);
@@ -96,7 +94,7 @@ export class YearlyEventsGenerator {
           eventDate.getTime(),
           eventEnd,
           start,
-          end
+          endDate.getTime()
         );
 
         if (isWithinRange) {
@@ -108,7 +106,9 @@ export class YearlyEventsGenerator {
           events.push(event);
         }
       }
-      currentTime += millisecondsPerYear;
+
+      // Increment the year
+      currentDate.setFullYear(currentDate.getFullYear() + 1);
     }
   }
 }
