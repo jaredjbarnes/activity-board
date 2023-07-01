@@ -2,10 +2,11 @@ import { EventTemplate } from "src/models/event_template.ts";
 import { Event } from "src/models/event.ts";
 import { Daily } from "src/models/event_template_types/daily.ts";
 import { doRangesIntersect } from "src/services/do_ranges_intersect.ts";
+import { EventGenerator } from "src/services/event_generator.ts";
 
 const DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
 
-export class DailyEventsGenerator {
+export class DailyEventsGenerator implements EventGenerator<Daily> {
   private _template!: EventTemplate<Daily>;
   private _events: Event<Daily>[] = [];
   private _startDate!: Date;
@@ -22,7 +23,7 @@ export class DailyEventsGenerator {
     this._events = [];
 
     const isDeleted = this._template.deletedOn != null;
-    
+
     if (isDeleted) {
       return this._events;
     }

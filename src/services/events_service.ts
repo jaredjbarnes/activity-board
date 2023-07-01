@@ -3,14 +3,7 @@ import { EventTemplateTypesPort } from "src/services/event_template_types_port.t
 import { Event } from "src/models/event.ts";
 import { EventTemplate } from "src/models/event_template.ts";
 import { EventTemplateType } from "src/models/event_template_type.ts";
-
-export interface EventGenerator<T extends EventTemplateType> {
-  generate(
-    template: EventTemplate<T>,
-    startDate: Date,
-    endDate: Date
-  ): Event<T>[];
-}
+import { EventGenerator } from "src/services/event_generator.ts";
 
 export class EventsService<T extends EventTemplateType> {
   private _eventsPort: EventTemplateTypesPort<T>;

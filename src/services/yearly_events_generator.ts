@@ -2,8 +2,9 @@ import { EventTemplate } from "src/models/event_template.ts";
 import { Event } from "src/models/event.ts";
 import { Yearly } from "src/models/event_template_types/yearly.ts";
 import { doRangesIntersect } from "src/services/do_ranges_intersect.ts";
+import { EventGenerator } from "src/services/event_generator.ts";
 
-export class YearlyEventsGenerator {
+export class YearlyEventsGenerator implements EventGenerator<Yearly> {
   private _template!: EventTemplate<Yearly>;
   private _events: Event<Yearly>[] = [];
   private _startDate!: Date;

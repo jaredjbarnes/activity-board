@@ -2,10 +2,11 @@ import { EventTemplate } from "src/models/event_template.ts";
 import { Event } from "src/models/event.ts";
 import { Weekly } from "src/models/event_template_types/weekly.ts";
 import { doRangesIntersect } from "src/services/do_ranges_intersect.ts";
+import { EventGenerator } from "src/services/event_generator.ts";
 
 const WEEK_IN_MILLISECONDS = 1000 * 60 * 60 * 24 * 7;
 
-export class WeeklyEventsGenerator {
+export class WeeklyEventsGenerator implements EventGenerator<Weekly> {
   private _template!: EventTemplate<Weekly>;
   private _startDate!: Date;
   private _endDate!: Date;
