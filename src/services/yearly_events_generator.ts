@@ -69,10 +69,16 @@ export class YearlyEventsGenerator {
     }
   }
 
+  private getStartTime() {
+    return Math.max(this._startDate.getTime(), this._template.start);
+  }
+
   private generateRepeatingEvents(): void {
     const events = this._events;
     const endDate = new Date(this.getEndTime());
-    const start = this._startDate.getTime();
+    const startDate = new Date(this.getStartTime());
+    const start = startDate.getTime();
+    const end = endDate.getTime();
 
     let currentDate = new Date(this._startDate.getTime());
 
@@ -88,13 +94,14 @@ export class YearlyEventsGenerator {
         eventDate.setHours(this._template.type.hour);
         eventDate.setMinutes(this._template.type.minute);
 
-        const eventEnd = eventDate.getTime() + this._template.type.duration;
+        const eventStart = eventDate.getTime();
+        const eventEnd = eventStart + this._template.type.duration;
 
         const isWithinRange = doRangesIntersect(
-          eventDate.getTime(),
+          eventStart,
           eventEnd,
           start,
-          endDate.getTime()
+          end
         );
 
         if (isWithinRange) {

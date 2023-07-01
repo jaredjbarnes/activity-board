@@ -102,6 +102,18 @@ describe("YearlyEventsGenerator", () => {
     expect(events.length).toEqual(2); // Since the event end time is 2024, there should be 2 events (2023, 2024)
   });
 
+  it("should handle events that start and end within the time", () => {
+    const template = createTemplate({
+      start: new Date(2023, 6, 0, 0, 0, 0).getTime(),
+      end: new Date(2024, 5, 15, 13, 0, 0).getTime(),
+      type: {
+        repeatEvery: 1,
+      },
+    });
+    const events = generator.generate(template, startDate, endDate);
+    expect(events.length).toEqual(1); // Since the event end time is 2024, there should be 2 events (2023, 2024)
+  });
+
   it("should handle events outside of date range", () => {
     const template = createTemplate({
       start: new Date(2030, 5, 15).getTime(),

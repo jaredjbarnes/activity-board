@@ -129,7 +129,7 @@ describe("DailyService", () => {
   });
 
   // No events before startOn date
-  test("does not create events before startOn date", async () => {
+  test("does not create events before start date", async () => {
     // arrange
     const template: EventTemplate<Daily> = {
       id: "some_guid",
@@ -163,7 +163,7 @@ describe("DailyService", () => {
     expect(events.length).toBe(0);
   });
 
-  test("does not create events before startOn date, but starts in the middle of range", async () => {
+  test("does not create events before start date, but starts in the middle of range", async () => {
     // arrange
     const template: EventTemplate<Daily> = {
       id: "some_guid",
