@@ -11,7 +11,7 @@ enum DayOfWeek {
 }
 
 export interface Weekly extends EventTemplateType {
-  dayOfWeek: DayOfWeek;
+  daysOfWeek: Set<DayOfWeek>;
   hour: number;
   minute: number;
   duration: number;

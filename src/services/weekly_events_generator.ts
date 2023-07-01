@@ -17,7 +17,6 @@ export class WeeklyEventsGenerator {
     endDate: Date
   ): Event<Weekly>[] {
     this._template = template;
-    let eventDate = new Date(template.start);
     this._startDate = startDate;
     this._endDate = endDate;
     this._events = [];
@@ -29,15 +28,16 @@ export class WeeklyEventsGenerator {
     }
 
     if (this._template.type.repeatEvery === 0) {
-      this.generateNonRepeating(eventDate);
+      this.generateNonRepeating();
     } else {
-      this.generateRepeating(eventDate);
+      this.generateRepeating();
     }
 
     return this._events;
   }
 
-  private generateNonRepeating(eventDate: Date): void {
+  private generateNonRepeating(): void {
+    let eventDate = new Date(this._template.start);
     const endEvent = eventDate.getTime() + this._template.type.duration;
 
     const isWithinRange = doRangesIntersect(
@@ -60,41 +60,44 @@ export class WeeklyEventsGenerator {
     }
   }
 
-  private generateRepeating(eventDate: Date): void {
+  private generateRepeating(): void {
     const end = this.getEndTime();
-    const weeksSinceStart = Math.floor(
-      (this._startDate.getTime() - eventDate.getTime()) / WEEK_IN_MILLISECONDS
-    );
 
-    let daysToNextEvent =
-      (7 + this._template.type.dayOfWeek - eventDate.getDay()) % 7;
-
-    if (weeksSinceStart % this._template.type.repeatEvery !== 0) {
-      daysToNextEvent +=
-        Math.floor(weeksSinceStart / this._template.type.repeatEvery) *
-        this._template.type.repeatEvery *
-        7;
-    }
-
-    eventDate.setDate(eventDate.getDate() + daysToNextEvent);
-
-    while (eventDate.getTime() < end) {
-      const endEvent = eventDate.getTime() + this._template.type.duration;
-
-      const isWithinRange = doRangesIntersect(
-        eventDate.getTime(),
-        endEvent,
-        this._startDate.getTime(),
-        this._endDate.getTime()
+    for (let dayOfWeek of this._template.type.daysOfWeek) {
+      let eventDate = new Date(this._template.start);
+      const weeksSinceStart = Math.floor(
+        (this._startDate.getTime() - eventDate.getTime()) / WEEK_IN_MILLISECONDS
       );
 
-      if (isWithinRange) {
-        this._events.push(this.createEvent(eventDate));
+      let daysToNextEvent = (7 + dayOfWeek - eventDate.getDay()) % 7;
+
+      if (weeksSinceStart % this._template.type.repeatEvery !== 0) {
+        daysToNextEvent +=
+          Math.floor(weeksSinceStart / this._template.type.repeatEvery) *
+          this._template.type.repeatEvery *
+          7;
       }
 
-      eventDate.setDate(
-        eventDate.getDate() + this._template.type.repeatEvery * 7
-      );
+      eventDate.setDate(eventDate.getDate() + daysToNextEvent);
+
+      while (eventDate.getTime() < end) {
+        const endEvent = eventDate.getTime() + this._template.type.duration;
+
+        const isWithinRange = doRangesIntersect(
+          eventDate.getTime(),
+          endEvent,
+          this._startDate.getTime(),
+          this._endDate.getTime()
+        );
+
+        if (isWithinRange) {
+          this._events.push(this.createEvent(eventDate));
+        }
+
+        eventDate.setDate(
+          eventDate.getDate() + this._template.type.repeatEvery * 7
+        );
+      }
     }
   }
 

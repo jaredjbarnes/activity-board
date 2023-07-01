@@ -5,14 +5,21 @@ import { EventTemplate } from "src/models/event_template.ts";
 import { EventTemplateType } from "src/models/event_template_type.ts";
 
 export interface EventGenerator<T extends EventTemplateType> {
-  generate(template: EventTemplate<T>, startDate: Date, endDate: Date): Event<T>[];
+  generate(
+    template: EventTemplate<T>,
+    startDate: Date,
+    endDate: Date
+  ): Event<T>[];
 }
 
 export class EventsService<T extends EventTemplateType> {
   private _eventsPort: EventTemplateTypesPort<T>;
   private _generator: EventGenerator<T>;
 
-  constructor(eventsPort: EventTemplateTypesPort<T>, generator: EventGenerator<T>) {
+  constructor(
+    eventsPort: EventTemplateTypesPort<T>,
+    generator: EventGenerator<T>
+  ) {
     this._eventsPort = eventsPort;
     this._generator = generator;
   }
@@ -26,7 +33,7 @@ export class EventsService<T extends EventTemplateType> {
   }
 
   getEvents(startDate: Date, endDate: Date): WeakPromise<Event<T>[]> {
-    return this._eventsPort.getEvents().then((templates) => {
+    return this._eventsPort.getEvents(startDate, endDate).then((templates) => {
       const events: Event<T>[] = [];
 
       for (let template of templates) {

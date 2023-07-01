@@ -18,7 +18,7 @@ function createBaseTemplate(): EventTemplate<Weekly>{
     type: {
       name: TemplateName.WEEKLY,
       repeatEvery: 1,
-      dayOfWeek: 1,
+      daysOfWeek: new Set([1]),
       duration: 3600000,
       hour: 10,
       minute: 0,
@@ -100,4 +100,19 @@ describe("WeeklyEventsGenerator", () => {
     expect(eventDate.getHours()).toEqual(10);
     expect(eventDate.getMinutes()).toEqual(0);
   });
+
+  test("should generate events for each day in daysOfWeek", () => {
+    const template = createBaseTemplate();
+    template.type.daysOfWeek = new Set([1, 3, 5]); // Monday, Wednesday, Friday
+    const events = generator.generate(template, startDate, endDate);
+    
+    expect(events).toHaveLength(12); 
+  
+    // Validate that the daysOfWeek are correct for the generated events
+    for (let event of events) {
+      const eventDay = new Date(event.startTimestamp).getDay();
+      expect(template.type.daysOfWeek).toContain(eventDay);
+    }
+  });
+  
 });

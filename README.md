@@ -15,6 +15,6 @@ First Week of the Year
 Last Week of the Month
 Last Week of the Year
 
-Number Day of the Week
-Number Day of the Month
-Number Day of the Year
+Day of the Week --> Repeat Every Monday, Tuesday
+Number Day of the Month --> Repeat every 2nd Sunday of the Month
+Number Day of the Year --> Repeat every 3rd Sunday of March
