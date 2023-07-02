@@ -2,7 +2,7 @@ import { EventTemplate } from "src/models/event_template.ts";
 import { TemplateName } from "src/models/event_template_types/template_name.ts";
 import { FirstDayOfWeek } from "src/models/event_template_types/first_day_of_week.ts";
 import { DayOfWeek } from "src/models/event_template_types/day_of_week.ts";
-import { FirstDayOfWeekEventsGenerator } from "src/services/first_day_of_week_generator.ts";
+import { FirstDayOfWeekEventsGenerator } from "src/services/first_day_of_week_events_generator.ts";
 
 function createBaseTemplate(): EventTemplate<FirstDayOfWeek> {
   return {
@@ -15,6 +15,7 @@ function createBaseTemplate(): EventTemplate<FirstDayOfWeek> {
     createdOn: new Date("2023-01-01").getTime(),
     updatedOn: new Date("2023-01-01").getTime(),
     deletedOn: null,
+    activity: null,
     type: {
       name: TemplateName.FIRST_DAY_OF_WEEK,
       daysOfWeek: DayOfWeek.Monday,

@@ -15,6 +15,7 @@ function createBaseTemplate(): EventTemplate<Weekly>{
     createdOn: new Date("July 1, 2023").getTime(),
     updatedOn: new Date("July 1, 2023").getTime(),
     deletedOn: null,
+    activity: null,
     type: {
       name: TemplateName.WEEKLY,
       repeatEvery: 1,

@@ -19,6 +19,7 @@ describe("YearlyEventsGenerator", () => {
     createdOn: 0,
     updatedOn: 0,
     deletedOn: null,
+    activity: null,
     type: {
       name: TemplateName.YEARLY,
       day: 15,
