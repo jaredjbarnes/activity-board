@@ -40,10 +40,22 @@ export class YearlyEventsGenerator implements EventGenerator<Yearly> {
     const eventDate = new Date(this._template.start);
     eventDate.setMonth(this._template.type.month);
     eventDate.setDate(this._template.type.day);
-    eventDate.setHours(this._template.type.hour);
-    eventDate.setMinutes(this._template.type.minute);
 
-    const eventEnd = eventDate.getTime() + this._template.type.duration;
+    if (!this._template.type.isAllDay) {
+      eventDate.setHours(this._template.type.hour);
+      eventDate.setMinutes(this._template.type.minute);
+    } else {
+      eventDate.setHours(0);
+      eventDate.setMinutes(0);
+    }
+
+    const eventEnd = this._template.type.isAllDay
+      ? new Date(
+          eventDate.getFullYear(),
+          eventDate.getMonth(),
+          eventDate.getDate() + 1
+        ).getTime()
+      : eventDate.getTime() + this._template.type.duration;
 
     const isWithinRange = doRangesIntersect(
       eventDate.getTime(),
@@ -62,18 +74,6 @@ export class YearlyEventsGenerator implements EventGenerator<Yearly> {
     }
   }
 
-  private getEndTime() {
-    if (this._template.end == null) {
-      return this._endDate.getTime();
-    } else {
-      return Math.min(this._endDate.getTime(), this._template.end);
-    }
-  }
-
-  private getStartTime() {
-    return Math.max(this._startDate.getTime(), this._template.start);
-  }
-
   private generateRepeatingEvents(): void {
     const events = this._events;
     const endDate = new Date(this.getEndTime());
@@ -87,16 +87,27 @@ export class YearlyEventsGenerator implements EventGenerator<Yearly> {
       const currentYear = currentDate.getFullYear();
       const eventYear = new Date(this._template.start).getFullYear();
 
-      // Check if the current year is a repeat year
       if ((currentYear - eventYear) % this._template.type.repeatEvery === 0) {
         const eventDate = new Date(currentDate);
         eventDate.setMonth(this._template.type.month);
         eventDate.setDate(this._template.type.day);
-        eventDate.setHours(this._template.type.hour);
-        eventDate.setMinutes(this._template.type.minute);
+
+        if (!this._template.type.isAllDay) {
+          eventDate.setHours(this._template.type.hour);
+          eventDate.setMinutes(this._template.type.minute);
+        } else {
+          eventDate.setHours(0);
+          eventDate.setMinutes(0);
+        }
 
         const eventStart = eventDate.getTime();
-        const eventEnd = eventStart + this._template.type.duration;
+        const eventEnd = this._template.type.isAllDay
+          ? new Date(
+              eventDate.getFullYear(),
+              eventDate.getMonth(),
+              eventDate.getDate() + 1
+            ).getTime()
+          : eventStart + this._template.type.duration;
 
         const isWithinRange = doRangesIntersect(
           eventStart,
@@ -115,8 +126,19 @@ export class YearlyEventsGenerator implements EventGenerator<Yearly> {
         }
       }
 
-      // Increment the year
       currentDate.setFullYear(currentDate.getFullYear() + 1);
     }
+  }
+
+  private getEndTime() {
+    if (this._template.end == null) {
+      return this._endDate.getTime();
+    } else {
+      return Math.min(this._endDate.getTime(), this._template.end);
+    }
+  }
+
+  private getStartTime() {
+    return Math.max(this._startDate.getTime(), this._template.start);
   }
 }

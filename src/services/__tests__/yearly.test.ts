@@ -29,6 +29,7 @@ describe("YearlyEventsGenerator", () => {
       minute: 0,
       duration: 60 * 60 * 1000,
       repeatEvery: 0,
+      isAllDay: false
     },
   };
 
@@ -121,5 +122,25 @@ describe("YearlyEventsGenerator", () => {
     });
     const events = generator.generate(template, startDate, endDate);
     expect(events).toEqual([]); // Since the event is in 2030, it should not be included in the events list
+  });
+
+  it("should handle all-day events", () => {
+    const template = createTemplate({
+      type: {
+        isAllDay: true,
+      },
+    });
+    const events = generator.generate(template, startDate, endDate);
+
+    // Verify that the event starts at the start of the day
+    const start = events[0].startTimestamp;
+    expect(new Date(start).getHours()).toBe(0);
+    expect(new Date(start).getMinutes()).toBe(0);
+
+    // Verify that the event ends at the start of the next day
+    const end = events[0].endTimestamp;
+    expect(new Date(end).getHours()).toBe(0);
+    expect(new Date(end).getMinutes()).toBe(0);
+    expect(new Date(end).getDate()).toBe(new Date(start).getDate() + 1);
   });
 });

@@ -9,5 +9,6 @@ export interface Yearly extends EventTemplateType {
   hour: number;
   minute: number;
   duration: number;
+  isAllDay: boolean;
   repeatEvery: number; 
 }
