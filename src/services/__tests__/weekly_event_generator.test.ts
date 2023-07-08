@@ -85,14 +85,14 @@ describe("WeeklyEventGenerator", () => {
   it("does not generate events for non-weekly templates", () => {
     const generator = new WeeklyEventGenerator();
     const template = createTemplate(
-      new Date(2023, 6, 1).getTime(),
+      new Date(2023, 6, 2).getTime(),
       [Days.Monday, Days.Wednesday, Days.Friday],
       1
     );
     template.eventType.name = EventTypeName.Monthly; // Change to monthly
 
-    const startDate = new Date(2023, 6, 1); // July 1, 2023
-    const endDate = new Date(2023, 6, 7); // July 7, 2023
+    const startDate = new Date(2023, 6, 2); // July 2, 2023
+    const endDate = new Date(2023, 6, 8); // July 8, 2023
 
     const events = generator.generate(template, startDate, endDate);
 
@@ -102,13 +102,13 @@ describe("WeeklyEventGenerator", () => {
   it("does not generate events if startDate is after endDate", () => {
     const generator = new WeeklyEventGenerator();
     const template = createTemplate(
-      new Date(2023, 6, 1).getTime(),
+      new Date(2023, 6, 2).getTime(),
       [Days.Monday, Days.Wednesday, Days.Friday],
       1
     );
 
-    const startDate = new Date(2023, 6, 7); // July 7, 2023
-    const endDate = new Date(2023, 6, 1); // July 1, 2023
+    const startDate = new Date(2023, 6, 8); // July 8, 2023
+    const endDate = new Date(2023, 6, 2); // July 2, 2023
 
     const events = generator.generate(template, startDate, endDate);
 

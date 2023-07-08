@@ -28,37 +28,40 @@ export class WeeklyEventGenerator implements EventGenerator {
       Math.max(startDate.getTime(), weeklyTemplate.startOn)
     );
     current.setHours(0, 0, 0, 0);
+    const startTimestamp = new Date(current).getTime();
     const end = new Date(
       Math.min(endDate.getTime(), weeklyTemplate.endOn || Infinity)
     );
+    const endTimestamp = end.getTime();
 
-    // Round the start date down to the start of the current week
-    if (current.getDay() !== 1) {
-      current.setDate(current.getDate() - (current.getDay() - 1));
+    // Find the first recurring day of the week.
+    const minimumDay = Math.min(...weeklyTemplate.repeatOnDays);
+    const diff = current.getDay() - minimumDay;
+
+    if (diff > 0) {
+      current.setDate(current.getDate() + 7 - diff);
+    } else if (diff < 0) {
+      current.setDate(current.getDate() - current.getDay() + minimumDay);
     }
 
     while (current.getTime() <= end.getTime()) {
       // Iterate over each day in the week
       for (const day of weeklyTemplate.repeatOnDays) {
         const eventDate = new Date(current.getTime());
-        eventDate.setDate(eventDate.getDate() + (day - 1)); // `Days` are 1-indexed, while `getDay` is 0-indexed
+        eventDate.setDate(eventDate.getDate() - eventDate.getDay() + day);
         const eventStart = eventDate.getTime() + weeklyTemplate.startTime;
-        
-        // Make sure we are within bounds.
-        if (eventStart >= end.getTime()){
-          break;
-        }
-
         const eventEnd =
           eventDate.getTime() +
           weeklyTemplate.startTime +
           weeklyTemplate.duration;
 
-        events.push({
-          template: template,
-          startTimestamp: eventStart,
-          endTimestamp: eventEnd,
-        });
+        if (intersects(eventStart, eventEnd, startTimestamp, endTimestamp)) {
+          events.push({
+            template: template,
+            startTimestamp: eventStart,
+            endTimestamp: eventEnd,
+          });
+        }
       }
 
       // Skip to the start of the same day in the next week
