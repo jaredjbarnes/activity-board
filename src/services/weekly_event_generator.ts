@@ -22,6 +22,18 @@ export class WeeklyEventGenerator
     startDate: Date,
     endDate: Date
   ): IEvent<IWeeklyRecurringEventType>[] {
+    // Quickly get out if there isn't an intersection.
+    if (
+      !this.intersects(
+        startDate.getTime(),
+        endDate.getTime(),
+        template.eventType.startOn,
+        template.eventType.endOn || Infinity
+      )
+    ) {
+      return [];
+    }
+
     const events: IEvent<IWeeklyRecurringEventType>[] = [];
 
     if (template.eventType.name !== EventTypeName.Weekly) {
@@ -75,5 +87,14 @@ export class WeeklyEventGenerator
     }
 
     return events;
+  }
+
+  private intersects(
+    startA: number,
+    endA: number,
+    startB: number,
+    endB: number
+  ): boolean {
+    return Math.max(startA, startB) <= Math.min(endA, endB);
   }
 }

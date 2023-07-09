@@ -14,6 +14,18 @@ export class MonthlyEventGenerator
   ): IEvent<IMonthlyRecurringEventType>[] {
     let events: IEvent<IMonthlyRecurringEventType>[] = [];
 
+    // Quickly get out if there isn't an intersection.
+    if (
+      !this.intersects(
+        startDate.getTime(),
+        endDate.getTime(),
+        template.eventType.startOn,
+        template.eventType.endOn || Infinity
+      )
+    ) {
+      return [];
+    }
+
     if (template.eventType.name === EventTypeName.Monthly) {
       const eventType = template.eventType;
 
