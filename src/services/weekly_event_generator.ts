@@ -14,9 +14,15 @@ function intersects(
   return Math.max(startA, startB) < Math.min(endA, endB);
 }
 
-export class WeeklyEventGenerator implements EventGenerator {
-  generate(template: IEventTemplate, startDate: Date, endDate: Date): IEvent[] {
-    const events: IEvent[] = [];
+export class WeeklyEventGenerator
+  implements EventGenerator<IWeeklyRecurringEventType>
+{
+  generate(
+    template: IEventTemplate<IWeeklyRecurringEventType>,
+    startDate: Date,
+    endDate: Date
+  ): IEvent<IWeeklyRecurringEventType>[] {
+    const events: IEvent<IWeeklyRecurringEventType>[] = [];
 
     if (template.eventType.name !== EventTypeName.Weekly) {
       return events;

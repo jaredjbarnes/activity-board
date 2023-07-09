@@ -8,7 +8,7 @@ function createTemplate(
   startDay: number,
   days: Days[],
   interval: number
-): IEventTemplate {
+): IEventTemplate<IWeeklyRecurringEventType> {
   return {
     id: "1",
     title: "Weekly Meeting",
@@ -88,7 +88,8 @@ describe("WeeklyEventGenerator", () => {
       new Date(2023, 6, 2).getTime(),
       [Days.Monday, Days.Wednesday, Days.Friday],
       1
-    );
+    ) as any;
+    
     template.eventType.name = EventTypeName.Monthly; // Change to monthly
 
     const startDate = new Date(2023, 6, 2); // July 2, 2023
