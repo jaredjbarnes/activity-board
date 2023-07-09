@@ -125,8 +125,8 @@ describe("MonthlyEventGenerator", () => {
     template.eventType.repeatOnWeekNumber = -1; // Last week of the month
     template.eventType.repeatOnDays = [Days.Monday]; // Monday
 
-    const startDate = new Date(2023, 0, 1); // January 1, 2023
-    const endDate = new Date(2023, 2, 31); // December 31, 2023
+    const startDate = new Date(2023, 0, 1); 
+    const endDate = new Date(2023, 2, 31); 
 
     const events = generator.generate(template, startDate, endDate);
     expect(events.length).toBe(3);
@@ -136,5 +136,20 @@ describe("MonthlyEventGenerator", () => {
     expect(events[1].endTimestamp).toBe(new Date(2023, 1, 27, 10).getTime());
     expect(events[2].startTimestamp).toBe(new Date(2023, 2, 27, 9).getTime());
     expect(events[2].endTimestamp).toBe(new Date(2023, 2, 27, 10).getTime());
+  });
+
+  it("generates correctly if the range is smaller than all the days", () => {
+    template.eventType.repeatOnWeekNumber = -1; // Last week of the month
+    template.eventType.repeatOnDays = [Days.Monday, Days.Wednesday, Days.Friday]; 
+
+    const startDate = new Date(2023, 0, 26);
+    const endDate = new Date(2023, 1, 1); 
+
+    const events = generator.generate(template, startDate, endDate);
+    expect(events.length).toBe(2);
+    expect(events[0].startTimestamp).toBe(new Date(2023, 0, 30, 9).getTime());
+    expect(events[0].endTimestamp).toBe(new Date(2023, 0, 30, 10).getTime());
+    expect(events[1].startTimestamp).toBe(new Date(2023, 0, 27, 9).getTime());
+    expect(events[1].endTimestamp).toBe(new Date(2023, 0, 27, 10).getTime());
   });
 });
