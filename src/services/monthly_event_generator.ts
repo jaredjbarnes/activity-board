@@ -134,6 +134,6 @@ export class MonthlyEventGenerator
     startB: number,
     endB: number
   ): boolean {
-    return Math.max(startA, startB) <= Math.min(endA, endB);
+    return Math.max(startA, startB) < Math.min(endA, endB);
   }
 }
