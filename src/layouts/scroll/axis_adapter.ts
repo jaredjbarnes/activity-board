@@ -222,11 +222,11 @@ export class AxisAdapter implements IAxisPort {
       });
     } else {
       if (offset < this._minOffset) {
-        this.animateTo(this._minOffset, 800, customBoundsEasing, () => {
+        this.animateOffsetTo(this._minOffset, 800, customBoundsEasing, () => {
           this.processScrollEnd();
         });
       } else if (offset > this.maxOffset) {
-        this.animateTo(this._maxOffset, 800, customBoundsEasing, () => {
+        this.animateOffsetTo(this._maxOffset, 800, customBoundsEasing, () => {
           this.processScrollEnd();
         });
       } else {
@@ -302,7 +302,7 @@ export class AxisAdapter implements IAxisPort {
         this._deltaOffset *= 1 - (offset - this._maxOffset) / 200;
       } else {
         this.reset();
-        this.animateTo(this._maxOffset, 800, customBoundsEasing, () => {
+        this.animateOffsetTo(this._maxOffset, 800, customBoundsEasing, () => {
           this.processScrollEnd();
         });
         return true;
@@ -312,7 +312,7 @@ export class AxisAdapter implements IAxisPort {
         this._deltaOffset *= 1 - (this.minOffset - offset) / 200;
       } else {
         this.reset();
-        this.animateTo(this._minOffset, 800, customBoundsEasing, () => {
+        this.animateOffsetTo(this._minOffset, 800, customBoundsEasing, () => {
           this.processScrollEnd();
         });
         return true;
@@ -327,6 +327,15 @@ export class AxisAdapter implements IAxisPort {
   }
 
   animateTo(
+    value: number,
+    duration = 2000,
+    easing: EasingFunction = easings.easeOutQuint,
+    onComplete?: () => void
+  ) {
+    this.animateOffsetTo(-value, duration, easing, onComplete);
+  }
+
+  animateOffsetTo(
     value: number,
     duration = 2000,
     easing: EasingFunction = easings.easeOutQuint,

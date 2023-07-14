@@ -40,7 +40,7 @@ export class SnapAxisAdapter extends AxisAdapter {
     const value = this.round(offset + distance);
 
     if (value <= this.maxOffset && value >= this.minOffset) {
-      this.animateTo(value);
+      this.animateOffsetTo(value);
     }
   }
 

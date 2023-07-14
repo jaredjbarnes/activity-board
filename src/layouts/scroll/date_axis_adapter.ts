@@ -41,7 +41,7 @@ export class DateAxisAdapter extends SnapAxisAdapter {
     const days = this.daysBetweenTwoDates(this._anchorDate, date);
     const offset = days * this._snapInterval;
 
-    this.animateTo(offset);
+    this.animateOffsetTo(offset);
   }
 
   scrollToDate(date: Date) {

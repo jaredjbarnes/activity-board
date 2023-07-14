@@ -24,5 +24,5 @@ export interface IAxisPort {
   disable(): void;
   enable(): void;
   scrollTo(value: number): void;
-  animateTo(value: number, duration: number): void;
+  animateOffsetTo(value: number, duration: number): void;
 }
