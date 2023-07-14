@@ -1,7 +1,7 @@
 import { IStandardEventType } from "src/models/event_template_types/i_standard_event_type.ts";
 import { EventTypeName } from "src/models/event_type_name.ts";
 import { IEventTemplate } from "src/models/i_event_template.ts";
-import { StandardEventGenerator } from "src/services/standard_event_generator.ts";
+import { StandardEventGenerator } from "src/event_generators/standard_event_generator.ts";
 
 const standardTemplate = (start: number, end: number): IEventTemplate<IStandardEventType> => {
   return {

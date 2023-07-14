@@ -2,7 +2,7 @@ import { Days } from "src/models/days.ts";
 import { IWeeklyRecurringEventType } from "src/models/event_template_types/i_weekly_recurring_event_type.ts";
 import { EventTypeName } from "src/models/event_type_name.ts";
 import { IEventTemplate } from "src/models/i_event_template.ts";
-import { WeeklyEventGenerator } from "src/services/weekly_event_generator.ts";
+import { WeeklyEventGenerator } from "src/event_generators/weekly_event_generator.ts";
 
 function createTemplate(
   startDay: number,

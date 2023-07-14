@@ -1,7 +1,7 @@
 import { IEvent } from "src/models/i_event.ts";
 import { IEventTemplate } from "src/models/i_event_template.ts";
 import { IYearlyRecurringEventType } from "src/models/event_template_types/i_yearly_recurring_event_type.ts";
-import { EventGenerator } from "src/services/event_generator.ts";
+import { EventGenerator } from "src/event_generators/event_generator.ts";
 
 export class YearlyEventGenerator
   implements EventGenerator<IYearlyRecurringEventType>

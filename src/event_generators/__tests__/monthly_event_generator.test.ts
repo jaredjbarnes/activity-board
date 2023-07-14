@@ -1,7 +1,7 @@
 import { IEventTemplate } from "src/models/i_event_template.ts";
 import { EventTypeName } from "src/models/event_type_name.ts";
 import { Days } from "src/models/days.ts";
-import { MonthlyEventGenerator } from "src/services/monthly_event_generator.ts";
+import { MonthlyEventGenerator } from "src/event_generators/monthly_event_generator.ts";
 import { IMonthlyRecurringEventType } from "src/models/event_template_types/i_monthly_recurring_event_type.ts";
 
 describe("MonthlyEventGenerator", () => {

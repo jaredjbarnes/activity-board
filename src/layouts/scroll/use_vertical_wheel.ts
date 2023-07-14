@@ -1,0 +1,23 @@
+import React, { useLayoutEffect } from "react";
+import { IAxisPort } from "src/layouts/scroll/i_axis_port.ts";
+
+export function useVerticalWheel(
+  divRef: React.RefObject<HTMLDivElement | null>,
+  axisAdapter: IAxisPort
+) {
+  const div = divRef.current;
+
+  useLayoutEffect(() => {
+    if (div != null) {
+      function onWheelChange(event: WheelEvent) {
+        axisAdapter.offset += event.deltaY;
+      }
+
+      div.addEventListener("wheel", onWheelChange);
+
+      return () => {
+        div.removeEventListener("wheel", onWheelChange);
+      };
+    }
+  }, [div]);
+}

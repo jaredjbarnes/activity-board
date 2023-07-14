@@ -2,7 +2,7 @@ import { IMonthlyRecurringEventType } from "src/models/event_template_types/i_mo
 import { EventTypeName } from "src/models/event_type_name.ts";
 import { IEvent } from "src/models/i_event.ts";
 import { IEventTemplate } from "src/models/i_event_template.ts";
-import { EventGenerator } from "src/services/event_generator.ts";
+import { EventGenerator } from "src/event_generators/event_generator.ts";
 
 export class MonthlyEventGenerator
   implements EventGenerator<IMonthlyRecurringEventType>
