@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect } from "react";
 import { IPointerPort } from "./i_pointer.ts";
 import "hammerjs";
 

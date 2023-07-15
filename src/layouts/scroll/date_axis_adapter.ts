@@ -57,10 +57,13 @@ export class DateAxisAdapter extends SnapAxisAdapter {
     const currentDate = this.getDateByPosition(this.start);
     const endDate = this.getDateByPosition(this.end);
 
+    currentDate.setDate(currentDate.getDate() - 1);
+    endDate.setDate(endDate.getDate() + 1);
+
     while (currentDate.getTime() < endDate.getTime()) {
       const cell = this._dateCellFactory.useInstance();
       const index = this.daysBetweenTwoDates(this._anchorDate, currentDate);
-      const position = index * this._snapInterval;
+      const position = index * this._snapInterval - this.start;
 
       cell.position = position;
       cell.size = this._snapInterval;
@@ -72,8 +75,8 @@ export class DateAxisAdapter extends SnapAxisAdapter {
     return cells;
   }
 
-  private getDateByPosition(value: number) {
-    const index = round(value / this._snapInterval);
+  getDateByPosition(value: number) {
+    const index = Math.floor(value / this._snapInterval);
     const date = new Date(this._anchorDate);
 
     date.setDate(date.getDate() + index);
