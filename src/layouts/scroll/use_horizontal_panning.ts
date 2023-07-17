@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { IPointerPort } from "./i_pointer.ts";
+import { IPointerPort } from "./i_pointer_port.ts";
 import "hammerjs";
 
 declare var Hammer: any;

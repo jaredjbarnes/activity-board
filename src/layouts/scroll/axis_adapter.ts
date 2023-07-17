@@ -335,7 +335,7 @@ export class AxisAdapter implements IAxisPort {
     this.animateOffsetTo(-value, duration, easing, onComplete);
   }
 
-  animateOffsetTo(
+  protected animateOffsetTo(
     value: number,
     duration = 2000,
     easing: EasingFunction = easings.easeOutQuint,

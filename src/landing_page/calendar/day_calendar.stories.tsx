@@ -3,7 +3,7 @@ import { DayCalendar } from "src/landing_page/calendar/day_calendar.tsx";
 import { DateAxisAdapter } from "src/layouts/scroll/date_axis_adapter.ts";
 
 export default {
-  title: "landing_page/day_calendar",
+  title: "Landing Page/Day Calendar",
   component: DayCalendar,
 };
 

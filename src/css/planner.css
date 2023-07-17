@@ -4,4 +4,6 @@
 
 .calendar .date-of-day {
   font-size: 32px;
+  font-weight: 200;
+  opacity: 0.65
 }

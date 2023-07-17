@@ -3,7 +3,7 @@ import { DateAxisAdapter } from "src/layouts/scroll/date_axis_adapter.ts";
 import { VDateScroll } from "src/layouts/scroll/v_date_scroll.tsx";
 
 export default {
-  title: "scroll/VDateScroll",
+  title: "Scroll/VDateScroll",
   component: VDateScroll,
 };
 
