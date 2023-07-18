@@ -1,8 +1,8 @@
-import { DateCell } from "src/layouts/scroll/date_axis_adapter.ts";
+import { IDateCell } from "src/layouts/scroll/i_date_cell.ts";
 import { VStack } from "src/layouts/stacks/v_stack/index.tsx";
 
 export interface DayProps {
-  dateCell: DateCell;
+  dateCell: IDateCell;
 }
 
 const dayOfWeekMap: Record<number, string> = {

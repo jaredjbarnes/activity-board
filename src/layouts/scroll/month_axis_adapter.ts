@@ -1,3 +1,4 @@
+import { EasingFunction, easings } from "motion-ux";
 import { Factory } from "src/factory.ts";
 import { SnapAxisAdapter } from "src/layouts/scroll/snap_axis_adapter.ts";
 
@@ -35,17 +36,24 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
     this._snapInterval = interval;
   }
 
-  animateToDate(date: Date) {
-    this.animateTo(this.getPositionForDate(date));
+  animateToDate(
+    date: Date,
+    duration: number = 1000,
+    easing?: EasingFunction,
+    onComplete?: () => void
+  ) {
+    const position = this.getPositionForDate(date);
+    this.animateTo(position, duration, easing, onComplete);
   }
 
   scrollToDate(date: Date) {
-    this.scrollTo(this.getPositionForDate(date));
+    const position = this.getPositionForDate(date);
+    this.scrollTo(position);
   }
 
   private getPositionForDate(date: Date) {
     const months = this.getMonthsBetweenDates(this._anchorDate, date);
-    return months * this._snapInterval - this.start;
+    return months * this._snapInterval;
   }
 
   getVisibleCells() {
@@ -54,12 +62,12 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
     const currentDate = this.getDateByPosition(this.start);
     const endDate = this.getDateByPosition(this.end);
 
-    currentDate.setDate(currentDate.getMonth() - 1);
-    endDate.setDate(endDate.getMonth() + 1);
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    endDate.setMonth(endDate.getMonth() + 1);
 
     while (currentDate.getTime() < endDate.getTime()) {
       const cell = this._dateCellFactory.useInstance();
-      const position = this.getPositionForDate(currentDate);
+      const position = this.getPositionForDate(currentDate) - this.start;
 
       cell.position = position;
       cell.size = this._snapInterval;
@@ -68,6 +76,7 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
       cells.push(cell);
       currentDate.setMonth(currentDate.getMonth() + 1);
     }
+
     return cells;
   }
 
@@ -80,9 +89,11 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
 
   private getMonthsBetweenDates(from: Date, to: Date) {
     let months;
+
     months = (to.getFullYear() - from.getFullYear()) * 12;
     months -= from.getMonth();
     months += to.getMonth();
+
     return months;
   }
 }

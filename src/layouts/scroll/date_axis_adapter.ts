@@ -1,19 +1,14 @@
 import { Factory } from "src/factory.ts";
+import { IDateCell } from "src/layouts/scroll/i_date_cell.ts";
 import { SnapAxisAdapter } from "src/layouts/scroll/snap_axis_adapter.ts";
 import { round } from "src/round.ts";
 
 const ONE_DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
 
-export interface DateCell {
-  position: number;
-  size: number;
-  date: Date;
-}
-
 export class DateAxisAdapter extends SnapAxisAdapter {
   protected _snapInterval: number;
   protected _anchorDate: Date;
-  protected _dateCellFactory: Factory<DateCell>;
+  protected _dateCellFactory: Factory<IDateCell>;
 
   constructor(
     requestAnimationFrame: (callback: () => void) => number,
@@ -47,11 +42,15 @@ export class DateAxisAdapter extends SnapAxisAdapter {
 
   private getPositionForDate(date: Date) {
     const index = this.getDaysBetweenDates(this._anchorDate, date);
-    return index * this._snapInterval - this.start;
+    return index * this._snapInterval;
+  }
+
+  getCurrentDate(){
+    return this.getDateByPosition(-this.offset);
   }
 
   getVisibleCells() {
-    const cells: DateCell[] = [];
+    const cells: IDateCell[] = [];
     this._dateCellFactory.releaseAll();
     const currentDate = this.getDateByPosition(this.start);
     const endDate = this.getDateByPosition(this.end);
@@ -61,8 +60,7 @@ export class DateAxisAdapter extends SnapAxisAdapter {
 
     while (currentDate.getTime() < endDate.getTime()) {
       const cell = this._dateCellFactory.useInstance();
-      const index = this.getDaysBetweenDates(this._anchorDate, currentDate);
-      const position = index * this._snapInterval - this.start;
+      const position = this.getPositionForDate(currentDate) - this.start;
 
       cell.position = position;
       cell.size = this._snapInterval;

@@ -1,58 +1,58 @@
 import { useAsyncValue } from "@m/hex/hooks/use_async_value";
-import { useRef, useEffect } from "react";
-import { DateAxisAdapter } from "src/layouts/scroll/date_axis_adapter.ts";
+import { useRef, useLayoutEffect } from "react";
 import { IDateCell } from "src/layouts/scroll/i_date_cell.ts";
+import { MonthAxisAdapter } from "src/layouts/scroll/month_axis_adapter.ts";
 import { useVerticalPanning } from "src/layouts/scroll/use_vertical_panning.ts";
 import { useVerticalResizing } from "src/layouts/scroll/use_vertical_resizing.ts";
 
-export interface VDateScrollProps {
+export interface VMonthScrollProps {
   children: (
     dateCell: IDateCell,
-    axis: DateAxisAdapter,
+    axis: MonthAxisAdapter,
     index: number
   ) => React.ReactNode;
-  dateAxisAdapter: DateAxisAdapter;
+  monthAxisAdapter: MonthAxisAdapter;
   className?: string;
   style?: React.CSSProperties;
   onDateTap?: (date: Date) => void;
   overflow?: "hidden" | "visible";
 }
 
-export function VDateScroll({
-  dateAxisAdapter,
+export function VMonthScroll({
+  monthAxisAdapter,
   children: renderCell,
   style,
   className,
   overflow,
-}: VDateScrollProps) {
+}: VMonthScrollProps) {
   const divRef = useRef<HTMLDivElement | null>(null);
-  const cells = dateAxisAdapter.getVisibleCells();
+  const cells = monthAxisAdapter.getVisibleCells();
+  
+  useAsyncValue(monthAxisAdapter.offsetBroadcast);
+  useAsyncValue(monthAxisAdapter.sizeBroadcast);
+  useVerticalResizing(divRef, monthAxisAdapter);
+  useVerticalPanning(divRef, monthAxisAdapter);
 
-  useAsyncValue(dateAxisAdapter.offsetBroadcast);
-  useAsyncValue(dateAxisAdapter.sizeBroadcast);
-  useVerticalResizing(divRef, dateAxisAdapter);
-  useVerticalPanning(divRef, dateAxisAdapter);
-
-  useEffect(() => {
-    dateAxisAdapter.initialize(0);
-  }, [dateAxisAdapter]);
+  useLayoutEffect(() => {
+    monthAxisAdapter.initialize(0);
+  }, [monthAxisAdapter]);
 
   return (
     <div
       ref={divRef}
       onPointerDown={() => {
-        dateAxisAdapter.stop();
+        monthAxisAdapter.stop();
       }}
       style={{
-        ...style,
         position: "relative",
+        ...style,
         userSelect: "none",
         touchAction: "none",
         overflow,
       }}
       className={className}
     >
-      {cells.map((c, index) => renderCell(c, dateAxisAdapter, index))}
+      {cells.map((c, index) => renderCell(c, monthAxisAdapter, index))}
     </div>
   );
 }

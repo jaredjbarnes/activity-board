@@ -353,7 +353,6 @@ export class AxisAdapter implements IAxisPort {
     });
 
     value = this.getValueWithinBounds(value);
-
     this.reset();
     this._motion.inject(animation);
     this._motion.segueTo(

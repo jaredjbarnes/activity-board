@@ -22,9 +22,10 @@ export function DayCalendar({
       dateAxisAdapter={dateAxisAdapter}
       style={style}
       className={`${className} calendar`}
+      
     >
-      {(dateCell) => {
-        return <Day dateCell={dateCell} />;
+      {(dateCell, _, index) => {
+        return <Day key={index} dateCell={dateCell} />;
       }}
     </VDateScroll>
   );

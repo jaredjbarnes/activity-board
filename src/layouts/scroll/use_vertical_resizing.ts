@@ -22,7 +22,7 @@ export function useVerticalResizing(
     observer.observe(div);
 
     const rect = div.getBoundingClientRect();
-    axisAdapter.setSize(rect.width);
+    axisAdapter.setSize(rect.height);
 
     return () => {
       observer.disconnect();
