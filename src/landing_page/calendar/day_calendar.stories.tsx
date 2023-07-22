@@ -89,16 +89,49 @@ export function BasicCalendar() {
 
   useLayoutEffect(() => {
     let currentMonthDate = monthAxisAdapter.getCurrentMonth();
-    let isMonthAnimating = false;
-    let isDateAnimating = false;
 
-    dateAxisAdapter.onScroll = () => {
+    function nullableScroll() {}
+
+    function onDateScrollStart() {
+      monthAxisAdapter.disable();
+      dateAxisAdapter.onScroll = onDateScroll;
+      monthAxisAdapter.onScrollStart = nullableScroll;
+      monthAxisAdapter.onScrollEnd = nullableScroll;
+    }
+
+    function onDateScrollEnd() {
+      monthAxisAdapter.enable();
+      dateAxisAdapter.onScroll = nullableScroll;
+      monthAxisAdapter.onScrollStart = onMonthScrollStart;
+      monthAxisAdapter.onScrollEnd = onMonthScrollEnd;
+    }
+
+    function onMonthScrollStart() {
+      dateAxisAdapter.disable();
+      monthAxisAdapter.onScroll = onMonthScroll;
+      dateAxisAdapter.onScrollStart = nullableScroll;
+      dateAxisAdapter.onScrollEnd = nullableScroll;
+    }
+
+    function onMonthScrollEnd() {
+      dateAxisAdapter.enable();
+      monthAxisAdapter.onScroll = nullableScroll;
+      dateAxisAdapter.onScrollStart = onDateScrollStart;
+      dateAxisAdapter.onScrollEnd = onDateScrollEnd;
+    }
+
+    dateAxisAdapter.onScrollStart = onDateScrollStart;
+    dateAxisAdapter.onScrollEnd = onDateScrollEnd;
+
+    monthAxisAdapter.onScrollStart = onMonthScrollStart;
+    monthAxisAdapter.onScrollEnd = onMonthScrollEnd;
+
+    function onDateScroll() {
       const currentDate = dateAxisAdapter.getCurrentDate();
 
       if (
-        !isDateAnimating &&
-        (currentDate.getMonth() !== currentMonthDate.getMonth() ||
-        currentDate.getFullYear() !== currentMonthDate.getFullYear())
+        currentDate.getMonth() !== currentMonthDate.getMonth() ||
+        currentDate.getFullYear() !== currentMonthDate.getFullYear()
       ) {
         const newDate = new Date(currentDate);
         newDate.setDate(1);
@@ -106,20 +139,16 @@ export function BasicCalendar() {
 
         currentMonthDate = newDate;
 
-        isMonthAnimating = true;
-        monthAxisAdapter.animateToDate(newDate, undefined, undefined , () => {
-          isMonthAnimating = false;
-        });
+        monthAxisAdapter.animateToDate(newDate);
       }
-    };
+    }
 
-    monthAxisAdapter.onScroll = () => {
+    function onMonthScroll() {
       const currentDate = monthAxisAdapter.getCurrentMonth();
 
       if (
-        !isMonthAnimating &&
-        (currentDate.getMonth() !== currentMonthDate.getMonth() ||
-        currentDate.getFullYear() !== currentMonthDate.getFullYear())
+        currentDate.getMonth() !== currentMonthDate.getMonth() ||
+        currentDate.getFullYear() !== currentMonthDate.getFullYear()
       ) {
         const newDate = new Date(currentDate);
         newDate.setDate(1);
@@ -127,12 +156,12 @@ export function BasicCalendar() {
 
         currentMonthDate = newDate;
 
-        isDateAnimating = true;
-        dateAxisAdapter.animateToDate(newDate, undefined, undefined , () => {
-          isDateAnimating = false;
-        });
+        dateAxisAdapter.animateToDate(newDate);
       }
-    };
+    }
+
+    monthAxisAdapter.onScroll = nullableScroll;
+    dateAxisAdapter.onScroll = nullableScroll;
   }, [dateAxisAdapter, monthAxisAdapter]);
 
   return (
