@@ -30,10 +30,15 @@ export function Month({ dateCell }: MonthProps) {
         top: `${dateCell.position}px`,
         left: "0px",
         height: `${dateCell.size}px`,
+        userSelect: "none",
       }}
     >
-      <Box height="41px" className="month">{monthMap[dateCell.date.getMonth()]}</Box>
-      <Box height="36px" className="year">{dateCell.date.getFullYear()}</Box>
+      <Box height="41px" className="month">
+        {monthMap[dateCell.date.getMonth()]}
+      </Box>
+      <Box height="36px" className="year">
+        {dateCell.date.getFullYear()}
+      </Box>
     </VStack>
   );
 }

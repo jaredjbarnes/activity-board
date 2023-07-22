@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { DayCalendar } from "src/landing_page/calendar/day_calendar.tsx";
 import { MonthHeader } from "src/landing_page/calendar/month_header.tsx";
 import { DateAxisAdapter } from "src/layouts/scroll/date_axis_adapter.ts";
+import { MonthAxisAdapter } from "src/layouts/scroll/month_axis_adapter.ts";
 
 export default {
   title: "Landing Page/Day Calendar",
@@ -25,26 +26,37 @@ export function SidebarCalendar() {
 }
 
 export function MonthHeaderExample() {
-  const [date, setDate] = useState(() => {
-    return new Date(2023, 0, 1);
+  const [monthAxisAdapter] = useState(() => {
+    const monthAxisAdapter = new MonthAxisAdapter(
+      requestAnimationFrame,
+      cancelAnimationFrame
+    );
+
+    monthAxisAdapter.scrollToDate(new Date(2023, 0, 1));
+
+    return monthAxisAdapter;
   });
 
   function next() {
-    const nextDate = new Date(date);
-    nextDate.setMonth(nextDate.getMonth() + 1);
-    setDate(nextDate);
+    const currentDate = monthAxisAdapter.getCurrentMonth();
+    const newDate = new Date(currentDate);
+    newDate.setMonth(newDate.getMonth() + 1);
+
+    monthAxisAdapter.animateToDate(newDate);
   }
 
   function prev() {
-    const prevDate = new Date(date);
-    prevDate.setMonth(prevDate.getMonth() - 1);
-    setDate(prevDate);
+    const currentDate = monthAxisAdapter.getCurrentMonth();
+    const newDate = new Date(currentDate);
+    newDate.setMonth(newDate.getMonth() - 1);
+
+    monthAxisAdapter.animateToDate(newDate);
   }
 
   return (
     <div>
       <MonthHeader
-        date={date}
+        monthAxisAdapter={monthAxisAdapter}
         style={{
           width: "300px",
           height: "100px",
@@ -57,24 +69,71 @@ export function MonthHeaderExample() {
 }
 
 export function BasicCalendar() {
-  const [date, setDate] = useState(new Date());
+  const [monthAxisAdapter] = useState(() => {
+    const monthAxisAdapter = new MonthAxisAdapter(
+      requestAnimationFrame,
+      cancelAnimationFrame
+    );
+
+    return monthAxisAdapter;
+  });
+
   const [dateAxisAdapter] = useState(() => {
     const dateAxisAdapter = new DateAxisAdapter(
       requestAnimationFrame,
       cancelAnimationFrame
     );
+
+    return dateAxisAdapter;
+  });
+
+  useLayoutEffect(() => {
+    let currentMonthDate = monthAxisAdapter.getCurrentMonth();
+    let isMonthAnimating = false;
+    let isDateAnimating = false;
+
     dateAxisAdapter.onScroll = () => {
       const currentDate = dateAxisAdapter.getCurrentDate();
 
       if (
-        currentDate.getMonth() !== date.getMonth() ||
-        currentDate.getFullYear() !== date.getFullYear()
+        !isDateAnimating &&
+        (currentDate.getMonth() !== currentMonthDate.getMonth() ||
+        currentDate.getFullYear() !== currentMonthDate.getFullYear())
       ) {
-        setDate(currentDate);
+        const newDate = new Date(currentDate);
+        newDate.setDate(1);
+        newDate.setHours(0, 0, 0, 0);
+
+        currentMonthDate = newDate;
+
+        isMonthAnimating = true;
+        monthAxisAdapter.animateToDate(newDate, undefined, undefined , () => {
+          isMonthAnimating = false;
+        });
       }
     };
-    return dateAxisAdapter;
-  });
+
+    monthAxisAdapter.onScroll = () => {
+      const currentDate = monthAxisAdapter.getCurrentMonth();
+
+      if (
+        !isMonthAnimating &&
+        (currentDate.getMonth() !== currentMonthDate.getMonth() ||
+        currentDate.getFullYear() !== currentMonthDate.getFullYear())
+      ) {
+        const newDate = new Date(currentDate);
+        newDate.setDate(1);
+        newDate.setHours(0, 0, 0, 0);
+
+        currentMonthDate = newDate;
+
+        isDateAnimating = true;
+        dateAxisAdapter.animateToDate(newDate, undefined, undefined , () => {
+          isDateAnimating = false;
+        });
+      }
+    };
+  }, [dateAxisAdapter, monthAxisAdapter]);
 
   return (
     <>
@@ -109,7 +168,7 @@ export function BasicCalendar() {
         }}
       />
       <MonthHeader
-        date={date}
+        monthAxisAdapter={monthAxisAdapter}
         style={{
           position: "absolute",
           top: 0,

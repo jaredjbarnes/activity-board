@@ -5,30 +5,16 @@ import { MonthAxisAdapter } from "src/layouts/scroll/month_axis_adapter.ts";
 import { VMonthScroll } from "src/layouts/scroll/v_month_scroll.tsx";
 
 export interface MonthHeaderProps {
-  date: Date;
+  monthAxisAdapter: MonthAxisAdapter;
   className?: string;
   style?: React.CSSProperties;
 }
 
-export function MonthHeader({ date, className, style }: MonthHeaderProps) {
-  const month = date.getMonth();
-  const year = date.getFullYear();
-
-  const [monthAxisAdapter] = useState(() => {
-    const monthAxisAdapter = new MonthAxisAdapter(
-      requestAnimationFrame,
-      cancelAnimationFrame,
-      100
-    );
-    monthAxisAdapter.disable();
-    monthAxisAdapter.scrollToDate(date);
-    return monthAxisAdapter;
-  });
+export function MonthHeader({ monthAxisAdapter, className, style }: MonthHeaderProps) {
 
   useLayoutEffect(() => {
-    const date = new Date(year, month, 1);
-    monthAxisAdapter.animateToDate(date);
-  }, [month, year, monthAxisAdapter]);
+    monthAxisAdapter.setSnapInterval(100);
+  }, [monthAxisAdapter]);
 
   return (
     <VMonthScroll

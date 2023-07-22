@@ -1,6 +1,7 @@
 import { EasingFunction, easings } from "motion-ux";
 import { Factory } from "src/factory.ts";
 import { SnapAxisAdapter } from "src/layouts/scroll/snap_axis_adapter.ts";
+import { round } from "src/round.ts";
 
 export interface DateCell {
   position: number;
@@ -56,6 +57,10 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
     return months * this._snapInterval;
   }
 
+  getCurrentMonth(){
+    return this.getDateByPosition(-this.offset);
+  }
+
   getVisibleCells() {
     const cells: DateCell[] = [];
     this._dateCellFactory.releaseAll();
@@ -81,7 +86,7 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
   }
 
   getDateByPosition(value: number) {
-    const monthsAway = Math.floor(value / this._snapInterval);
+    const monthsAway = round(value / this._snapInterval);
     const date = new Date(this._anchorDate);
     date.setMonth(date.getMonth() + monthsAway);
     return date;

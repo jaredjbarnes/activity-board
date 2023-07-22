@@ -1,16 +1,19 @@
 .calendar .day-of-week {
   font-size: 36px;
+  user-select: none;
 }
 
 .calendar .date-of-day {
   font-size: 32px;
   font-weight: 200;
   opacity: 0.65;
+  user-select: none;
 }
 
 .month-year-header .month {
   font-size: 36px;
   text-align: left;
+  user-select: none;
 }
 
 .month-year-header .year {
@@ -18,4 +21,5 @@
   font-weight: 200;
   opacity: 0.65;
   text-align: left;
+  user-select: none;
 }

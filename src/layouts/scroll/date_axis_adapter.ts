@@ -1,3 +1,4 @@
+import { EasingFunction } from "motion-ux";
 import { Factory } from "src/factory.ts";
 import { IDateCell } from "src/layouts/scroll/i_date_cell.ts";
 import { SnapAxisAdapter } from "src/layouts/scroll/snap_axis_adapter.ts";
@@ -32,8 +33,13 @@ export class DateAxisAdapter extends SnapAxisAdapter {
     this._snapInterval = interval;
   }
 
-  animateToDate(date: Date) {
-    this.animateTo(this.getPositionForDate(date));
+  animateToDate(
+    date: Date,
+    duration: number = 1000,
+    easing?: EasingFunction,
+    onComplete?: () => void
+  ) {
+    this.animateTo(this.getPositionForDate(date), duration, easing, onComplete);
   }
 
   scrollToDate(date: Date) {
@@ -45,7 +51,7 @@ export class DateAxisAdapter extends SnapAxisAdapter {
     return index * this._snapInterval;
   }
 
-  getCurrentDate(){
+  getCurrentDate() {
     return this.getDateByPosition(-this.offset);
   }
 
@@ -73,7 +79,7 @@ export class DateAxisAdapter extends SnapAxisAdapter {
   }
 
   getDateByPosition(value: number) {
-    const index = Math.floor(value / this._snapInterval);
+    const index = round(value / this._snapInterval);
     const date = new Date(this._anchorDate);
 
     date.setDate(date.getDate() + index);

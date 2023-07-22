@@ -18,12 +18,15 @@ const dayOfWeekMap: Record<number, string> = {
 
 export function Day({ dateCell }: DayProps) {
   return (
-    <VStack style={{
-      position: "absolute",
-      top: `${dateCell.position}px`,
-      left: "0px",
-      height: `${dateCell.size}px`
-    }} >
+    <VStack
+      style={{
+        position: "absolute",
+        top: `${dateCell.position}px`,
+        left: "0px",
+        height: `${dateCell.size}px`,
+        userSelect: "none",
+      }}
+    >
       <div className="day-of-week">{dayOfWeekMap[dateCell.date.getDay()]}</div>
       <div className="date-of-day">{dateCell.date.getDate()}</div>
     </VStack>
