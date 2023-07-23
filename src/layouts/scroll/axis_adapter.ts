@@ -145,6 +145,7 @@ export class AxisAdapter implements IAxisPort {
 
   private processScrollEnd() {
     if (this._isScrolling) {
+      this.reset();
       this._isScrolling = false;
       this.onScrollEnd && this.onScrollEnd(this);
     }

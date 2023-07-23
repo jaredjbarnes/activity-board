@@ -3,7 +3,7 @@ import { TextField } from "src/controls/text_field.tsx";
 import { TextFieldAdapter } from "src/controls/text_field_adapter.ts";
 
 export default {
-  title: "TextField",
+  title: "Controls/TextField",
   component: TextField,
 };
 

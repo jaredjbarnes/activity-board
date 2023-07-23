@@ -44,10 +44,12 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
     onComplete?: () => void
   ) {
     const position = this.getPositionForDate(date);
+    console.log(date, this.start, position);
     this.animateTo(position, duration, easing, onComplete);
   }
 
   scrollToDate(date: Date) {
+    console.log(date);
     const position = this.getPositionForDate(date);
     this.scrollTo(position);
   }
