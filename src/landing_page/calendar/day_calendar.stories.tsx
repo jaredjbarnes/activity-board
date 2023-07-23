@@ -186,6 +186,17 @@ export function BasicCalendar() {
           borderLeft: "3px solid black",
         }}
       ></div>
+
+      <div
+        style={{
+          position: "absolute",
+          top: "105px",
+          left: "83px",
+          width: "0px",
+          bottom: "5px",
+          borderLeft: "3px solid black",
+        }}
+      ></div>
       <DayCalendar
         dateAxisAdapter={dateAxisAdapter}
         style={{

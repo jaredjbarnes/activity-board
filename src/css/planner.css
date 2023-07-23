@@ -23,3 +23,20 @@
   text-align: left;
   user-select: none;
 }
+
+/* Controls */
+.text-field {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.text-field label {
+  font-size: 16px;
+}
+
+.text-field input {
+  font-size: 20px;
+  padding-left: 4px;
+  border: 3px solid black;
+  border-radius: 10px;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
