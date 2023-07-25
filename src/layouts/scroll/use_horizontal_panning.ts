@@ -20,11 +20,12 @@ export function useHorizontalPanning(
         new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 5 })
       );
 
-      if (onTap) {
-        manager.add(new Hammer.Tap());
-      }
+      manager.add(new Hammer.Tap());
 
       manager.on("tap", (e: any) => {
+        pointerAdapter.pointerStart(e.center.x);
+        pointerAdapter.pointerMove(e.center.x);
+        pointerAdapter.pointerEnd();
         onTap && onTap(e.srcEvent);
       });
 

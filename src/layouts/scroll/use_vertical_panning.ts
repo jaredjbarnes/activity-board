@@ -20,11 +20,13 @@ export function useVerticalPanning(
         new Hammer.Pan({ direction: Hammer.DIRECTION_VERTICAL, threshold: 5 })
       );
 
-      if (onTap) {
-        manager.add(new Hammer.Tap());
-      }
+      manager.add(new Hammer.Tap());
 
       manager.on("tap", (e: any) => {
+        pointerAdapter.pointerStart(e.center.y);
+        pointerAdapter.pointerMove(e.center.y);
+        pointerAdapter.pointerEnd();
+
         onTap && onTap(e.srcEvent);
       });
 

@@ -40,9 +40,6 @@ export function VMonthScroll({
   return (
     <div
       ref={divRef}
-      onPointerDown={() => {
-        monthAxisAdapter.stop();
-      }}
       style={{
         position: "relative",
         ...style,

@@ -36,9 +36,6 @@ export function HScroll({
   return (
     <div
       ref={divRef}
-      onPointerDown={() => {
-        axisAdapter.stop();
-      }}
       style={{
         ...style,
         position: "relative",

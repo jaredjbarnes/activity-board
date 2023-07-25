@@ -94,37 +94,53 @@ export function BasicCalendar() {
 
     function onDateScrollStart() {
       monthAxisAdapter.disable();
-      dateAxisAdapter.onScroll = onDateScroll;
+      monthAxisAdapter.onScroll = nullableScroll;
       monthAxisAdapter.onScrollStart = nullableScroll;
       monthAxisAdapter.onScrollEnd = nullableScroll;
+
+      dateAxisAdapter.onScroll = onDateScroll;
     }
 
     function onDateScrollEnd() {
-      monthAxisAdapter.enable();
+      if (monthAxisAdapter.isScrolling) {
+        monthAxisAdapter.onScrollEnd = () => {
+          monthAxisAdapter.enable();
+          monthAxisAdapter.onScrollStart = onMonthScrollStart;
+          monthAxisAdapter.onScrollEnd = onMonthScrollEnd;
+        };
+      } else {
+        monthAxisAdapter.enable();
+        monthAxisAdapter.onScrollStart = onMonthScrollStart;
+        monthAxisAdapter.onScrollEnd = onMonthScrollEnd;
+      }
+
       dateAxisAdapter.onScroll = nullableScroll;
-      monthAxisAdapter.onScrollStart = onMonthScrollStart;
-      monthAxisAdapter.onScrollEnd = onMonthScrollEnd;
     }
 
     function onMonthScrollStart() {
       dateAxisAdapter.disable();
-      monthAxisAdapter.onScroll = onMonthScroll;
+      dateAxisAdapter.onScroll = nullableScroll;
       dateAxisAdapter.onScrollStart = nullableScroll;
       dateAxisAdapter.onScrollEnd = nullableScroll;
+
+      monthAxisAdapter.onScroll = onMonthScroll;
     }
 
     function onMonthScrollEnd() {
-      dateAxisAdapter.enable();
+      if (dateAxisAdapter.isScrolling) {
+        dateAxisAdapter.onScrollEnd = () => {
+          dateAxisAdapter.enable();
+          dateAxisAdapter.onScrollStart = onDateScrollStart;
+          dateAxisAdapter.onScrollEnd = onDateScrollEnd;
+        };
+      } else {
+        dateAxisAdapter.enable();
+        dateAxisAdapter.onScrollStart = onDateScrollStart;
+        dateAxisAdapter.onScrollEnd = onDateScrollEnd;
+      }
+
       monthAxisAdapter.onScroll = nullableScroll;
-      dateAxisAdapter.onScrollStart = onDateScrollStart;
-      dateAxisAdapter.onScrollEnd = onDateScrollEnd;
     }
-
-    dateAxisAdapter.onScrollStart = onDateScrollStart;
-    dateAxisAdapter.onScrollEnd = onDateScrollEnd;
-
-    monthAxisAdapter.onScrollStart = onMonthScrollStart;
-    monthAxisAdapter.onScrollEnd = onMonthScrollEnd;
 
     function onDateScroll() {
       const currentDate = dateAxisAdapter.getCurrentDate();
@@ -160,8 +176,14 @@ export function BasicCalendar() {
       }
     }
 
-    monthAxisAdapter.onScroll = nullableScroll;
     dateAxisAdapter.onScroll = nullableScroll;
+    dateAxisAdapter.onScrollStart = onDateScrollStart;
+    dateAxisAdapter.onScrollEnd = onDateScrollEnd;
+
+    monthAxisAdapter.onScroll = nullableScroll;
+    monthAxisAdapter.onScrollStart = onMonthScrollStart;
+    monthAxisAdapter.onScrollEnd = onMonthScrollEnd;
+
   }, [dateAxisAdapter, monthAxisAdapter]);
 
   return (
@@ -182,7 +204,7 @@ export function BasicCalendar() {
           top: "5px",
           left: "83px",
           width: "0px",
-          height: "90px",
+          height: "87px",
           borderLeft: "3px solid black",
         }}
       ></div>

@@ -21,6 +21,11 @@ export class SnapAxisAdapter extends AxisAdapter {
 
   pointerEnd() {
     super.pointerEnd();
+
+    if (!this._isEnabled) {
+      return;
+    }
+
     this.settle();
   }
 
@@ -30,7 +35,10 @@ export class SnapAxisAdapter extends AxisAdapter {
 
   stop() {
     super.stop();
-    this.settle();
+
+    if (this.isScrolling && this._isEnabled) {
+      this.settle();
+    }
   }
 
   protected settle() {

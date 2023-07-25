@@ -40,9 +40,6 @@ export function VDateScroll({
   return (
     <div
       ref={divRef}
-      onPointerDown={() => {
-        dateAxisAdapter.stop();
-      }}
       style={{
         ...style,
         position: "relative",

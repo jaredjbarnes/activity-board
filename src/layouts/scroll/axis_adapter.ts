@@ -19,9 +19,9 @@ export class AxisAdapter implements IAxisPort {
   protected _offset = new ObservableValue<number>(0);
   protected _size = new ObservableValue<number>(0);
   protected _motion: Motion<{ offset: number }>;
+  protected _isPointerDown = false;
   protected _isScrolling = false;
   protected _isEnabled = true;
-  protected _isPointerEnabled = true;
   protected _requestAnimationId = -1;
   protected _lastPointerEventTime = Date.now();
   protected _lastOffset: number = 0;
@@ -44,7 +44,7 @@ export class AxisAdapter implements IAxisPort {
   }
 
   set offset(value: number) {
-    this.stop();
+    this.processScrollEnd();
     this.onScrollStart && this.onScrollStart(this);
     this._offset.setValue(value);
     this.onScroll && this.onScroll(this);
@@ -124,10 +124,10 @@ export class AxisAdapter implements IAxisPort {
   }
 
   private updateFromAnimation(offset: number, newOffset: number) {
-    offset = newOffset;
-    this._deltaOffset = offset - this._lastOffset;
+    this._deltaOffset = newOffset - offset;
     this._deltaOffsetHistory.fill(this._deltaOffset);
-    return offset;
+    this._lastOffset = offset;
+    return newOffset;
   }
 
   private processScrollStart() {
@@ -165,7 +165,12 @@ export class AxisAdapter implements IAxisPort {
   }
 
   pointerStart(value: number) {
+    if (!this._isEnabled) {
+      return;
+    }
+
     this.reset();
+    this._isPointerDown = true;
     this._lastPointerEventTime = Date.now();
     this._lastOffset = value;
     this._startOffset = value;
@@ -175,14 +180,8 @@ export class AxisAdapter implements IAxisPort {
   }
 
   pointerMove(value: number) {
-    if (!this._isEnabled) {
-      this.reset();
-      this._lastPointerEventTime = Date.now();
-      this._lastOffset = value;
-      this._startOffset = value;
-      this._deltaOffset = 0;
-      this._deltaOffsetHistory.fill(0);
-      this.processScrollEnd();
+    if (!this._isPointerDown || !this._isEnabled) {
+      return;
     }
 
     const now = Date.now();
@@ -205,17 +204,25 @@ export class AxisAdapter implements IAxisPort {
 
     this.onScroll && this.onScroll(this);
 
-    return true;
   }
 
   pointerEnd() {
-    if (!this.isScrolling) {
+    
+    if (!this._isPointerDown) {
       return;
     }
 
+    this._isPointerDown = false;
+
+    if (!this._isEnabled){
+      return;
+    }
+    
+    this._lastPointerEventTime = Date.now();
+    
     const offset = this._offset.getValue();
     const delta = Math.abs(this._deltaOffset);
-    this._lastPointerEventTime = Date.now();
+
 
     if (delta > 3) {
       this._requestAnimationId = requestAnimationFrame(() => {
@@ -231,7 +238,7 @@ export class AxisAdapter implements IAxisPort {
           this.processScrollEnd();
         });
       } else {
-        this.stop();
+        this.processScrollEnd();
       }
     }
   }
@@ -277,9 +284,7 @@ export class AxisAdapter implements IAxisPort {
       this._requestAnimationId = requestAnimationFrame(() => {
         this.finishMomentum();
       });
-    }
-
-    if (!sufficientSpeedToContinue && !beyondBounds) {
+    } else if (!sufficientSpeedToContinue && !beyondBounds) {
       this.processScrollEnd();
     }
   }
@@ -373,7 +378,6 @@ export class AxisAdapter implements IAxisPort {
 
   stop() {
     this.processScrollEnd();
-    this.reset();
   }
 
   setSize(value: number) {
