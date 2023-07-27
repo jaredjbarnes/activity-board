@@ -1,7 +1,7 @@
 import { useAsyncValue } from "@m/hex/hooks/use_async_value";
 import { useRef, useEffect } from "react";
-import { DateAxisAdapter } from "src/layouts/scroll/date_axis_adapter.ts";
-import { IDateCell } from "src/layouts/scroll/i_date_cell.ts";
+import { DateAxisAdapter } from "src/layouts/scroll/date/date_axis_adapter.ts";
+import { IDateCell } from "src/layouts/scroll/date/i_date_cell.ts";
 import { useVerticalPanning } from "src/layouts/scroll/use_vertical_panning.ts";
 import { useVerticalResizing } from "src/layouts/scroll/use_vertical_resizing.ts";
 
@@ -14,7 +14,6 @@ export interface VDateScrollProps {
   dateAxisAdapter: DateAxisAdapter;
   className?: string;
   style?: React.CSSProperties;
-  onDateTap?: (date: Date) => void;
   overflow?: "hidden" | "visible";
 }
 

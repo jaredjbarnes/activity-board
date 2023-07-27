@@ -1,7 +1,7 @@
 import { useAsyncValue } from "@m/hex/hooks/use_async_value";
 import { useRef, useLayoutEffect } from "react";
-import { IDateCell } from "src/layouts/scroll/i_date_cell.ts";
-import { MonthAxisAdapter } from "src/layouts/scroll/month_axis_adapter.ts";
+import { IDateCell } from "src/layouts/scroll/date/i_date_cell.ts";
+import { MonthAxisAdapter } from "src/layouts/scroll/month/month_axis_adapter.ts";
 import { useVerticalPanning } from "src/layouts/scroll/use_vertical_panning.ts";
 import { useVerticalResizing } from "src/layouts/scroll/use_vertical_resizing.ts";
 

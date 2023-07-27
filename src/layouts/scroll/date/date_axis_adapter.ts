@@ -1,18 +1,15 @@
-import { EasingFunction, easings } from "motion-ux";
+import { EasingFunction } from "motion-ux";
 import { Factory } from "src/factory.ts";
+import { IDateCell } from "src/layouts/scroll/date/i_date_cell.ts";
 import { SnapAxisAdapter } from "src/layouts/scroll/snap_axis_adapter.ts";
 import { round } from "src/round.ts";
 
-export interface DateCell {
-  position: number;
-  size: number;
-  date: Date;
-}
+const ONE_DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
 
-export class MonthAxisAdapter extends SnapAxisAdapter {
+export class DateAxisAdapter extends SnapAxisAdapter {
   protected _snapInterval: number;
   protected _anchorDate: Date;
-  protected _dateCellFactory: Factory<DateCell>;
+  protected _dateCellFactory: Factory<IDateCell>;
 
   constructor(
     requestAnimationFrame: (callback: () => void) => number,
@@ -23,7 +20,6 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
     this._snapInterval = snapInterval;
 
     this._anchorDate = new Date();
-    this._anchorDate.setDate(1);
     this._anchorDate.setHours(0, 0, 0, 0);
 
     this._dateCellFactory = new Factory(() => ({
@@ -43,32 +39,30 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
     easing?: EasingFunction,
     onComplete?: () => void
   ) {
-    const position = this.getPositionForDate(date);
-    this.animateTo(position, duration, easing, onComplete);
+    this.animateTo(this.getPositionForDate(date), duration, easing, onComplete);
   }
 
   scrollToDate(date: Date) {
-    const position = this.getPositionForDate(date);
-    this.scrollTo(position);
+    this.scrollTo(this.getPositionForDate(date));
   }
 
   private getPositionForDate(date: Date) {
-    const months = this.getMonthsBetweenDates(this._anchorDate, date);
-    return months * this._snapInterval;
+    const index = this.getDaysBetweenDates(this._anchorDate, date);
+    return index * this._snapInterval;
   }
 
-  getCurrentMonth(){
+  getCurrentDate() {
     return this.getDateByPosition(-this.offset);
   }
 
   getVisibleCells() {
-    const cells: DateCell[] = [];
+    const cells: IDateCell[] = [];
     this._dateCellFactory.releaseAll();
     const currentDate = this.getDateByPosition(this.start);
     const endDate = this.getDateByPosition(this.end);
 
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    endDate.setMonth(endDate.getMonth() + 1);
+    currentDate.setDate(currentDate.getDate() - 1);
+    endDate.setDate(endDate.getDate() + 1);
 
     while (currentDate.getTime() < endDate.getTime()) {
       const cell = this._dateCellFactory.useInstance();
@@ -79,26 +73,23 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
       cell.date = new Date(currentDate);
 
       cells.push(cell);
-      currentDate.setMonth(currentDate.getMonth() + 1);
+      currentDate.setDate(currentDate.getDate() + 1);
     }
-
     return cells;
   }
 
   getDateByPosition(value: number) {
-    const monthsAway = round(value / this._snapInterval);
+    const index = round(value / this._snapInterval);
     const date = new Date(this._anchorDate);
-    date.setMonth(date.getMonth() + monthsAway);
+
+    date.setDate(date.getDate() + index);
     return date;
   }
 
-  private getMonthsBetweenDates(from: Date, to: Date) {
-    let months;
+  private getDaysBetweenDates(from: Date, to: Date) {
+    const timeBetween = to.getTime() - from.getTime();
+    const daysBetweenDates = timeBetween / ONE_DAY_IN_MILLISECONDS;
 
-    months = (to.getFullYear() - from.getFullYear()) * 12;
-    months -= from.getMonth();
-    months += to.getMonth();
-
-    return months;
+    return round(daysBetweenDates);
   }
 }

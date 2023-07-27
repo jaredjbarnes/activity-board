@@ -6,10 +6,10 @@ import { VStack } from "src/layouts/stacks/v_stack/index.tsx";
 
 export interface TextFieldProps {
   adapter: FieldPort<string>;
-  width?: number;
+  width?: string;
 }
 
-export function TextField({ adapter, width = 300 }: TextFieldProps) {
+export function TextField({ adapter, width = "100%" }: TextFieldProps) {
   const id = useAsyncValue(adapter.id);
   const label = useAsyncValue(adapter.label);
   const value = useAsyncValue(adapter.value);

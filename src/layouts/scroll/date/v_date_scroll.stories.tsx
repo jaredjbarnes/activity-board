@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { DateAxisAdapter } from "src/layouts/scroll/date_axis_adapter.ts";
-import { VDateScroll } from "src/layouts/scroll/v_date_scroll.tsx";
+import { DateAxisAdapter } from "src/layouts/scroll/date/date_axis_adapter.ts";
+import { VDateScroll } from "src/layouts/scroll/date/v_date_scroll.tsx";
 
 export default {
   title: "Scroll/VDateScroll",
@@ -15,9 +15,6 @@ export function DefaultVDateScroll() {
   return (
     <VDateScroll
       dateAxisAdapter={dateAxisAdapter}
-      onDateTap={(date) => {
-        alert(date);
-      }}
       style={{
         width: "100%",
         height: `100%`,

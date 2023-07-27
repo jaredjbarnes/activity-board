@@ -1,8 +1,8 @@
 import { useLayoutEffect, useState } from "react";
 import "src/css/planner.css";
 import { Month } from "src/landing_page/calendar/month.tsx";
-import { MonthAxisAdapter } from "src/layouts/scroll/month_axis_adapter.ts";
-import { VMonthScroll } from "src/layouts/scroll/v_month_scroll.tsx";
+import { MonthAxisAdapter } from "src/layouts/scroll/month/month_axis_adapter.ts";
+import { VMonthScroll } from "src/layouts/scroll/month/v_month_scroll.tsx";
 
 export interface MonthHeaderProps {
   monthAxisAdapter: MonthAxisAdapter;

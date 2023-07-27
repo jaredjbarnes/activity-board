@@ -1,6 +1,5 @@
 import { Box } from "src/layouts/box/index.tsx";
-import { IDateCell } from "src/layouts/scroll/i_date_cell.ts";
-import { Spacer } from "src/layouts/stacks/spacer.tsx";
+import { IDateCell } from "src/layouts/scroll/date/i_date_cell.ts";
 import { VStack } from "src/layouts/stacks/v_stack/index.tsx";
 
 export interface MonthProps {

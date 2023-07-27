@@ -1,8 +1,8 @@
 import { useLayoutEffect, useState } from "react";
 import { DayCalendar } from "src/landing_page/calendar/day_calendar.tsx";
 import { MonthHeader } from "src/landing_page/calendar/month_header.tsx";
-import { DateAxisAdapter } from "src/layouts/scroll/date_axis_adapter.ts";
-import { MonthAxisAdapter } from "src/layouts/scroll/month_axis_adapter.ts";
+import { DateAxisAdapter } from "src/layouts/scroll/date/date_axis_adapter.ts";
+import { MonthAxisAdapter } from "src/layouts/scroll/month/month_axis_adapter.ts";
 
 export default {
   title: "Landing Page/Day Calendar",
