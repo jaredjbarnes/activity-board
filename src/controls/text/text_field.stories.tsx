@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { TextField } from "src/controls/text_field.tsx";
-import { TextFieldAdapter } from "src/controls/text_field_adapter.ts";
+import { TextField } from "src/controls/text/text_field.tsx";
+import { TextFieldAdapter } from "src/controls/text/text_field_adapter.ts";
 
 export default {
   title: "Controls/TextField",

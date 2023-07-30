@@ -1,42 +1,42 @@
 import { useAsyncValue } from "@m/hex/hooks/use_async_value";
 import { useRef, useEffect } from "react";
-import { ModularAxisAdapter } from "src/layouts/scroll/modular/modular_axis_adapter.ts";
-import { IModularCell } from "src/layouts/scroll/modular/i_modular_cell.ts";
+import { NumberAxisAdapter } from "src/layouts/scroll/number/number_axis_adapter.ts";
+import { INumberCell } from "src/layouts/scroll/number/i_number_cell.ts";
 import { useVerticalPanning } from "src/layouts/scroll/use_vertical_panning.ts";
 import { useVerticalResizing } from "src/layouts/scroll/use_vertical_resizing.ts";
 import { usePreventNativeScrolling } from "src/layouts/scroll/usePreventNativeScrolling.ts";
 
-export interface VModularScrollProps {
+export interface VNumberScrollProps {
   children: (
-    dateCell: IModularCell,
-    axis: ModularAxisAdapter,
+    dateCell: INumberCell,
+    axis: NumberAxisAdapter,
     index: number
   ) => React.ReactNode;
-  modularAxisAdapter: ModularAxisAdapter;
+  numberAxisAdapter: NumberAxisAdapter;
   className?: string;
   style?: React.CSSProperties;
   overflow?: "hidden" | "visible";
 }
 
-export function VModularScroll({
-  modularAxisAdapter,
+export function VNumberScroll({
+  numberAxisAdapter,
   children: renderCell,
   style,
   className,
   overflow = "visible",
-}: VModularScrollProps) {
+}: VNumberScrollProps) {
   const divRef = useRef<HTMLDivElement | null>(null);
-  const cells = modularAxisAdapter.getVisibleCells();
+  const cells = numberAxisAdapter.getVisibleCells();
 
-  useAsyncValue(modularAxisAdapter.offsetBroadcast);
-  useAsyncValue(modularAxisAdapter.sizeBroadcast);
-  useVerticalResizing(divRef, modularAxisAdapter);
-  useVerticalPanning(divRef, modularAxisAdapter);
+  useAsyncValue(numberAxisAdapter.offsetBroadcast);
+  useAsyncValue(numberAxisAdapter.sizeBroadcast);
+  useVerticalResizing(divRef, numberAxisAdapter);
+  useVerticalPanning(divRef, numberAxisAdapter);
   usePreventNativeScrolling(divRef);
-  
+
   useEffect(() => {
-    modularAxisAdapter.initialize(modularAxisAdapter.offset);
-  }, [modularAxisAdapter]);
+    numberAxisAdapter.initialize(numberAxisAdapter.offset);
+  }, [numberAxisAdapter]);
 
   return (
     <div
@@ -50,7 +50,7 @@ export function VModularScroll({
       }}
       className={className}
     >
-      {cells.map((c, index) => renderCell(c, modularAxisAdapter, index))}
+      {cells.map((c, index) => renderCell(c, numberAxisAdapter, index))}
     </div>
   );
 }

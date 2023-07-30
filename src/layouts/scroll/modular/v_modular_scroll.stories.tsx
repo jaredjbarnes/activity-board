@@ -7,7 +7,7 @@ export default {
   component: VModularScroll,
 };
 
-export function DefaultVDateScroll() {
+export function DefaultVModularScroll() {
   const [modularAxisAdapter] = useState(() => {
     return new ModularAxisAdapter(requestAnimationFrame, cancelAnimationFrame);
   });

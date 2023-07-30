@@ -2,6 +2,7 @@ import { useAsyncValue } from "@m/hex/hooks/use_async_value";
 import { useRef, useEffect } from "react";
 import { DateAxisAdapter } from "src/layouts/scroll/date/date_axis_adapter.ts";
 import { IDateCell } from "src/layouts/scroll/date/i_date_cell.ts";
+import { usePreventNativeScrolling } from "src/layouts/scroll/usePreventNativeScrolling.ts";
 import { useVerticalPanning } from "src/layouts/scroll/use_vertical_panning.ts";
 import { useVerticalResizing } from "src/layouts/scroll/use_vertical_resizing.ts";
 
@@ -31,9 +32,10 @@ export function VDateScroll({
   useAsyncValue(dateAxisAdapter.sizeBroadcast);
   useVerticalResizing(divRef, dateAxisAdapter);
   useVerticalPanning(divRef, dateAxisAdapter);
+  usePreventNativeScrolling(divRef);
 
   useEffect(() => {
-    dateAxisAdapter.initialize(0);
+    dateAxisAdapter.initialize(dateAxisAdapter.offset);
   }, [dateAxisAdapter]);
 
   return (

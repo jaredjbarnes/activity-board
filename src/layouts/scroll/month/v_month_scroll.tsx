@@ -2,6 +2,7 @@ import { useAsyncValue } from "@m/hex/hooks/use_async_value";
 import { useRef, useLayoutEffect } from "react";
 import { IDateCell } from "src/layouts/scroll/date/i_date_cell.ts";
 import { MonthAxisAdapter } from "src/layouts/scroll/month/month_axis_adapter.ts";
+import { usePreventNativeScrolling } from "src/layouts/scroll/usePreventNativeScrolling.ts";
 import { useVerticalPanning } from "src/layouts/scroll/use_vertical_panning.ts";
 import { useVerticalResizing } from "src/layouts/scroll/use_vertical_resizing.ts";
 
@@ -32,9 +33,10 @@ export function VMonthScroll({
   useAsyncValue(monthAxisAdapter.sizeBroadcast);
   useVerticalResizing(divRef, monthAxisAdapter);
   useVerticalPanning(divRef, monthAxisAdapter);
-
+  usePreventNativeScrolling(divRef);
+  
   useLayoutEffect(() => {
-    monthAxisAdapter.initialize(0);
+    monthAxisAdapter.initialize(monthAxisAdapter.offset);
   }, [monthAxisAdapter]);
 
   return (

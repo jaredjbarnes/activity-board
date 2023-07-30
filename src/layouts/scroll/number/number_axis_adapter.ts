@@ -1,13 +1,13 @@
 import { EasingFunction } from "motion-ux";
 import { Factory } from "src/factory.ts";
-import { IModularCell } from "src/layouts/scroll/modular/i_modular_cell.ts";
+import { INumberCell } from "src/layouts/scroll/number/i_number_cell.ts";
 import { SnapAxisAdapter } from "src/layouts/scroll/snap_axis_adapter.ts";
 import { round } from "src/round.ts";
 
-export class ModularAxisAdapter extends SnapAxisAdapter {
+export class NumberAxisAdapter extends SnapAxisAdapter {
   protected _modulus: number;
   protected _snapInterval: number;
-  protected _modularCellFactory: Factory<IModularCell>;
+  protected _modularCellFactory: Factory<INumberCell>;
 
   constructor(
     requestAnimationFrame: (callback: () => void) => number,
@@ -53,13 +53,7 @@ export class ModularAxisAdapter extends SnapAxisAdapter {
   }
 
   private getPositionForValue(value: number) {
-    const intervalRemainder = this.start % this._snapInterval;
-    const position = this.start - intervalRemainder;
-    const positionIndex = position / this._snapInterval;
-    const currentIndex = positionIndex % this._modulus;
-    const moveByIndex = value - currentIndex;
-
-    return (positionIndex + moveByIndex) * this._snapInterval;
+    return value * this._snapInterval;
   }
 
   getCurrentValue() {
@@ -67,7 +61,7 @@ export class ModularAxisAdapter extends SnapAxisAdapter {
   }
 
   getVisibleCells() {
-    const cells: IModularCell[] = [];
+    const cells: INumberCell[] = [];
     this._modularCellFactory.releaseAll();
 
     const start = round(this.start / this._snapInterval) - 1;
@@ -76,7 +70,7 @@ export class ModularAxisAdapter extends SnapAxisAdapter {
     for (let x = start; x < end; x++) {
       const cell = this._modularCellFactory.useInstance();
 
-      const value = Math.abs(x % this._modulus);
+      const value = x;
       const position = x * this._snapInterval - this.start;
 
       cell.position = position;
@@ -90,6 +84,6 @@ export class ModularAxisAdapter extends SnapAxisAdapter {
   }
 
   getValueByPosition(value: number) {
-    return round(value / this._snapInterval) % this._modulus;
+    return round(value / this._snapInterval);
   }
 }
