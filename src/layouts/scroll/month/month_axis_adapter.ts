@@ -15,11 +15,11 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
   protected _dateCellFactory: Factory<DateCell>;
 
   constructor(
-    requestAnimationFrame: (callback: () => void) => number,
-    cancelAnimationFrame: (id: number) => void,
-    snapInterval = 100
+    snapInterval = 100,
+    requestAnimationFrame?: (callback: () => void) => number,
+    cancelAnimationFrame?: (id: number) => void
   ) {
-    super(requestAnimationFrame, cancelAnimationFrame, snapInterval);
+    super(snapInterval, requestAnimationFrame, cancelAnimationFrame);
     this._snapInterval = snapInterval;
 
     this._anchorDate = new Date();
@@ -57,7 +57,7 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
     return months * this._snapInterval;
   }
 
-  getCurrentMonth(){
+  getCurrentMonth() {
     return this.getDateByPosition(-this.offset);
   }
 

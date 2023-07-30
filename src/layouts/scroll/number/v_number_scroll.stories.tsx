@@ -9,7 +9,7 @@ export default {
 
 export function DefaultVNumberScroll() {
   const [modularAxisAdapter] = useState(() => {
-    return new NumberAxisAdapter(requestAnimationFrame, cancelAnimationFrame);
+    return new NumberAxisAdapter();
   });
 
   return (
@@ -44,7 +44,7 @@ export function DefaultVNumberScroll() {
 
 export function MinMaxVNumberScroll() {
   const [modularAxisAdapter] = useState(() => {
-    const axis = new NumberAxisAdapter(requestAnimationFrame, cancelAnimationFrame);
+    const axis = new NumberAxisAdapter();
     axis.min = 0;
     axis.max = 500;
     return axis;
@@ -82,7 +82,7 @@ export function MinMaxVNumberScroll() {
 
 export function StartAtValue() {
   const [modularAxisAdapter] = useState(() => {
-    const axis = new NumberAxisAdapter(requestAnimationFrame, cancelAnimationFrame);
+    const axis = new NumberAxisAdapter();
     axis.scrollToValue(2023);
     return axis;
   });

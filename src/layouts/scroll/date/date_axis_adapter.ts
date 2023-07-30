@@ -12,11 +12,11 @@ export class DateAxisAdapter extends SnapAxisAdapter {
   protected _dateCellFactory: Factory<IDateCell>;
 
   constructor(
-    requestAnimationFrame: (callback: () => void) => number,
-    cancelAnimationFrame: (id: number) => void,
+    requestAnimationFrame?: (callback: () => void) => number,
+    cancelAnimationFrame?: (id: number) => void,
     snapInterval = 100
   ) {
-    super(requestAnimationFrame, cancelAnimationFrame, snapInterval);
+    super(snapInterval, requestAnimationFrame, cancelAnimationFrame);
     this._snapInterval = snapInterval;
 
     this._anchorDate = new Date();

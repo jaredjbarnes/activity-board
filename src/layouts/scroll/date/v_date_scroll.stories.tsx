@@ -9,7 +9,7 @@ export default {
 
 export function DefaultVDateScroll() {
   const [dateAxisAdapter] = useState(() => {
-    return new DateAxisAdapter(requestAnimationFrame, cancelAnimationFrame);
+    return new DateAxisAdapter();
   });
 
   return (
@@ -44,10 +44,7 @@ export function DefaultVDateScroll() {
 
 export function MinMaxVDateScroll() {
   const [dateAxisAdapter] = useState(() => {
-    const axisAdapter = new DateAxisAdapter(
-      requestAnimationFrame,
-      cancelAnimationFrame
-    );
+    const axisAdapter = new DateAxisAdapter();
     axisAdapter.max = 500;
     axisAdapter.min = 0;
     return axisAdapter;

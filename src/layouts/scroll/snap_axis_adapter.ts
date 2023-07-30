@@ -5,9 +5,9 @@ export class SnapAxisAdapter extends AxisAdapter {
   protected _snapInterval: number | null = null;
 
   constructor(
-    requestAnimationFrame: (callback: () => void) => number,
-    cancelAnimationFrame: (id: number) => void,
-    snapInterval?: number
+    snapInterval?: number,
+    requestAnimationFrame?: (callback: () => void) => number,
+    cancelAnimationFrame?: (id: number) => void
   ) {
     super(requestAnimationFrame, cancelAnimationFrame);
     if (snapInterval != null) {

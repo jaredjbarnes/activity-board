@@ -9,7 +9,7 @@ export default {
 
 export function DefaultVModularScroll() {
   const [modularAxisAdapter] = useState(() => {
-    return new ModularAxisAdapter(requestAnimationFrame, cancelAnimationFrame);
+    return new ModularAxisAdapter();
   });
 
   return (

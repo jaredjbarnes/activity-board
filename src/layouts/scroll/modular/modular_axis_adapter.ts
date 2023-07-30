@@ -10,12 +10,12 @@ export class ModularAxisAdapter extends SnapAxisAdapter {
   protected _modularCellFactory: Factory<IModularCell>;
 
   constructor(
-    requestAnimationFrame: (callback: () => void) => number,
-    cancelAnimationFrame: (id: number) => void,
     modulus: number = 10,
-    snapInterval = 100
+    snapInterval = 100,
+    requestAnimationFrame?: (callback: () => void) => number,
+    cancelAnimationFrame?: (id: number) => void
   ) {
-    super(requestAnimationFrame, cancelAnimationFrame, snapInterval);
+    super(snapInterval, requestAnimationFrame, cancelAnimationFrame);
     this._modulus = modulus;
     this._snapInterval = snapInterval;
 
@@ -30,8 +30,12 @@ export class ModularAxisAdapter extends SnapAxisAdapter {
     this._snapInterval = interval;
   }
 
-  setModulus(value: number){
+  setModulus(value: number) {
     this._modulus = value;
+  }
+
+  getModulus(){
+    return this._modulus;
   }
 
   animateToValue(

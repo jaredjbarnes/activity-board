@@ -27,10 +27,7 @@ export function SidebarCalendar() {
 
 export function MonthHeaderExample() {
   const [monthAxisAdapter] = useState(() => {
-    const monthAxisAdapter = new MonthAxisAdapter(
-      requestAnimationFrame,
-      cancelAnimationFrame
-    );
+    const monthAxisAdapter = new MonthAxisAdapter();
 
     monthAxisAdapter.scrollToDate(new Date(2023, 0, 1));
 
@@ -70,10 +67,7 @@ export function MonthHeaderExample() {
 
 export function BasicCalendar() {
   const [monthAxisAdapter] = useState(() => {
-    const monthAxisAdapter = new MonthAxisAdapter(
-      requestAnimationFrame,
-      cancelAnimationFrame
-    );
+    const monthAxisAdapter = new MonthAxisAdapter();
 
     return monthAxisAdapter;
   });
@@ -183,7 +177,6 @@ export function BasicCalendar() {
     monthAxisAdapter.onScroll = nullableScroll;
     monthAxisAdapter.onScrollStart = onMonthScrollStart;
     monthAxisAdapter.onScrollEnd = onMonthScrollEnd;
-
   }, [dateAxisAdapter, monthAxisAdapter]);
 
   return (
