@@ -16,6 +16,8 @@ export interface VModularScrollProps {
   className?: string;
   style?: React.CSSProperties;
   overflow?: "hidden" | "visible";
+  width?: string | number;
+  height?: string | number;
 }
 
 export function VModularScroll({
@@ -23,6 +25,8 @@ export function VModularScroll({
   children: renderCell,
   style,
   className,
+  width = "100%",
+  height = "100%",
   overflow = "visible",
 }: VModularScrollProps) {
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -33,7 +37,7 @@ export function VModularScroll({
   useVerticalResizing(divRef, modularAxisAdapter);
   useVerticalPanning(divRef, modularAxisAdapter);
   usePreventNativeScrolling(divRef);
-  
+
   useEffect(() => {
     modularAxisAdapter.initialize(modularAxisAdapter.offset);
   }, [modularAxisAdapter]);
@@ -42,6 +46,8 @@ export function VModularScroll({
     <div
       ref={divRef}
       style={{
+        height,
+        width,
         ...style,
         position: "relative",
         userSelect: "none",

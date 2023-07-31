@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import {useState } from "react";
 import { NumberAxisAdapter } from "src/layouts/scroll/number/number_axis_adapter.ts";
 import { VNumberScroll } from "src/layouts/scroll/number/v_number_scroll.tsx";
 

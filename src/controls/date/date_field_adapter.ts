@@ -1,4 +1,5 @@
 import { ObservableValue } from "@m/hex/observable_value";
+import { DateFieldDynamicStyles } from "src/controls/date/date_field_dynamic_styles.ts";
 import { FieldPort } from "src/controls/field_port.ts";
 import { ModularAxisAdapter } from "src/layouts/scroll/modular/modular_axis_adapter.ts";
 import { NumberAxisAdapter } from "src/layouts/scroll/number/number_axis_adapter.ts";
@@ -12,17 +13,34 @@ export class DateFieldAdapter implements FieldPort<Date> {
   private _yearAxis: NumberAxisAdapter;
   private _utilityDate: Date = new Date();
   private _isExpanded: ObservableValue<boolean>;
+  private _dynamicStyles: DateFieldDynamicStyles;
 
-  get id() {
+  get idBroadcast() {
     return this._id.broadcast;
   }
 
-  get value() {
+  get valueBroadcast() {
     return this._value.broadcast;
   }
 
-  get label() {
+  get labelBroadcast() {
     return this._label.broadcast;
+  }
+
+  get dynamicStyles() {
+    return this._dynamicStyles;
+  }
+
+  get monthAxis() {
+    return this._monthAxis;
+  }
+
+  get dateAxis() {
+    return this._dateAxis;
+  }
+
+  get yearAxis() {
+    return this._yearAxis;
   }
 
   constructor(
@@ -36,30 +54,32 @@ export class DateFieldAdapter implements FieldPort<Date> {
     this._label = new ObservableValue(label);
     this._value = new ObservableValue(value);
     this._isExpanded = new ObservableValue(false);
+    this._dynamicStyles = new DateFieldDynamicStyles();
 
     this._monthAxis = new ModularAxisAdapter(
       12,
-      40,
+      36,
       requestAnimationFrame,
       cancelAnimationFrame
     );
 
     this._dateAxis = new ModularAxisAdapter(
       this._getAmountOfDaysInMonth(value.getDate(), value.getFullYear()),
-      40,
+      36,
       requestAnimationFrame,
       cancelAnimationFrame
     );
 
     this._yearAxis = new NumberAxisAdapter(
       value.getFullYear(),
-      40,
+      36,
       requestAnimationFrame,
       cancelAnimationFrame
     );
 
     this._monthAxis.onScroll = () => {
       this._transformIfDifferent(this._value.getValue());
+      this._updateDaysIfNecessary();
     };
 
     this._dateAxis.onScroll = () => {
@@ -68,6 +88,7 @@ export class DateFieldAdapter implements FieldPort<Date> {
 
     this._yearAxis.onScroll = () => {
       this._transformIfDifferent(this._value.getValue());
+      this._updateDaysIfNecessary();
     };
   }
 
@@ -159,9 +180,11 @@ export class DateFieldAdapter implements FieldPort<Date> {
 
   expand() {
     this._isExpanded.setValue(true);
+    this._dynamicStyles.expand();
   }
 
   contract() {
     this._isExpanded.setValue(false);
+    this._dynamicStyles.contract();
   }
 }

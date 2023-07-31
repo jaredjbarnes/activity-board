@@ -10,9 +10,9 @@ export interface TextFieldProps {
 }
 
 export function TextField({ adapter, width = "100%" }: TextFieldProps) {
-  const id = useAsyncValue(adapter.id);
-  const label = useAsyncValue(adapter.label);
-  const value = useAsyncValue(adapter.value);
+  const id = useAsyncValue(adapter.idBroadcast);
+  const label = useAsyncValue(adapter.labelBroadcast);
+  const value = useAsyncValue(adapter.valueBroadcast);
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     adapter.setValue(event.target.value);

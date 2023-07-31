@@ -6,15 +6,15 @@ export class TextFieldAdapter implements FieldPort<string> {
   private _value: ObservableValue<string, any>;
   private _label: ObservableValue<string, any>;
 
-  get id() {
+  get idBroadcast() {
     return this._id.broadcast;
   }
 
-  get label() {
+  get labelBroadcast() {
     return this._label.broadcast;
   }
 
-  get value() {
+  get valueBroadcast() {
     return this._value.broadcast;
   }
 

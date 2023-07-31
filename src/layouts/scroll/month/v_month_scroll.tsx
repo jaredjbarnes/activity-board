@@ -17,6 +17,8 @@ export interface VMonthScrollProps {
   style?: React.CSSProperties;
   onDateTap?: (date: Date) => void;
   overflow?: "hidden" | "visible";
+  width?: string | number;
+  height?: string | number;
 }
 
 export function VMonthScroll({
@@ -25,16 +27,18 @@ export function VMonthScroll({
   style,
   className,
   overflow,
+  width = "100%",
+  height = "100%",
 }: VMonthScrollProps) {
   const divRef = useRef<HTMLDivElement | null>(null);
   const cells = monthAxisAdapter.getVisibleCells();
-  
+
   useAsyncValue(monthAxisAdapter.offsetBroadcast);
   useAsyncValue(monthAxisAdapter.sizeBroadcast);
   useVerticalResizing(divRef, monthAxisAdapter);
   useVerticalPanning(divRef, monthAxisAdapter);
   usePreventNativeScrolling(divRef);
-  
+
   useLayoutEffect(() => {
     monthAxisAdapter.initialize(monthAxisAdapter.offset);
   }, [monthAxisAdapter]);
@@ -43,6 +47,8 @@ export function VMonthScroll({
     <div
       ref={divRef}
       style={{
+        width,
+        height,
         position: "relative",
         ...style,
         userSelect: "none",

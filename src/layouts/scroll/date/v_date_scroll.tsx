@@ -16,6 +16,8 @@ export interface VDateScrollProps {
   className?: string;
   style?: React.CSSProperties;
   overflow?: "hidden" | "visible";
+  width?: string | number;
+  height?: string | number;
 }
 
 export function VDateScroll({
@@ -24,6 +26,8 @@ export function VDateScroll({
   style,
   className,
   overflow,
+  width = "100%",
+  height = "100%",
 }: VDateScrollProps) {
   const divRef = useRef<HTMLDivElement | null>(null);
   const cells = dateAxisAdapter.getVisibleCells();
@@ -42,6 +46,8 @@ export function VDateScroll({
     <div
       ref={divRef}
       style={{
+        width,
+        height,
         ...style,
         position: "relative",
         userSelect: "none",

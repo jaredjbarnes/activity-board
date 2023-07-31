@@ -35,7 +35,7 @@
   color: #666;
 }
 
-.text-field input {
+.text-field input, .text-field .input {
   font-size: 20px;
   padding-left: 4px;
   border: 3px solid black;
@@ -43,7 +43,6 @@
   border-radius: 10px;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
-
 
 .text-field input:focus {
   border: 3px solid rgb(0, 132, 255);
