@@ -52,30 +52,34 @@ export class DateFieldAdapter implements FieldPort<Date> {
   ) {
     this._id = new ObservableValue(id);
     this._label = new ObservableValue(label);
-    this._value = new ObservableValue(value);
+    this._value = new ObservableValue(new Date(value));
     this._isExpanded = new ObservableValue(false);
     this._dynamicStyles = new DateFieldDynamicStyles();
 
     this._monthAxis = new ModularAxisAdapter(
       12,
-      36,
+      34,
       requestAnimationFrame,
       cancelAnimationFrame
     );
 
     this._dateAxis = new ModularAxisAdapter(
       this._getAmountOfDaysInMonth(value.getDate(), value.getFullYear()),
-      36,
+      34,
       requestAnimationFrame,
       cancelAnimationFrame
     );
 
     this._yearAxis = new NumberAxisAdapter(
       value.getFullYear(),
-      36,
+      34,
       requestAnimationFrame,
       cancelAnimationFrame
     );
+
+    this._setMonth();
+    this._setYear();
+    this._setDate();
 
     this._monthAxis.onScroll = () => {
       this._transformIfDifferent(this._value.getValue());
@@ -90,6 +94,7 @@ export class DateFieldAdapter implements FieldPort<Date> {
       this._transformIfDifferent(this._value.getValue());
       this._updateDaysIfNecessary();
     };
+   
   }
 
   private _getAmountOfDaysInMonth(month: number, year: number) {
@@ -131,8 +136,8 @@ export class DateFieldAdapter implements FieldPort<Date> {
   private _transformValue(date: number, month: number, year: number) {
     this._value.transformValue((d) => {
       d.setHours(0, 0, 0, 0);
-      d.setMonth(date);
-      d.setDate(month);
+      d.setMonth(month);
+      d.setDate(date);
       d.setFullYear(year);
       return d;
     });
@@ -161,7 +166,7 @@ export class DateFieldAdapter implements FieldPort<Date> {
   private _setDate() {
     const currentDate = this._value.getValue();
     const date = currentDate.getDate();
-    this._dateAxis.scrollToValue(date);
+    this._dateAxis.scrollToValue(date - 1);
   }
 
   private _setYear() {

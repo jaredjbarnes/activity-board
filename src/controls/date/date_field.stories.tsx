@@ -9,7 +9,7 @@ export default {
 
 export function Baseline(){
   const [adapter] = useState(()=>{
-    return new DateFieldAdapter("Birthday", new Date(1982, 6, 11));
+    return new DateFieldAdapter("Birthday", new Date(1982, 5, 11));
   });
   return <DateField adapter={adapter} />
 }

@@ -1,10 +1,12 @@
 import { useAsyncValue } from "@m/hex/hooks/use_async_value";
 import { classnames } from "src/classnames.ts";
+import { Comma } from "src/controls/date/comma.tsx";
 import { DateFieldAdapter } from "src/controls/date/date_field_adapter.ts";
 import { DateNumber } from "src/controls/date/date_number.tsx";
 import { Month } from "src/controls/date/month.tsx";
 import { Year } from "src/controls/date/year.tsx";
 import { Box } from "src/layouts/box/index.tsx";
+import { FlexBox } from "src/layouts/flex_box/index.tsx";
 import { VModularScroll } from "src/layouts/scroll/modular/v_modular_scroll.tsx";
 import { VNumberScroll } from "src/layouts/scroll/number/v_number_scroll.tsx";
 import { HStack } from "src/layouts/stacks/h_stack/index.tsx";
@@ -58,16 +60,14 @@ export function DateField({
         onBlur={blur}
         className="input"
       >
-        <HStack height="40px">
-          <Spacer />
-          <Box width="110px">
+        <HStack height="34px">
+          <Box width="25px">
             <VModularScroll modularAxisAdapter={adapter.monthAxis}>
               {(cell) => {
                 return <Month cell={cell} />;
               }}
             </VModularScroll>
           </Box>
-          <Spacer width="10px" />
           <Box width="40px">
             <VModularScroll modularAxisAdapter={adapter.dateAxis}>
               {(cell) => {
@@ -75,15 +75,14 @@ export function DateField({
               }}
             </VModularScroll>
           </Box>
-          <Spacer width="10px" />
-          <Box width="60px">
+          <Box width="15px"><Comma /></Box>
+          <FlexBox>
             <VNumberScroll numberAxisAdapter={adapter.yearAxis}>
               {(cell) => {
                 return <Year cell={cell} />;
               }}
             </VNumberScroll>
-          </Box>
-          <Spacer />
+          </FlexBox>
         </HStack>
       </div>
     </VStack>

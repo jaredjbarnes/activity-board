@@ -80,8 +80,12 @@ export class ModularAxisAdapter extends SnapAxisAdapter {
     for (let x = start; x < end; x++) {
       const cell = this._modularCellFactory.useInstance();
 
-      const value = Math.abs(x % this._modulus);
+      let value = x % this._modulus;
       const position = x * this._snapInterval - this.start;
+
+      if (value < 0){
+        value = this._modulus + value;
+      } 
 
       cell.position = position;
       cell.size = this._snapInterval;
