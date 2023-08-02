@@ -94,14 +94,14 @@ export class DateFieldAdapter implements FieldPort<Date> {
       this._transformIfDifferent(this._value.getValue());
       this._updateDaysIfNecessary();
     };
-   
   }
 
   private _getAmountOfDaysInMonth(month: number, year: number) {
     this._utilityDate.setHours(0, 0, 0, 0);
+    this._utilityDate.setDate(1);
     this._utilityDate.setMonth(month + 1);
     this._utilityDate.setFullYear(year);
-    this._utilityDate.setDate(-1);
+    this._utilityDate.setDate(0);
 
     return this._utilityDate.getDate();
   }
@@ -114,8 +114,10 @@ export class DateFieldAdapter implements FieldPort<Date> {
       date.getFullYear()
     );
 
+    
     if (dateModulus !== modulus) {
-      this._dateAxis.setModulus(modulus);
+      console.log(dateModulus, modulus);
+      this._dateAxis.setModulus(dateModulus);
     }
   }
 
@@ -145,15 +147,16 @@ export class DateFieldAdapter implements FieldPort<Date> {
 
   private _transformIfDifferent(value: Date) {
     const date = this._dateAxis.getCurrentValue();
-    const month = this._dateAxis.getCurrentValue();
-    const year = this._dateAxis.getCurrentValue();
+    const month = this._monthAxis.getCurrentValue();
+    const year = this._yearAxis.getCurrentValue();
 
     const isDateDifferent = value.getDate() !== date + 1;
     const isMonthDifferent = value.getMonth() !== month;
     const isYearDifferent = value.getFullYear() !== year;
 
     if (isDateDifferent || isMonthDifferent || isYearDifferent) {
-      this._transformValue(date, month, year);
+      console.log("Changed", date, month, year);
+      this._transformValue(date + 1, month, year);
     }
   }
 

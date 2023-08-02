@@ -61,14 +61,14 @@ export function DateField({
         className="input"
       >
         <HStack height="34px">
-          <Box width="25px">
+          <Box width="40px">
             <VModularScroll modularAxisAdapter={adapter.monthAxis}>
               {(cell) => {
                 return <Month cell={cell} />;
               }}
             </VModularScroll>
           </Box>
-          <Box width="40px">
+          <Box width="25px">
             <VModularScroll modularAxisAdapter={adapter.dateAxis}>
               {(cell) => {
                 return <DateNumber cell={cell} />;

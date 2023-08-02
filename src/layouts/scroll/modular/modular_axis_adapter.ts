@@ -34,7 +34,7 @@ export class ModularAxisAdapter extends SnapAxisAdapter {
     this._modulus = value;
   }
 
-  getModulus(){
+  getModulus() {
     return this._modulus;
   }
 
@@ -83,9 +83,9 @@ export class ModularAxisAdapter extends SnapAxisAdapter {
       let value = x % this._modulus;
       const position = x * this._snapInterval - this.start;
 
-      if (value < 0){
+      if (value < 0) {
         value = this._modulus + value;
-      } 
+      }
 
       cell.position = position;
       cell.size = this._snapInterval;
@@ -97,7 +97,12 @@ export class ModularAxisAdapter extends SnapAxisAdapter {
     return cells;
   }
 
-  getValueByPosition(value: number) {
-    return round(value / this._snapInterval) % this._modulus;
+  getValueByPosition(position: number) {
+    let value = round(position / this._snapInterval) % this._modulus;
+
+    if (value < 0) {
+      value = this._modulus + value;
+    }
+    return value;
   }
 }
