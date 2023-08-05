@@ -1,8 +1,8 @@
-import React, { HTMLAttributes, useLayoutEffect, useRef } from 'react';
-import { useForkRef } from 'src/hooks/use_fork_ref.ts';
+import React, { HTMLAttributes, useLayoutEffect, useRef } from "react";
+import { useForkRef } from "src/hooks/use_fork_ref.ts";
 export interface FlexBoxProps extends HTMLAttributes<HTMLElement> {
   fillSpaceWeight?: number;
-  scroll?: boolean;
+  overflow?: "visible" | "auto" | "scroll" | "hidden";
   padding?: string;
   boxShadow?: string;
   background?: string;
@@ -25,7 +25,7 @@ export interface FlexBoxProps extends HTMLAttributes<HTMLElement> {
 }
 export const FlexBox = React.forwardRef(function FillBox(
   {
-    scroll = false,
+    overflow = "visible",
     children,
     fillSpaceWeight = 1,
     style = {},
@@ -48,19 +48,19 @@ export const FlexBox = React.forwardRef(function FillBox(
     if (element != null) {
       // This is faster than getComputedStyle. And we know how the parents style is set.
       // This approach has its cons, but its fast. getComputedStyle causes a style recalc.
-      const isRow = element.parentElement?.style.flexDirection === 'row';
+      const isRow = element.parentElement?.style.flexDirection === "row";
       if (isRow) {
-        element.style.width = 'auto';
-        element.style.height = '100%';
+        element.style.width = "auto";
+        element.style.height = "100%";
         element.style.flexGrow = `${fillSpaceWeight}`;
         element.style.flexShrink = `${fillSpaceWeight}`;
-        element.style.flexBasis = '0%';
+        element.style.flexBasis = "0%";
       } else {
-        element.style.width = '100%';
-        element.style.height = 'auto';
+        element.style.width = "100%";
+        element.style.height = "auto";
         element.style.flexGrow = `${fillSpaceWeight}`;
         element.style.flexShrink = `${fillSpaceWeight}`;
-        element.style.flexBasis = '0%';
+        element.style.flexBasis = "0%";
       }
     }
   }, [fillSpaceWeight]);
@@ -68,8 +68,8 @@ export const FlexBox = React.forwardRef(function FillBox(
     <div
       ref={forkedRef}
       style={{
-        position: 'relative',
-        boxSizing: 'border-box',
+        position: "relative",
+        boxSizing: "border-box",
       }}
     >
       <div
@@ -82,12 +82,12 @@ export const FlexBox = React.forwardRef(function FillBox(
           opacity,
           transform,
           ...style,
-          overflow: scroll ? 'auto' : 'hidden',
-          position: 'absolute',
-          top: '0px',
-          left: '0px',
-          bottom: '0px',
-          right: '0px',
+          overflow,
+          position: "absolute",
+          top: "0px",
+          left: "0px",
+          bottom: "0px",
+          right: "0px",
         }}
         className={className}
         {...props}

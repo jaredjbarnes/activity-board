@@ -13,15 +13,17 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
   protected _snapInterval: number;
   protected _anchorDate: Date;
   protected _dateCellFactory: Factory<DateCell>;
+  protected _scrollBuffer: number;
 
   constructor(
     snapInterval = 100,
+    scrollBuffer = 0,
     requestAnimationFrame?: (callback: () => void) => number,
     cancelAnimationFrame?: (id: number) => void
   ) {
     super(snapInterval, requestAnimationFrame, cancelAnimationFrame);
     this._snapInterval = snapInterval;
-
+    this._scrollBuffer = scrollBuffer;
     this._anchorDate = new Date();
     this._anchorDate.setDate(1);
     this._anchorDate.setHours(0, 0, 0, 0);
@@ -64,8 +66,8 @@ export class MonthAxisAdapter extends SnapAxisAdapter {
   getVisibleCells() {
     const cells: DateCell[] = [];
     this._dateCellFactory.releaseAll();
-    const currentDate = this.getDateByPosition(this.start);
-    const endDate = this.getDateByPosition(this.end);
+    const currentDate = this.getDateByPosition(this.start - this._scrollBuffer);
+    const endDate = this.getDateByPosition(this.end + this._scrollBuffer);
 
     currentDate.setMonth(currentDate.getMonth() - 1);
     endDate.setMonth(endDate.getMonth() + 1);

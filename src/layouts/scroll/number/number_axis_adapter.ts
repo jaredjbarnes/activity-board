@@ -8,17 +8,19 @@ export class NumberAxisAdapter extends SnapAxisAdapter {
   protected _modulus: number;
   protected _snapInterval: number;
   protected _modularCellFactory: Factory<INumberCell>;
+  protected _scrollBuffer: number;
 
   constructor(
     modulus: number = 10,
     snapInterval = 100,
+    scrollBuffer = 0,
     requestAnimationFrame?: (callback: () => void) => number,
     cancelAnimationFrame?: (id: number) => void
   ) {
     super(snapInterval, requestAnimationFrame, cancelAnimationFrame);
     this._modulus = modulus;
     this._snapInterval = snapInterval;
-
+    this._scrollBuffer = scrollBuffer;
     this._modularCellFactory = new Factory(() => ({
       position: 0,
       size: 0,
@@ -64,8 +66,11 @@ export class NumberAxisAdapter extends SnapAxisAdapter {
     const cells: INumberCell[] = [];
     this._modularCellFactory.releaseAll();
 
-    const start = round(this.start / this._snapInterval) - 1;
-    const end = round(this.end / this._snapInterval) + 1;
+    const adjustedStart = this.start - this._scrollBuffer;
+    const adjustedEnd = this.end + this._scrollBuffer;
+
+    const start = round(adjustedStart / this._snapInterval) - 1;
+    const end = round(adjustedEnd / this._snapInterval) + 1;
 
     for (let x = start; x < end; x++) {
       const cell = this._modularCellFactory.useInstance();

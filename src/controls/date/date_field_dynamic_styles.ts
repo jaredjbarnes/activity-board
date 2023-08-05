@@ -27,25 +27,28 @@ export class DateFieldDynamicStyles {
       this._inputHeight.setValue(animation.currentValues.inputHeight);
       this._scrollerPosition.setValue(animation.currentValues.scrollerPosition);
     });
-  }
 
-  initialize() {
-    this._motion.segueTo(
-      createAnimation({
-        inputHeight: 40,
-        scrollerPosition: 0,
-      }),
-      32
-    );
+    const animation = createAnimation({
+      inputHeight: {
+        from: 40,
+        to: 40,
+      },
+      scrollerPosition: {
+        from: 0,
+        to: 0,
+      },
+    });
+
+    this._motion.inject(animation);
   }
 
   expand() {
     this._motion.segueTo(
       createAnimation({
-        inputHeight: 120,
-        scrollerPosition: 40,
+        inputHeight: 220,
+        scrollerPosition: 88,
       }),
-      1000,
+      400,
       easings.easeOutQuint
     );
   }
@@ -53,10 +56,10 @@ export class DateFieldDynamicStyles {
   contract() {
     this._motion.segueTo(
       createAnimation({
-        inputHeight: 120,
-        scrollerPosition: 40,
+        inputHeight: 40,
+        scrollerPosition: 0,
       }),
-      1000,
+      400,
       easings.easeOutQuint
     );
   }

@@ -10,15 +10,17 @@ export class DateAxisAdapter extends SnapAxisAdapter {
   protected _snapInterval: number;
   protected _anchorDate: Date;
   protected _dateCellFactory: Factory<IDateCell>;
+  protected _scrollBuffer: number;
 
   constructor(
+    snapInterval = 100,
+    scrollBuffer = 0,
     requestAnimationFrame?: (callback: () => void) => number,
-    cancelAnimationFrame?: (id: number) => void,
-    snapInterval = 100
+    cancelAnimationFrame?: (id: number) => void
   ) {
     super(snapInterval, requestAnimationFrame, cancelAnimationFrame);
     this._snapInterval = snapInterval;
-
+    this._scrollBuffer = scrollBuffer;
     this._anchorDate = new Date();
     this._anchorDate.setHours(0, 0, 0, 0);
 
@@ -58,8 +60,8 @@ export class DateAxisAdapter extends SnapAxisAdapter {
   getVisibleCells() {
     const cells: IDateCell[] = [];
     this._dateCellFactory.releaseAll();
-    const currentDate = this.getDateByPosition(this.start);
-    const endDate = this.getDateByPosition(this.end);
+    const currentDate = this.getDateByPosition(this.start - this._scrollBuffer);
+    const endDate = this.getDateByPosition(this.end + this._scrollBuffer);
 
     currentDate.setDate(currentDate.getDate() - 1);
     endDate.setDate(endDate.getDate() + 1);

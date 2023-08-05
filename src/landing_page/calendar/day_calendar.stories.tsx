@@ -11,7 +11,7 @@ export default {
 
 export function SidebarCalendar() {
   const [dateAxisAdapter] = useState(() => {
-    return new DateAxisAdapter(requestAnimationFrame, cancelAnimationFrame);
+    return new DateAxisAdapter();
   });
 
   return (
@@ -73,10 +73,7 @@ export function BasicCalendar() {
   });
 
   const [dateAxisAdapter] = useState(() => {
-    const dateAxisAdapter = new DateAxisAdapter(
-      requestAnimationFrame,
-      cancelAnimationFrame
-    );
+    const dateAxisAdapter = new DateAxisAdapter();
 
     return dateAxisAdapter;
   });

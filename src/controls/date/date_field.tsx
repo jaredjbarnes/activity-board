@@ -1,4 +1,6 @@
 import { useAsyncValue } from "@m/hex/hooks/use_async_value";
+import { useAsyncValueEffect } from "@m/hex/hooks/use_async_value_effect";
+import { useRef } from "react";
 import { classnames } from "src/classnames.ts";
 import { Comma } from "src/controls/date/comma.tsx";
 import { DateFieldAdapter } from "src/controls/date/date_field_adapter.ts";
@@ -26,8 +28,45 @@ export function DateField({
   style,
   className,
 }: DateFieldProps) {
+  const fieldRef = useRef<HTMLElement | null>(null);
+  const inputRef = useRef<HTMLDivElement | null>(null);
+  const scrollerContainerRef = useRef<HTMLDivElement | null>(null);
+  const upperVeilRef = useRef<HTMLDivElement | null>(null);
+  const lowerVeilRef = useRef<HTMLDivElement | null>(null);
   const id = useAsyncValue(adapter.idBroadcast);
   const label = useAsyncValue(adapter.labelBroadcast);
+  const isExpanded = useAsyncValue(adapter.isExpandedBroadcast);
+
+  useAsyncValueEffect((value) => {
+    const input = inputRef.current;
+    const field = fieldRef.current;
+
+    if (input != null) {
+      input.style.height = `${value}px`;
+    }
+
+    if (field != null) {
+      field.style.height = `${value + 30}px`;
+    }
+  }, adapter.dynamicStyles.inputHeightBroadcast);
+
+  useAsyncValueEffect((value) => {
+    const scrollerContainer = scrollerContainerRef.current;
+    const upperVeil = upperVeilRef.current;
+    const lowerVeil = lowerVeilRef.current;
+
+    if (scrollerContainer != null) {
+      scrollerContainer.style.top = `${value}px`;
+    }
+
+    if (upperVeil != null) {
+      upperVeil.style.top = `${value - 240}px`;
+    }
+
+    if (lowerVeil != null) {
+      lowerVeil.style.top = `${value + 36}px`;
+    }
+  }, adapter.dynamicStyles.scrollerPosition);
 
   function expand() {
     adapter.expand();
@@ -39,6 +78,7 @@ export function DateField({
 
   return (
     <VStack
+      ref={fieldRef}
       className={classnames("text-field", className)}
       height="70px"
       width={width}
@@ -49,6 +89,7 @@ export function DateField({
       </HStack>
       <div
         id={id}
+        ref={inputRef}
         tabIndex={0}
         style={{
           position: "relative",
@@ -60,7 +101,12 @@ export function DateField({
         onBlur={blur}
         className="input"
       >
-        <HStack height="34px">
+        <HStack
+          style={{ position: "absolute", top: "0", left: "0" }}
+          ref={scrollerContainerRef}
+          height="34px"
+        >
+          <Spacer width="8px" />
           <Box width="40px">
             <VModularScroll modularAxisAdapter={adapter.monthAxis}>
               {(cell) => {
@@ -68,15 +114,17 @@ export function DateField({
               }}
             </VModularScroll>
           </Box>
-          <Box width="25px">
+          <Box width="30px">
             <VModularScroll modularAxisAdapter={adapter.dateAxis}>
               {(cell) => {
                 return <DateNumber cell={cell} />;
               }}
             </VModularScroll>
           </Box>
-          <Box width="15px"><Comma /></Box>
-          <FlexBox>
+          <Box width="10px">
+            <Comma />
+          </Box>
+          <FlexBox style={{ overflow: "visible" }}>
             <VNumberScroll numberAxisAdapter={adapter.yearAxis}>
               {(cell) => {
                 return <Year cell={cell} />;
@@ -84,6 +132,37 @@ export function DateField({
             </VNumberScroll>
           </FlexBox>
         </HStack>
+        {!isExpanded && (
+          <Box style={{ position: "absolute", top: "0", left: "0" }}></Box>
+        )}
+        <div
+          ref={upperVeilRef}
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            height: "240px",
+            width: "100%",
+            boxSizing: "border-box",
+            borderBottom: "1px solid black",
+            background: "rgba(200,200,200, 0.5)",
+            pointerEvents: "none",
+          }}
+        ></div>
+        <div
+          ref={lowerVeilRef}
+          style={{
+            position: "absolute",
+            top: "40px",
+            left: "0",
+            height: "240px",
+            width: "100%",
+            boxSizing: "border-box",
+            borderTop: "1px solid black",
+            background: "rgba(200,200,200, 0.5)",
+            pointerEvents: "none",
+          }}
+        ></div>
       </div>
     </VStack>
   );

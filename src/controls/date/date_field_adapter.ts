@@ -27,6 +27,10 @@ export class DateFieldAdapter implements FieldPort<Date> {
     return this._label.broadcast;
   }
 
+  get isExpandedBroadcast() {
+    return this._isExpanded.broadcast;
+  }
+
   get dynamicStyles() {
     return this._dynamicStyles;
   }
@@ -59,6 +63,7 @@ export class DateFieldAdapter implements FieldPort<Date> {
     this._monthAxis = new ModularAxisAdapter(
       12,
       34,
+      100,
       requestAnimationFrame,
       cancelAnimationFrame
     );
@@ -66,6 +71,7 @@ export class DateFieldAdapter implements FieldPort<Date> {
     this._dateAxis = new ModularAxisAdapter(
       this._getAmountOfDaysInMonth(value.getDate(), value.getFullYear()),
       34,
+      100,
       requestAnimationFrame,
       cancelAnimationFrame
     );
@@ -73,6 +79,7 @@ export class DateFieldAdapter implements FieldPort<Date> {
     this._yearAxis = new NumberAxisAdapter(
       value.getFullYear(),
       34,
+      100,
       requestAnimationFrame,
       cancelAnimationFrame
     );
@@ -114,7 +121,6 @@ export class DateFieldAdapter implements FieldPort<Date> {
       date.getFullYear()
     );
 
-    
     if (dateModulus !== modulus) {
       console.log(dateModulus, modulus);
       this._dateAxis.setModulus(dateModulus);
