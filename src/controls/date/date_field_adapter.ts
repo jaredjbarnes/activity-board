@@ -69,7 +69,7 @@ export class DateFieldAdapter implements FieldPort<Date> {
     );
 
     this._dateAxis = new ModularAxisAdapter(
-      this._getAmountOfDaysInMonth(value.getDate(), value.getFullYear()),
+      31,
       34,
       100,
       requestAnimationFrame,
@@ -88,18 +88,16 @@ export class DateFieldAdapter implements FieldPort<Date> {
     this._setYear();
     this._setDate();
 
-    this._monthAxis.onScroll = () => {
-      this._transformIfDifferent(this._value.getValue());
-      this._updateDaysIfNecessary();
-    };
-
-    this._dateAxis.onScroll = () => {
+    this._monthAxis.onScrollEnd = () => {
       this._transformIfDifferent(this._value.getValue());
     };
 
-    this._yearAxis.onScroll = () => {
+    this._dateAxis.onScrollEnd = () => {
       this._transformIfDifferent(this._value.getValue());
-      this._updateDaysIfNecessary();
+    };
+
+    this._yearAxis.onScrollEnd = () => {
+      this._transformIfDifferent(this._value.getValue());
     };
   }
 
@@ -111,20 +109,6 @@ export class DateFieldAdapter implements FieldPort<Date> {
     this._utilityDate.setDate(0);
 
     return this._utilityDate.getDate();
-  }
-
-  private _updateDaysIfNecessary() {
-    const date = this._value.getValue();
-    const modulus = this._dateAxis.getModulus();
-    const dateModulus = this._getAmountOfDaysInMonth(
-      date.getMonth(),
-      date.getFullYear()
-    );
-
-    if (dateModulus !== modulus) {
-      console.log(dateModulus, modulus);
-      this._dateAxis.setModulus(dateModulus);
-    }
   }
 
   setValue(value: Date): void {
@@ -152,16 +136,32 @@ export class DateFieldAdapter implements FieldPort<Date> {
   }
 
   private _transformIfDifferent(value: Date) {
+    const isScrolling =
+      this._monthAxis.isScrolling ||
+      this._yearAxis.isScrolling ||
+      this.dateAxis.isScrolling;
+
+    if (isScrolling) {
+      return;
+    }
+
     const date = this._dateAxis.getCurrentValue();
     const month = this._monthAxis.getCurrentValue();
     const year = this._yearAxis.getCurrentValue();
+    
+    const daysOfMonth = this._getAmountOfDaysInMonth(month, year);
+    if (date > daysOfMonth){
+      const day = Math.min(date, daysOfMonth);
+
+      this.dateAxis.animateToValue(day);
+      return;
+    }
 
     const isDateDifferent = value.getDate() !== date + 1;
     const isMonthDifferent = value.getMonth() !== month;
     const isYearDifferent = value.getFullYear() !== year;
 
     if (isDateDifferent || isMonthDifferent || isYearDifferent) {
-      console.log("Changed", date, month, year);
       this._transformValue(date + 1, month, year);
     }
   }

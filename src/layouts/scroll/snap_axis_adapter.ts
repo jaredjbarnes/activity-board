@@ -48,7 +48,9 @@ export class SnapAxisAdapter extends AxisAdapter {
     const value = this.round(offset + distance);
 
     if (value <= this.maxOffset && value >= this.minOffset) {
-      this.animateOffsetTo(value);
+      const difference = Math.abs(value - offset)
+      const duration = difference < 30 ? 300 : 2000;
+      this.animateOffsetTo(value, duration);
     }
   }
 

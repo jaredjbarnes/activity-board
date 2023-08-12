@@ -21,8 +21,9 @@ export function Day({ dateCell }: DayProps) {
     <VStack
       style={{
         position: "absolute",
-        top: `${dateCell.position}px`,
+        top: "0px",
         left: "0px",
+        transform: `translate(${0}px, ${dateCell.position}px)`,
         height: `${dateCell.size}px`,
         userSelect: "none",
       }}

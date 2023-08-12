@@ -96,6 +96,8 @@ export function DateField({
           width: "100%",
           height: "40px",
           overflow: "hidden",
+          perspective: "700px",
+          perspectiveOrigin: "center center",
         }}
         onFocus={expand}
         onBlur={blur}
@@ -109,15 +111,15 @@ export function DateField({
           <Spacer width="8px" />
           <Box width="40px">
             <VModularScroll modularAxisAdapter={adapter.monthAxis}>
-              {(cell) => {
-                return <Month cell={cell} />;
+              {(cell, _, index) => {
+                return <Month key={index} cell={cell} />;
               }}
             </VModularScroll>
           </Box>
           <Box width="30px">
             <VModularScroll modularAxisAdapter={adapter.dateAxis}>
-              {(cell) => {
-                return <DateNumber cell={cell} />;
+              {(cell, _, index) => {
+                return <DateNumber key={index} cell={cell} />;
               }}
             </VModularScroll>
           </Box>
@@ -126,8 +128,8 @@ export function DateField({
           </Box>
           <FlexBox style={{ overflow: "visible" }}>
             <VNumberScroll numberAxisAdapter={adapter.yearAxis}>
-              {(cell) => {
-                return <Year cell={cell} />;
+              {(cell, _, index) => {
+                return <Year key={index} cell={cell} />;
               }}
             </VNumberScroll>
           </FlexBox>

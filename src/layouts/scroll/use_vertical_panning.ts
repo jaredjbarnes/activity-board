@@ -32,6 +32,7 @@ export function useVerticalPanning(
 
       manager.on("panstart", (e: any) => {
         pointerAdapter.pointerStart(e.center.y);
+        pointerAdapter.pointerMove(e.center.y);
       });
 
       manager.on("panmove", (e: any) => {

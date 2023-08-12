@@ -77,11 +77,7 @@ export function MinMaxHScroll() {
 
 export function SnapHScroll() {
   const [axisAdapter] = useState(() => {
-    return new SnapAxisAdapter(
-      requestAnimationFrame,
-      cancelAnimationFrame,
-      100
-    );
+    return new SnapAxisAdapter(100);
   });
 
   return (

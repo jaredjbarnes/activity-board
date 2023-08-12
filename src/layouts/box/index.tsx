@@ -1,5 +1,5 @@
 import React, { HTMLAttributes, useRef } from 'react';
-import { useForkRef } from 'src/hooks/use_fork_ref.ts';
+import { useForkRef } from 'src/utils/hooks/use_fork_ref.ts';
 import { BottomResizeHandle } from './bottom_resize_handle.tsx';
 import { LeftResizeHandle } from './left_resize_handle.tsx';
 import { RightResizeHandle } from './right_resize_handle.tsx';

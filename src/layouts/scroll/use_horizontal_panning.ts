@@ -31,6 +31,7 @@ export function useHorizontalPanning(
 
       manager.on("panstart", (e: any) => {
         pointerAdapter.pointerStart(e.center.x);
+        pointerAdapter.pointerMove(e.center.x);
       });
 
       manager.on("panmove", (e: any) => {

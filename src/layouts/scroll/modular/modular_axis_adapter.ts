@@ -60,11 +60,20 @@ export class ModularAxisAdapter extends SnapAxisAdapter {
   }
 
   private getPositionForValue(value: number) {
+    const modulus = this._modulus;
     const intervalRemainder = this.start % this._snapInterval;
     const position = this.start - intervalRemainder;
     const positionIndex = position / this._snapInterval;
     const currentIndex = positionIndex % this._modulus;
-    const moveByIndex = value - currentIndex;
+
+    let distance = value - currentIndex;
+    const forwardMove = ((distance % modulus) + modulus) % modulus;
+    const backwardMove = forwardMove - modulus;
+
+    const moveByIndex =
+      Math.abs(forwardMove) <= Math.abs(backwardMove)
+        ? forwardMove
+        : backwardMove;
 
     return (positionIndex + moveByIndex) * this._snapInterval;
   }

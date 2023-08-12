@@ -9,6 +9,8 @@ export default {
   component: DayCalendar,
 };
 
+window.devicePixelRatio = 2;
+
 export function SidebarCalendar() {
   const [dateAxisAdapter] = useState(() => {
     return new DateAxisAdapter();
