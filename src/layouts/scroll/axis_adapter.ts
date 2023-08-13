@@ -208,6 +208,7 @@ export class AxisAdapter implements IAxisPort {
   }
 
   pointerEnd() {
+    const now = Date.now();
     if (!this._isPointerDown) {
       return;
     }
@@ -218,7 +219,11 @@ export class AxisAdapter implements IAxisPort {
       return;
     }
 
-    this._lastPointerEventTime = Date.now();
+    if (now - this._lastPointerEventTime > 32){
+      this._deltaOffset = 0;
+    }
+
+    this._lastPointerEventTime = now;
 
     const offset = this._offset.getValue();
     const delta = Math.abs(this._deltaOffset);
