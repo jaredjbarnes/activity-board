@@ -148,9 +148,9 @@ export class DateFieldAdapter implements FieldPort<Date> {
     const date = this._dateAxis.getCurrentValue();
     const month = this._monthAxis.getCurrentValue();
     const year = this._yearAxis.getCurrentValue();
-    
+
     const daysOfMonth = this._getAmountOfDaysInMonth(month, year);
-    if (date > daysOfMonth){
+    if (date > daysOfMonth) {
       const day = Math.min(date, daysOfMonth);
 
       this.dateAxis.animateToValue(day);

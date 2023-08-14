@@ -105,7 +105,9 @@ class ResizeObserverRegistry {
     return handlers as ResizeHandler[];
   }
 }
+
 const resizeObserverRegistry = new ResizeObserverRegistry();
+
 export function useResizeObserver<T extends Element>(
   resizeHandler: ResizeHandler,
   triggerConfig: TriggerConfig = TriggerConfig.Both
@@ -113,6 +115,7 @@ export function useResizeObserver<T extends Element>(
   const ref = useRef<T | null>(null);
   const resizeHandlerRef = useRef<ResizeHandler>(resizeHandler);
   resizeHandlerRef.current = resizeHandler;
+  
   useLayoutEffect(() => {
     const element = ref.current;
     if (element != null) {

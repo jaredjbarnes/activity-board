@@ -8,6 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       src: path.resolve("src/"),
+      static: path.resolve("static/"),
     },
   },
 });

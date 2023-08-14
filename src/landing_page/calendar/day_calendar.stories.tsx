@@ -165,7 +165,7 @@ export function BasicCalendar() {
 
         currentMonthDate = newDate;
 
-        dateAxisAdapter.animateToDate(newDate);
+        dateAxisAdapter.scrollToDate(newDate);
       }
     }
 
