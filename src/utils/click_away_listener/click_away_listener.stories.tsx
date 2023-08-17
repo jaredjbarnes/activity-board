@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "src/controls/buttons/button.tsx";
 import { ClickAwayListener } from "src/utils/click_away_listener/click_away_listener.tsx";
 import { Portal } from "src/utils/portal/portal.tsx";
 import { PortalPresenter } from "src/utils/portal/portal_presenter.ts";
@@ -23,7 +24,7 @@ export function Click() {
 
   return (
     <div>
-      <button onClick={show}>Show</button>
+      <Button onClick={show}>Show</Button>
       <Portal presenter={portalPresenter}>
         <div
           style={{
@@ -68,7 +69,7 @@ export function MouseDown() {
 
   return (
     <div>
-      <button onClick={show}>Show</button>
+      <Button onClick={show}>Show</Button>
       <Portal presenter={portalPresenter}>
         <div
           style={{
@@ -113,7 +114,7 @@ export function MouseUp() {
 
   return (
     <div>
-      <button onClick={show}>Show</button>
+      <Button onClick={show}>Show</Button>
       <Portal presenter={portalPresenter}>
         <div
           style={{

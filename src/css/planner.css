@@ -35,15 +35,61 @@
   color: #666;
 }
 
-.text-field input, .text-field .input {
+.text-field input,
+.text-field .input {
   font-size: 20px;
   padding-left: 4px;
   border: 3px solid black;
   outline: none !important;
   border-radius: 10px;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 .text-field input:focus {
   border: 3px solid rgb(0, 132, 255);
+}
+
+button {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  box-sizing: border-box;
+  border: 3px solid black;
+  background-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
+  color: black;
+}
+
+button:active {
+  border: 3px solid rgb(0, 132, 255);
+  color: rgb(0, 132, 255);
+  background-color:rgba(0, 132, 255, 0.25);
+}
+
+button:disabled {
+  border: 3px solid rgb(158, 158, 158);
+}
+
+button.primary {
+  border: 3px solid rgb(0, 132, 255);
+  background-color: rgb(0, 132, 255);
+  color: white;
+}
+
+button.primary:active {
+  color: rgb(0, 132, 255);
+  background-color:rgba(0, 132, 255, 0.25);
+}
+
+button.tertiary {
+  border: 3px solid rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  color: rgb(0, 132, 255);
+}
+
+button.tertiary:active {
+  transition: border 150ms ease-out;
+  border: 3px solid rgb(0, 132, 255);
+  color: rgb(0, 132, 255);
+  background-color:rgba(0, 132, 255, 0.25);
+
 }

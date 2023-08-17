@@ -1,5 +1,6 @@
 import { useAsyncValue } from "@m/hex/hooks/use_async_value";
 import { useState } from "react";
+import { Button } from "src/controls/buttons/button.tsx";
 import { Portal } from "src/utils/portal/portal.tsx";
 import { PortalPresenter } from "src/utils/portal/portal_presenter.ts";
 
@@ -50,7 +51,7 @@ export function Basic() {
           </div>
         </div>
       </Portal>
-      <button onClick={toggle}>{isOpen ? "Close" : "Open"}</button>
+      <Button onClick={toggle}>{isOpen ? "Close" : "Open"}</Button>
     </div>
   );
 }
