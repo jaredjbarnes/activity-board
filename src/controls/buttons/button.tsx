@@ -2,19 +2,19 @@ import React from "react";
 import { classnames } from "src/classnames.ts";
 
 export interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
   width?: string;
   height?: string;
-  children: React.ReactNode;
   variant?: "primary" | "secondary" | "tertiary";
   style?: React.CSSProperties;
   className?: string;
 }
 
 export const Button = React.forwardRef(function Button({
+  children,
   width = "auto",
   height = "40px",
   variant = "primary",
-  children,
   style = {},
   className,
   ...buttonProps
