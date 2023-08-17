@@ -1,7 +1,9 @@
 import React from "react";
 import { classnames } from "src/classnames.ts";
 
-export interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps
+  extends React.HTMLAttributes<HTMLButtonElement>,
+    Omit<React.HTMLProps<HTMLButtonElement>, "type"> {
   children: React.ReactNode;
   width?: string;
   height?: string;

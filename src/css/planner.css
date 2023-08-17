@@ -41,7 +41,6 @@
   padding-left: 4px;
   border: 3px solid black;
   outline: none !important;
-  border-radius: 10px;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
@@ -56,6 +55,13 @@ button {
   cursor: pointer;
 }
 
+button:disabled {
+  border: 3px solid rgb(200, 200, 200);
+  background-color: rgb(200, 200, 200);
+  color: white;
+  cursor: not-allowed;
+}
+
 button.secondary {
   border: 3px solid rgb(0, 132, 255);
   background-color: rgba(0, 0, 0, 0);
@@ -68,8 +74,10 @@ button.secondary:active {
   background-color: rgba(0, 132, 255, 0.25);
 }
 
-button:disabled {
-  border: 3px solid rgb(158, 158, 158);
+button.secondary:disabled {
+  border: 3px solid rgb(200, 200, 200);
+  background-color: rgba(0, 0, 0, 0);
+  color: rgb(200, 200, 200);
 }
 
 button.primary {
@@ -83,6 +91,12 @@ button.primary:active {
   background-color: rgba(0, 132, 255, 0.25);
 }
 
+button.primary:disabled {
+  border: 3px solid rgb(200, 200, 200);
+  background-color: rgb(200, 200, 200);
+  color: white;
+}
+
 button.tertiary {
   border: 3px solid rgba(0, 0, 0, 0);
   background-color: rgba(0, 0, 0, 0);
@@ -94,4 +108,10 @@ button.tertiary:active {
   border: 3px solid rgb(0, 132, 255);
   color: rgb(0, 132, 255);
   background-color: rgba(0, 132, 255, 0.25);
+}
+
+button.tertiary:disabled {
+  border: 3px solid rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  color: rgb(200, 200, 200);
 }
