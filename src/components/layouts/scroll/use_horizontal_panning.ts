@@ -23,15 +23,11 @@ export function useHorizontalPanning(
       manager.add(new Hammer.Tap());
 
       manager.on("tap", (e: any) => {
-        pointerAdapter.pointerStart(e.center.x);
-        pointerAdapter.pointerMove(e.center.x);
-        pointerAdapter.pointerEnd();
         onTap && onTap(e.srcEvent);
       });
 
       manager.on("panstart", (e: any) => {
         pointerAdapter.pointerStart(e.center.x);
-        pointerAdapter.pointerMove(e.center.x);
       });
 
       manager.on("panmove", (e: any) => {
@@ -46,9 +42,18 @@ export function useHorizontalPanning(
         pointerAdapter.pointerEnd();
       });
 
+      function start() {
+        pointerAdapter.touchStart();
+      }
+
+      div.addEventListener("touchstart", start);
+      div.addEventListener("mousedown", start);
+
       return () => {
         manager.stop();
         manager.destroy();
+        div.removeEventListener("touchstart", start);
+        div.removeEventListener("mousedown", start);
       };
     }
   }, [pointerAdapter, onTap, div]);

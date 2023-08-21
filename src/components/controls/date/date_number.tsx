@@ -15,7 +15,7 @@ export function DateNumber({ cell }: MonthProps) {
         transform: `translate(${0}px, ${cell.position}px)`,
         height: `${cell.size}px`,
         width: "100%",
-        placeItems: "center end",
+        placeItems: "center center",
       }}
     >
       {cell.value + 1}

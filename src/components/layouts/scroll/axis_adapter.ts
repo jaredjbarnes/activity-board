@@ -166,6 +166,14 @@ export class AxisAdapter implements IAxisPort {
     this._deltaOffsetHistory.fill(0);
   }
 
+  touchStart(): void {
+    this.stop();
+  }
+
+  touchEnd(): void {
+    // Do nothing.
+  }
+
   pointerStart(value: number) {
     if (!this._isEnabled) {
       return;
@@ -173,26 +181,22 @@ export class AxisAdapter implements IAxisPort {
 
     this.reset();
     this._isPointerDown = true;
-    this._lastPointerEventTime = Date.now();
     this._lastOffset = value;
     this._startOffset = value;
-    this._deltaOffset = 0;
-    this._deltaOffsetHistory.fill(0);
     this.processScrollStart();
   }
 
   pointerMove(value: number) {
-    if (!this._isPointerDown || !this._isEnabled) {
-      return;
-    }
-
     const now = Date.now();
     const deltaTime = now - this._lastPointerEventTime;
     const frames = Math.floor(deltaTime / 16);
     const delta = (value - this._lastOffset) / frames;
+    const noActivePointer = !this._isPointerDown;
+    const disabled = !this._isEnabled;
+    const tooFast = deltaTime < 16;
 
-    if (deltaTime < 16) {
-      return false;
+    if (noActivePointer || disabled || tooFast) {
+      return;
     }
 
     this._lastPointerEventTime = now;
@@ -201,14 +205,13 @@ export class AxisAdapter implements IAxisPort {
     this.updatePointerDelta(delta);
 
     this._offset.transformValue((o) => {
-      return this._isEnabled ? o + this._deltaOffset : o;
+      return o + this._deltaOffset;
     });
 
-    this.onScroll && this.onScroll(this);
+    this.processScroll();
   }
 
   pointerEnd() {
-    const now = Date.now();
     if (!this._isPointerDown) {
       return;
     }
@@ -219,7 +222,8 @@ export class AxisAdapter implements IAxisPort {
       return;
     }
 
-    if (now - this._lastPointerEventTime > 32){
+    const now = Date.now();
+    if (now - this._lastPointerEventTime > 32) {
       this._deltaOffset = 0;
     }
 

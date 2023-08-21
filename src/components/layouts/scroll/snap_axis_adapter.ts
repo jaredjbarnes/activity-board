@@ -29,14 +29,11 @@ export class SnapAxisAdapter extends AxisAdapter {
     this.settle();
   }
 
-  reset(): void {
-    super.reset();
-  }
-
   stop() {
+    const canSettle = this.isScrolling && this._isEnabled;
     super.stop();
 
-    if (this.isScrolling && this._isEnabled) {
+    if (canSettle) {
       this.settle();
     }
   }
