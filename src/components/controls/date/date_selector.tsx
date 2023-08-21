@@ -1,3 +1,4 @@
+import { Button } from "src/components/controls/buttons/button.tsx";
 import { DateFieldAdapter } from "src/components/controls/date/date_field_adapter.ts";
 import { DateNumber } from "src/components/controls/date/date_number.tsx";
 import { Month } from "src/components/controls/date/month.tsx";
@@ -14,39 +15,98 @@ export interface DateSelectorProps {
 
 export function DateSelector({ adapter }: DateSelectorProps) {
   return (
-    <VStack
-      className="text-field date-selector"
+    <div
       style={{
-        width: "250px",
-        height: "200px",
-        overflow: "hidden",
+        display: "inline-block",
+        padding: "8px",
+        backgroundColor: "white",
+        borderRadius: "8px",
+        boxShadow: "0px 0px 30px rgba(0,0,0,0.25)",
       }}
     >
-      <HStack height="50px"></HStack>
-      <HStack height="100px" style={{ overflow: "hidden" }}>
-        <Box width="100px">
-          <VModularScroll modularAxisAdapter={adapter.monthAxis}>
-            {(cell, _, index) => {
-              return <Month key={index} cell={cell} />;
+      <VStack
+        className="text-field date-selector"
+        style={{
+          width: "250px",
+          height: "202px",
+          overflow: "hidden",
+        }}
+      >
+        <HStack
+          height="50px"
+          verticalAlignment="center"
+          horizontalAlignment="center"
+        >
+          Choose Date
+        </HStack>
+        <Box height="102px" className="input" style={{overflow: "hidden" }}>
+          <HStack
+            height="34px"
+            style={{ position: "absolute", top: "31px", left: "0px" }}
+          >
+            <Box width="125px">
+              <VModularScroll modularAxisAdapter={adapter.monthAxis}>
+                {(cell, _, index) => {
+                  return <Month key={index} cell={cell} />;
+                }}
+              </VModularScroll>
+            </Box>
+            <Box width="50px">
+              <VModularScroll modularAxisAdapter={adapter.dateAxis}>
+                {(cell, _, index) => {
+                  return <DateNumber key={index} cell={cell} />;
+                }}
+              </VModularScroll>
+            </Box>
+            <Box width="75px">
+              <VNumberScroll numberAxisAdapter={adapter.yearAxis}>
+                {(cell, _, index) => {
+                  return <Year key={index} cell={cell} />;
+                }}
+              </VNumberScroll>
+            </Box>
+          </HStack>
+          <div
+            style={{
+              position: "absolute",
+              top: "0",
+              left: "0",
+              height: "31px",
+              width: "100%",
+              boxSizing: "border-box",
+              borderBottom: "1px solid black",
+              backgroundColor: "rgba(255,255,255, 0.65)",
+              backdropFilter: "blur(4px)",
+              WebkitBackdropFilter: "blur(1px)",
+              pointerEvents: "none",
             }}
-          </VModularScroll>
-        </Box>
-        <Box width="75px">
-          <VModularScroll modularAxisAdapter={adapter.dateAxis}>
-            {(cell, _, index) => {
-              return <DateNumber key={index} cell={cell} />;
+          ></div>
+          <div
+            style={{
+              position: "absolute",
+              top: "65px",
+              left: "0",
+              height: "34px",
+              width: "100%",
+              boxSizing: "border-box",
+              borderTop: "1px solid black",
+              backgroundColor: "rgba(255,255,255, 0.65)",
+              backdropFilter: "blur(4px)",
+              WebkitBackdropFilter: "blur(1px)",
+              pointerEvents: "none",
             }}
-          </VModularScroll>
+          ></div>
         </Box>
-        <Box width="75px">
-          <VNumberScroll numberAxisAdapter={adapter.yearAxis}>
-            {(cell, _, index) => {
-              return <Year key={index} cell={cell} />;
-            }}
-          </VNumberScroll>
-        </Box>
-      </HStack>
-      <HStack height="50px"></HStack>
-    </VStack>
+
+        <HStack height="50px">
+          <Button variant="tertiary" width="50%">
+            Cancel
+          </Button>
+          <Button variant="tertiary" width="50%">
+            Done
+          </Button>
+        </HStack>
+      </VStack>
+    </div>
   );
 }

@@ -8,9 +8,15 @@ export interface PopoverProps {
   presenter: PopoverPresenter;
   children: React.ReactElement;
   anchorRef: React.RefObject<Element> | React.MutableRefObject<Element>;
+  onClickAway?: (event: React.MouseEvent | React.TouchEvent) => void;
 }
 
-export function Popover({ presenter, children, anchorRef }: PopoverProps) {
+export function Popover({
+  presenter,
+  children,
+  anchorRef,
+  onClickAway,
+}: PopoverProps) {
   const isOpen = useAsyncValue(presenter.isOpenBroadcast);
   const position = useAsyncValue(presenter.popoverPositionBroadcast);
   const popoverRef = useRef<HTMLDivElement | null>(null);
@@ -66,8 +72,12 @@ export function Popover({ presenter, children, anchorRef }: PopoverProps) {
     }
   }, [isOpen]);
 
-  function close() {
-    presenter.close();
+  function handleClickAway(event: React.MouseEvent | React.TouchEvent) {
+    if (onClickAway != null) {
+      onClickAway(event);
+    } else {
+      presenter.close();
+    }
   }
 
   if (!isOpen) {
@@ -76,7 +86,7 @@ export function Popover({ presenter, children, anchorRef }: PopoverProps) {
 
   return (
     <Portal presenter={presenter.portalPresenter}>
-      <ClickAwayListener onClickAway={close}>
+      <ClickAwayListener onClickAway={handleClickAway} touchEvent="onTouchStart">
         <div
           ref={popoverRef}
           style={{

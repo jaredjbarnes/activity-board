@@ -48,6 +48,12 @@ export class PortalPresenter {
   }
 
   open() {
+    const currentPortalElement = this._portalElement.getValue();
+
+    if (currentPortalElement != null){
+      return;
+    }
+
     const portalElement = document.createElement("platform-portal");
     PortalPresenter._platformElement.appendChild(portalElement);
     return this._portalElement.setValue(portalElement);

@@ -1,19 +1,18 @@
 import { ObservableValue } from "@m/hex/observable_value";
-import { DateFieldDynamicStyles } from "src/components/controls/date/date_field_dynamic_styles.ts";
 import { FieldPort } from "src/components/controls/field_port.ts";
 import { ModularAxisAdapter } from "src/components/layouts/scroll/modular/modular_axis_adapter.ts";
 import { NumberAxisAdapter } from "src/components/layouts/scroll/number/number_axis_adapter.ts";
+import { PopoverPresenter } from "src/components/utils/popover/popover_presenter.ts";
 
 export class DateFieldAdapter implements FieldPort<Date> {
   private _id: ObservableValue<string>;
   private _value: ObservableValue<Date>;
   private _label: ObservableValue<string>;
+  private _dateSelectorPresenter: PopoverPresenter;
   private _monthAxis: ModularAxisAdapter;
   private _dateAxis: ModularAxisAdapter;
   private _yearAxis: NumberAxisAdapter;
   private _utilityDate: Date = new Date();
-  private _isExpanded: ObservableValue<boolean>;
-  private _dynamicStyles: DateFieldDynamicStyles;
 
   get idBroadcast() {
     return this._id.broadcast;
@@ -27,12 +26,8 @@ export class DateFieldAdapter implements FieldPort<Date> {
     return this._label.broadcast;
   }
 
-  get isExpandedBroadcast() {
-    return this._isExpanded.broadcast;
-  }
-
-  get dynamicStyles() {
-    return this._dynamicStyles;
+  get selectorPopoverPresenter() {
+    return this._dateSelectorPresenter;
   }
 
   get monthAxis() {
@@ -57,8 +52,9 @@ export class DateFieldAdapter implements FieldPort<Date> {
     this._id = new ObservableValue(id);
     this._label = new ObservableValue(label);
     this._value = new ObservableValue(new Date(value));
-    this._isExpanded = new ObservableValue(false);
-    this._dynamicStyles = new DateFieldDynamicStyles();
+    this._dateSelectorPresenter = new PopoverPresenter();
+    this._dateSelectorPresenter.setAnchorOrigin("bottom", "center");
+    this._dateSelectorPresenter.setPopoverOrigin("top", "center");
 
     this._monthAxis = new ModularAxisAdapter(
       12,
@@ -88,15 +84,15 @@ export class DateFieldAdapter implements FieldPort<Date> {
     this._setYear();
     this._setDate();
 
-    this._monthAxis.onScrollEnd = () => {
+    this._monthAxis.onScroll = () => {
       this._transformIfDifferent(this._value.getValue());
     };
 
-    this._dateAxis.onScrollEnd = () => {
+    this._dateAxis.onScroll = () => {
       this._transformIfDifferent(this._value.getValue());
     };
 
-    this._yearAxis.onScrollEnd = () => {
+    this._yearAxis.onScroll = () => {
       this._transformIfDifferent(this._value.getValue());
     };
   }
@@ -137,9 +133,9 @@ export class DateFieldAdapter implements FieldPort<Date> {
 
   private _transformIfDifferent(value: Date) {
     const isScrolling =
-      this._monthAxis.isScrolling ||
-      this._yearAxis.isScrolling ||
-      this.dateAxis.isScrolling;
+      this._monthAxis.velocity > 1 ||
+      this._yearAxis.velocity > 1 ||
+      this.dateAxis.velocity > 1;
 
     if (isScrolling) {
       return;
@@ -192,13 +188,11 @@ export class DateFieldAdapter implements FieldPort<Date> {
     this._label.setValue(label);
   }
 
-  expand() {
-    this._isExpanded.setValue(true);
-    this._dynamicStyles.expand();
+  showDateSelector() {
+    this._dateSelectorPresenter.open();
   }
 
-  contract() {
-    this._isExpanded.setValue(false);
-    this._dynamicStyles.contract();
+  hideDateSelector() {
+    this._dateSelectorPresenter.close();
   }
 }

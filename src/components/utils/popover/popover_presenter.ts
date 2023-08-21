@@ -79,8 +79,8 @@ export class PopoverPresenter {
     verticalOrigin: VerticalOrigin,
     horizontalOrigin: HorizontalOrigin
   ) {
-    this._anchorVerticalOrigin = verticalOrigin;
-    this._anchorHorizontalOrigin = horizontalOrigin;
+    this._popoverVerticalOrigin = verticalOrigin;
+    this._popoverHorizontalOrigin = horizontalOrigin;
   }
 
   updatePosition() {

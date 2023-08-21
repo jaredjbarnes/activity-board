@@ -4,7 +4,7 @@ export interface MonthProps {
   cell: IModularCell;
 }
 
-const monthMap: Record<number, string> = {
+export const monthMap: Record<number, string> = {
   0: "January",
   1: "February",
   2: "March",
@@ -27,6 +27,7 @@ export function Month({ cell }: MonthProps) {
         position: "absolute",
         top: "0px",
         left: "0px",
+        paddingLeft: "8px",
         transform: `translate(${0}px, ${cell.position}px)`,
         height: `${cell.size}px`,
         width: "100%",
