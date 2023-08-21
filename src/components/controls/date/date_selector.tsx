@@ -28,12 +28,12 @@ export function DateSelector({ adapter }: DateSelectorProps) {
         className="text-field date-selector"
         style={{
           width: "250px",
-          height: "202px",
+          height: "142px",
           overflow: "hidden",
         }}
       >
         <HStack
-          height="50px"
+          height="40px"
           verticalAlignment="center"
           horizontalAlignment="center"
         >
@@ -97,15 +97,6 @@ export function DateSelector({ adapter }: DateSelectorProps) {
             }}
           ></div>
         </Box>
-
-        <HStack height="50px">
-          <Button variant="tertiary" width="50%">
-            Cancel
-          </Button>
-          <Button variant="tertiary" width="50%">
-            Done
-          </Button>
-        </HStack>
       </VStack>
     </div>
   );

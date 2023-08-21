@@ -133,9 +133,9 @@ export class DateFieldAdapter implements FieldPort<Date> {
 
   private _transformIfDifferent(value: Date) {
     const isScrolling =
-      this._monthAxis.velocity > 1 ||
-      this._yearAxis.velocity > 1 ||
-      this.dateAxis.velocity > 1;
+      Math.abs(this._monthAxis.velocity) > 0.5 ||
+      Math.abs(this._yearAxis.velocity) > 0.5 ||
+      Math.abs(this.dateAxis.velocity) > 0.5;
 
     if (isScrolling) {
       return;
