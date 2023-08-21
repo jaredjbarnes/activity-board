@@ -21,6 +21,7 @@ export function useHorizontalPanning(
       );
 
       manager.add(new Hammer.Tap());
+      manager.add(new Hammer.Press({ time: 0 }));
 
       manager.on("tap", (e: any) => {
         onTap && onTap(e.srcEvent);
@@ -34,26 +35,25 @@ export function useHorizontalPanning(
         pointerAdapter.pointerMove(e.center.x);
       });
 
-      manager.on("panend", () => {
-        pointerAdapter.pointerEnd();
+      manager.on("panend", (e: any) => {
+        pointerAdapter.pointerEnd(e.center.x);
       });
 
-      manager.on("pancancel", () => {
-        pointerAdapter.pointerEnd();
+      manager.on("pancancel", (e: any) => {
+        pointerAdapter.pointerEnd(e.center.x);
       });
 
-      function start() {
-        pointerAdapter.touchStart();
-      }
+      manager.on("press", (e: any) => {
+        pointerAdapter.press(e.center.x);
+      });
 
-      div.addEventListener("touchstart", start);
-      div.addEventListener("mousedown", start);
+      manager.on("pressup", (e: any) => {
+        pointerAdapter.pressUp(e.center.x);
+      });
 
       return () => {
         manager.stop();
         manager.destroy();
-        div.removeEventListener("touchstart", start);
-        div.removeEventListener("mousedown", start);
       };
     }
   }, [pointerAdapter, onTap, div]);

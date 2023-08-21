@@ -20,6 +20,7 @@ export function useVerticalPanning(
         new Hammer.Pan({ direction: Hammer.DIRECTION_VERTICAL, threshold: 5 })
       );
 
+      manager.add(new Hammer.Press({ time: 0 }));
       manager.add(new Hammer.Tap());
 
       manager.on("tap", (e: any) => {
@@ -34,26 +35,25 @@ export function useVerticalPanning(
         pointerAdapter.pointerMove(e.center.y);
       });
 
-      manager.on("panend", () => {
-        pointerAdapter.pointerEnd();
+      manager.on("panend", (e: any) => {
+        pointerAdapter.pointerEnd(e.center.y);
       });
 
-      manager.on("pancancel", () => {
-        pointerAdapter.pointerEnd();
+      manager.on("pancancel", (e: any) => {
+        pointerAdapter.pointerEnd(e.center.y);
       });
 
-      function start() {
-        pointerAdapter.touchStart();
-      }
+      manager.on("press", (e: any) => {
+        pointerAdapter.press(e.center.y);
+      });
 
-      div.addEventListener("touchstart", start);
-      div.addEventListener("mousedown", start);
+      manager.on("pressup", (e: any) => {
+        pointerAdapter.pressUp(e.center.y);
+      });
 
       return () => {
         manager.stop();
         manager.destroy();
-        div.removeEventListener("touchstart", start);
-        div.removeEventListener("mousedown", start);
       };
     }
   }, [pointerAdapter, onTap, div]);

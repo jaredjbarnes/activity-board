@@ -1,7 +1,7 @@
 export interface IPointerPort {
-  touchStart():void;
+  press(value: number):void;
+  pressUp(value: number):void;
   pointerStart(value: number): void;
   pointerMove(value: number): void;
-  pointerEnd(): void;
-  touchEnd(): void;
+  pointerEnd(value: number): void;
 }

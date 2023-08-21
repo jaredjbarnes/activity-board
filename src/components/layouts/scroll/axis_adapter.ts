@@ -166,12 +166,12 @@ export class AxisAdapter implements IAxisPort {
     this._deltaOffsetHistory.fill(0);
   }
 
-  touchStart(): void {
-    this.stop();
+  press(value: number): void {
+    this.pointerStart(value);
   }
 
-  touchEnd(): void {
-    // Do nothing.
+  pressUp(_: number) {
+    this.pointerEnd();
   }
 
   pointerStart(value: number) {
