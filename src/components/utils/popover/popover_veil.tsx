@@ -1,4 +1,10 @@
-export function PopoverVeil({ onClick }: { onClick: () => void }) {
+export function PopoverVeil({
+  onClick,
+  style,
+}: {
+  onClick: () => void;
+  style?: React.CSSProperties;
+}) {
   return (
     <div
       onClick={(e) => {
@@ -11,6 +17,7 @@ export function PopoverVeil({ onClick }: { onClick: () => void }) {
         position: "absolute",
         inset: 0,
         opacity: 1,
+        ...style,
       }}
     ></div>
   );

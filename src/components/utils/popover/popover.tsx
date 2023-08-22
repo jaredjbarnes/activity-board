@@ -1,6 +1,5 @@
 import { useAsyncValue } from "@m/hex/hooks/use_async_value";
 import React, { useCallback, useLayoutEffect, useRef } from "react";
-import { useClientBoundingRect } from "src/components/utils/hooks/use_client_bounding_rect.ts";
 import { PopoverPresenter } from "src/components/utils/popover/popover_presenter.ts";
 import { PopoverVeil } from "src/components/utils/popover/popover_veil.tsx";
 import { Portal } from "src/components/utils/portal/portal.tsx";
@@ -15,6 +14,8 @@ export function Popover({ presenter, children, anchorRef }: PopoverProps) {
   const isOpen = useAsyncValue(presenter.isOpenBroadcast);
   const position = useAsyncValue(presenter.popoverPositionBroadcast);
   const popoverRef = useRef<HTMLDivElement | null>(null);
+  const opacity = useAsyncValue(presenter.revealer.opacityBroadcast);
+  const offset = useAsyncValue(presenter.revealer.offsetBroadcast);
 
   const updateRects = useCallback(() => {
     const popoverElement = popoverRef.current;
@@ -77,7 +78,7 @@ export function Popover({ presenter, children, anchorRef }: PopoverProps) {
 
   return (
     <Portal presenter={presenter.portalPresenter}>
-      <PopoverVeil onClick={close} />
+      <PopoverVeil style={{ opacity }} onClick={close} />
       <div
         ref={popoverRef}
         style={{
@@ -85,7 +86,8 @@ export function Popover({ presenter, children, anchorRef }: PopoverProps) {
           position: "absolute",
           top: "0px",
           left: "0px",
-          transform: `translate(${position.x}px, ${position.y}px)`,
+          opacity,
+          transform: `translate(${position.x}px, ${position.y + offset}px)`,
         }}
       >
         {children}

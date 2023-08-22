@@ -1,5 +1,6 @@
 import { ObservableValue } from "@m/hex/observable_value";
 import { PortalPresenter } from "src/components/utils/portal/portal_presenter.ts";
+import { Revealer } from "src/utils/revealer.ts";
 
 export type VerticalOrigin = "center" | "top" | "bottom";
 export type HorizontalOrigin = "center" | "left" | "right";
@@ -28,6 +29,7 @@ export class PopoverPresenter {
     left: -Infinity,
   };
   private _isOpen = new ObservableValue(false);
+  private _revealer = new Revealer();
 
   get isOpenBroadcast() {
     return this._isOpen.broadcast;
@@ -39,6 +41,10 @@ export class PopoverPresenter {
 
   get portalPresenter() {
     return this._portalPresenter;
+  }
+
+  get revealer() {
+    return this._revealer;
   }
 
   setAnchorRect(top: number, right: number, bottom: number, left: number) {
@@ -155,10 +161,13 @@ export class PopoverPresenter {
   open() {
     this.portalPresenter.open();
     this._isOpen.setValue(true);
+    this._revealer.show();
   }
 
   close() {
-    this.portalPresenter.close();
-    this._isOpen.setValue(false);
+    this._revealer.hide().then(() => {
+      this.portalPresenter.close();
+      this._isOpen.setValue(false);
+    });
   }
 }
