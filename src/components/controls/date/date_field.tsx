@@ -28,15 +28,11 @@ export const DateField = React.forwardRef(function DateField(
   const label = useAsyncValue(adapter.labelBroadcast);
   const forkedRef = useForkRef(ref, fieldRef);
   const isSelectorOpen = useAsyncValue(
-    adapter.selectorPopoverPresenter.isOpenBroadcast
+    adapter.popoverPresenter.isOpenBroadcast
   );
 
   function showDateSelector() {
-    adapter.selectorPopoverPresenter.open();
-  }
-
-  function hideDateSelector() {
-    adapter.selectorPopoverPresenter.close();
+    adapter.popoverPresenter.open();
   }
 
   return (
@@ -54,7 +50,7 @@ export const DateField = React.forwardRef(function DateField(
         id={id}
         ref={inputRef}
         tabIndex={0}
-        className="input date"
+        className={`input date ${isSelectorOpen ? "open" : ""}`}
         style={{
           position: "relative",
           width: "100%",
@@ -69,12 +65,7 @@ export const DateField = React.forwardRef(function DateField(
           monthMap[value.getMonth()]
         } ${value.getDate()}, ${value.getFullYear()}`}
         {isSelectorOpen && (
-          <Popover
-            hasVeil
-            onClickAway={hideDateSelector}
-            presenter={adapter.selectorPopoverPresenter}
-            anchorRef={inputRef}
-          >
+          <Popover presenter={adapter.popoverPresenter} anchorRef={inputRef}>
             <DateSelector adapter={adapter} />
           </Popover>
         )}

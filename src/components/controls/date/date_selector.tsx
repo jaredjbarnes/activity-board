@@ -1,4 +1,3 @@
-import { Button } from "src/components/controls/buttons/button.tsx";
 import { DateFieldAdapter } from "src/components/controls/date/date_field_adapter.ts";
 import { DateNumber } from "src/components/controls/date/date_number.tsx";
 import { Month } from "src/components/controls/date/month.tsx";

@@ -8,7 +8,7 @@ export class DateFieldAdapter implements FieldPort<Date> {
   private _id: ObservableValue<string>;
   private _value: ObservableValue<Date>;
   private _label: ObservableValue<string>;
-  private _dateSelectorPresenter: PopoverPresenter;
+  private _popoverPresenter: PopoverPresenter;
   private _monthAxis: ModularAxisAdapter;
   private _dateAxis: ModularAxisAdapter;
   private _yearAxis: NumberAxisAdapter;
@@ -26,8 +26,8 @@ export class DateFieldAdapter implements FieldPort<Date> {
     return this._label.broadcast;
   }
 
-  get selectorPopoverPresenter() {
-    return this._dateSelectorPresenter;
+  get popoverPresenter() {
+    return this._popoverPresenter;
   }
 
   get monthAxis() {
@@ -52,9 +52,9 @@ export class DateFieldAdapter implements FieldPort<Date> {
     this._id = new ObservableValue(id);
     this._label = new ObservableValue(label);
     this._value = new ObservableValue(new Date(value));
-    this._dateSelectorPresenter = new PopoverPresenter();
-    this._dateSelectorPresenter.setAnchorOrigin("bottom", "center");
-    this._dateSelectorPresenter.setPopoverOrigin("top", "center");
+    this._popoverPresenter = new PopoverPresenter();
+    this._popoverPresenter.setAnchorOrigin("bottom", "center");
+    this._popoverPresenter.setPopoverOrigin("top", "center");
 
     this._monthAxis = new ModularAxisAdapter(
       12,
