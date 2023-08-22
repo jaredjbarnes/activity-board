@@ -95,6 +95,18 @@ export class DateFieldAdapter implements FieldPort<Date> {
     this._yearAxis.onScroll = () => {
       this._transformIfDifferent(this._value.getValue());
     };
+
+    this._monthAxis.onScrollEnd = () => {
+      this._protectAgainstInvalidDate();
+    };
+
+    this._dateAxis.onScrollEnd = () => {
+      this._protectAgainstInvalidDate();
+    };
+
+    this._yearAxis.onScrollEnd = () => {
+      this._protectAgainstInvalidDate();
+    };
   }
 
   private _getAmountOfDaysInMonth(month: number, year: number) {
@@ -141,7 +153,24 @@ export class DateFieldAdapter implements FieldPort<Date> {
       return;
     }
 
-    const date = this._dateAxis.getCurrentValue();
+    const date = this._dateAxis.getCurrentValue() + 1;
+    const month = this._monthAxis.getCurrentValue();
+    const year = this._yearAxis.getCurrentValue();
+
+    const isDateDifferent = value.getDate() !== date;
+    const isMonthDifferent = value.getMonth() !== month;
+    const isYearDifferent = value.getFullYear() !== year;
+
+    const daysOfMonth = this._getAmountOfDaysInMonth(month, year);
+    const validDate = date <= daysOfMonth;
+
+    if (validDate && (isDateDifferent || isMonthDifferent || isYearDifferent)) {
+      this._transformValue(date, month, year);
+    }
+  }
+
+  private _protectAgainstInvalidDate() {
+    const date = this._dateAxis.getCurrentValue() + 1;
     const month = this._monthAxis.getCurrentValue();
     const year = this._yearAxis.getCurrentValue();
 
@@ -149,16 +178,8 @@ export class DateFieldAdapter implements FieldPort<Date> {
     if (date > daysOfMonth) {
       const day = Math.min(date, daysOfMonth);
 
-      this.dateAxis.animateToValue(day);
+      this.dateAxis.animateToValue(day - 1);
       return;
-    }
-
-    const isDateDifferent = value.getDate() !== date + 1;
-    const isMonthDifferent = value.getMonth() !== month;
-    const isYearDifferent = value.getFullYear() !== year;
-
-    if (isDateDifferent || isMonthDifferent || isYearDifferent) {
-      this._transformValue(date + 1, month, year);
     }
   }
 
@@ -188,11 +209,4 @@ export class DateFieldAdapter implements FieldPort<Date> {
     this._label.setValue(label);
   }
 
-  showDateSelector() {
-    this._dateSelectorPresenter.open();
-  }
-
-  hideDateSelector() {
-    this._dateSelectorPresenter.close();
-  }
 }

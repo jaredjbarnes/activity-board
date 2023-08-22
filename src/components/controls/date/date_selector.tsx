@@ -17,6 +17,7 @@ export function DateSelector({ adapter }: DateSelectorProps) {
   return (
     <div
       style={{
+        position: "relative",
         display: "inline-block",
         padding: "8px",
         backgroundColor: "white",
@@ -39,7 +40,7 @@ export function DateSelector({ adapter }: DateSelectorProps) {
         >
           Choose Date
         </HStack>
-        <Box height="102px" className="input" style={{overflow: "hidden" }}>
+        <Box height="102px" className="input" style={{ overflow: "hidden" }}>
           <HStack
             height="34px"
             style={{ position: "absolute", top: "31px", left: "0px" }}
@@ -76,7 +77,7 @@ export function DateSelector({ adapter }: DateSelectorProps) {
               boxSizing: "border-box",
               borderBottom: "1px solid black",
               backgroundColor: "rgba(255,255,255, 0.65)",
-              backdropFilter: "blur(4px)",
+              backdropFilter: "blur(1px)",
               WebkitBackdropFilter: "blur(1px)",
               pointerEvents: "none",
             }}
@@ -91,13 +92,33 @@ export function DateSelector({ adapter }: DateSelectorProps) {
               boxSizing: "border-box",
               borderTop: "1px solid black",
               backgroundColor: "rgba(255,255,255, 0.65)",
-              backdropFilter: "blur(4px)",
+              backdropFilter: "blur(1px)",
               WebkitBackdropFilter: "blur(1px)",
               pointerEvents: "none",
             }}
           ></div>
         </Box>
       </VStack>
+      <HStack
+        height="10px"
+        verticalAlignment="center"
+        horizontalAlignment="center"
+        style={{
+          position: "absolute",
+          top: "-9px",
+          left: "0px",
+        }}
+      >
+        <div
+          style={{
+            display: "inline-block",
+            clipPath: "polygon(0% 100%, 50% 0%, 100% 100%)",
+            backgroundColor: "white",
+            width: "25px",
+            height: "10px",
+          }}
+        ></div>
+      </HStack>
     </div>
   );
 }

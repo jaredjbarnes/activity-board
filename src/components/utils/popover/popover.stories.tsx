@@ -17,7 +17,7 @@ export function Example() {
     return new PopoverPresenter();
   });
 
-  function open(){
+  function open() {
     presenter.open();
   }
 
@@ -25,17 +25,61 @@ export function Example() {
     <VStack>
       <Spacer />
       <HStack>
-        <Button onClick={open} ref={anchorRef}>Open</Button>
-        <Popover anchorRef={anchorRef} presenter={presenter} >
-          <div style={{
-            backgroundColor: "white",
-            borderRadius:"4px",
-            width: "300px",
-            height: "100px",
-            boxShadow: "0px 0px 10px rgba(0,0,0,0.25)",
-            display: "grid",
-            placeItems: "center center"
-          }}>Hello Popover</div>
+        <Button onClick={open} ref={anchorRef}>
+          Open
+        </Button>
+        <Popover anchorRef={anchorRef} presenter={presenter}>
+          <div
+            style={{
+              backgroundColor: "white",
+              borderRadius: "4px",
+              width: "300px",
+              height: "100px",
+              boxShadow: "0px 0px 10px rgba(0,0,0,0.25)",
+              display: "grid",
+              placeItems: "center center",
+            }}
+          >
+            Hello Popover
+          </div>
+        </Popover>
+      </HStack>
+      <Spacer />
+    </VStack>
+  );
+}
+
+export function ExampleWithVeil() {
+  const anchorRef = useRef<HTMLButtonElement | null>(null);
+  const [presenter] = useState(() => {
+    return new PopoverPresenter();
+  });
+
+  function open() {
+    presenter.open();
+  }
+
+  return (
+    <VStack>
+      <Spacer />
+      <HStack>
+        <Button onClick={open} ref={anchorRef}>
+          Open
+        </Button>
+        <Popover hasVeil anchorRef={anchorRef} presenter={presenter}>
+          <div
+            style={{
+              backgroundColor: "white",
+              borderRadius: "4px",
+              width: "300px",
+              height: "100px",
+              boxShadow: "0px 0px 10px rgba(0,0,0,0.25)",
+              display: "grid",
+              placeItems: "center center",
+            }}
+          >
+            Hello Popover
+          </div>
         </Popover>
       </HStack>
       <Spacer />

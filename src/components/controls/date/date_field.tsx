@@ -32,11 +32,11 @@ export const DateField = React.forwardRef(function DateField(
   );
 
   function showDateSelector() {
-    adapter.showDateSelector();
+    adapter.selectorPopoverPresenter.open();
   }
 
   function hideDateSelector() {
-    adapter.hideDateSelector();
+    adapter.selectorPopoverPresenter.close();
   }
 
   return (
@@ -70,6 +70,7 @@ export const DateField = React.forwardRef(function DateField(
         } ${value.getDate()}, ${value.getFullYear()}`}
         {isSelectorOpen && (
           <Popover
+            hasVeil
             onClickAway={hideDateSelector}
             presenter={adapter.selectorPopoverPresenter}
             anchorRef={inputRef}

@@ -2,20 +2,21 @@ import { useAsyncValue } from "@m/hex/hooks/use_async_value";
 import React, { useCallback, useLayoutEffect, useRef } from "react";
 import { ClickAwayListener } from "src/components/utils/click_away_listener/click_away_listener.tsx";
 import { PopoverPresenter } from "src/components/utils/popover/popover_presenter.ts";
+import { PopoverVeil } from "src/components/utils/popover/popover_veil.tsx";
 import { Portal } from "src/components/utils/portal/portal.tsx";
 
 export interface PopoverProps {
   presenter: PopoverPresenter;
   children: React.ReactElement;
   anchorRef: React.RefObject<Element> | React.MutableRefObject<Element>;
-  onClickAway?: (event: React.MouseEvent | React.TouchEvent) => void;
+  hasVeil?: boolean;
 }
 
 export function Popover({
   presenter,
   children,
   anchorRef,
-  onClickAway,
+  hasVeil = false,
 }: PopoverProps) {
   const isOpen = useAsyncValue(presenter.isOpenBroadcast);
   const position = useAsyncValue(presenter.popoverPositionBroadcast);
@@ -72,12 +73,8 @@ export function Popover({
     }
   }, [isOpen]);
 
-  function handleClickAway(event: React.MouseEvent | React.TouchEvent) {
-    if (onClickAway != null) {
-      onClickAway(event);
-    } else {
-      presenter.close();
-    }
+  function handleClickAway() {
+    presenter.close();
   }
 
   if (!isOpen) {
@@ -86,7 +83,8 @@ export function Popover({
 
   return (
     <Portal presenter={presenter.portalPresenter}>
-      <ClickAwayListener onClickAway={handleClickAway} touchEvent="onTouchStart">
+      {hasVeil && <PopoverVeil />}
+      <ClickAwayListener onClickAway={handleClickAway}>
         <div
           ref={popoverRef}
           style={{
