@@ -1,12 +1,12 @@
-import { DateFieldAdapter } from "src/components/controls/date/date_field_adapter.ts";
-import { DateScroller } from "src/components/controls/date_scroller/date_scroller.tsx";
+import { TimeFieldAdapter } from "src/components/controls/time/time_field_adapter.ts";
+import { TimeScroller } from "src/components/controls/time_scroller/time_scroller.tsx";
 import { UpArrow } from "src/components/utils/arrows/up_arrow.tsx";
 
-export interface DateSelectorProps {
-  adapter: DateFieldAdapter;
+export interface TimeSelectorProps {
+  adapter: TimeFieldAdapter;
 }
 
-export function DateSelector({ adapter }: DateSelectorProps) {
+export function TimeSelector({ adapter }: TimeSelectorProps) {
   return (
     <div
       style={{
@@ -18,7 +18,7 @@ export function DateSelector({ adapter }: DateSelectorProps) {
         boxShadow: "0px 0px 30px rgba(0,0,0,0.25)",
       }}
     >
-      <DateScroller adapter={adapter} />
+      <TimeScroller adapter={adapter} />
       <UpArrow />
     </div>
   );

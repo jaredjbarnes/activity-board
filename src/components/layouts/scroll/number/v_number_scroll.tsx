@@ -12,7 +12,7 @@ export interface VNumberScrollProps {
     axis: NumberAxisAdapter,
     index: number
   ) => React.ReactNode;
-  numberAxisAdapter: NumberAxisAdapter;
+  adapter: NumberAxisAdapter;
   className?: string;
   style?: React.CSSProperties;
   overflow?: "hidden" | "visible";
@@ -21,7 +21,7 @@ export interface VNumberScrollProps {
 }
 
 export function VNumberScroll({
-  numberAxisAdapter,
+  adapter: numberAxisAdapter,
   children: renderCell,
   style,
   className,

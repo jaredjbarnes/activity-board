@@ -14,7 +14,7 @@ export function DefaultVNumberScroll() {
 
   return (
     <VNumberScroll
-      numberAxisAdapter={modularAxisAdapter}
+      adapter={modularAxisAdapter}
       style={{
         width: "100%",
         height: `100%`,
@@ -52,7 +52,7 @@ export function MinMaxVNumberScroll() {
 
   return (
     <VNumberScroll
-      numberAxisAdapter={modularAxisAdapter}
+      adapter={modularAxisAdapter}
       style={{
         width: "100%",
         height: `100%`,
@@ -89,7 +89,7 @@ export function StartAtValue() {
 
   return (
     <VNumberScroll
-      numberAxisAdapter={modularAxisAdapter}
+      adapter={modularAxisAdapter}
       style={{
         width: "100%",
         height: `100%`,

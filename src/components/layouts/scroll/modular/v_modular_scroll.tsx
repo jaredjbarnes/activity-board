@@ -12,7 +12,7 @@ export interface VModularScrollProps {
     axis: ModularAxisAdapter,
     index: number
   ) => React.ReactNode;
-  modularAxisAdapter: ModularAxisAdapter;
+  adapter: ModularAxisAdapter;
   className?: string;
   style?: React.CSSProperties;
   overflow?: "hidden" | "visible";
@@ -21,7 +21,7 @@ export interface VModularScrollProps {
 }
 
 export function VModularScroll({
-  modularAxisAdapter,
+  adapter: modularAxisAdapter,
   children: renderCell,
   style,
   className,

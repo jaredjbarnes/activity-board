@@ -5,23 +5,36 @@ import { SnapAxisAdapter } from "src/components/layouts/scroll/snap_axis_adapter
 import { round } from "src/utils/round.ts";
 
 export class NumberAxisAdapter extends SnapAxisAdapter {
-  protected _modulus: number;
   protected _snapInterval: number;
-  protected _modularCellFactory: Factory<INumberCell>;
+  protected _numberCellFactory: Factory<INumberCell>;
   protected _scrollBuffer: number;
 
+  get maxValue() {
+    return this.max / this._snapInterval;
+  }
+
+  set maxValue(value: number) {
+    this.max = value * this._snapInterval;
+  }
+
+  get minValue() {
+    return this.min / this._snapInterval;
+  }
+
+  set minValue(value: number) {
+    this.min = value * this._snapInterval;
+  }
+
   constructor(
-    modulus: number = 10,
     snapInterval = 100,
     scrollBuffer = 0,
     requestAnimationFrame?: (callback: () => void) => number,
     cancelAnimationFrame?: (id: number) => void
   ) {
     super(snapInterval, requestAnimationFrame, cancelAnimationFrame);
-    this._modulus = modulus;
     this._snapInterval = snapInterval;
     this._scrollBuffer = scrollBuffer;
-    this._modularCellFactory = new Factory(() => ({
+    this._numberCellFactory = new Factory(() => ({
       position: 0,
       size: 0,
       value: 0,
@@ -30,10 +43,6 @@ export class NumberAxisAdapter extends SnapAxisAdapter {
 
   setSnapInterval(interval: number): void {
     this._snapInterval = interval;
-  }
-
-  setModulus(value: number) {
-    this._modulus = value;
   }
 
   animateToValue(
@@ -64,7 +73,7 @@ export class NumberAxisAdapter extends SnapAxisAdapter {
 
   getVisibleCells() {
     const cells: INumberCell[] = [];
-    this._modularCellFactory.releaseAll();
+    this._numberCellFactory.releaseAll();
 
     const adjustedStart = this.start - this._scrollBuffer;
     const adjustedEnd = this.end + this._scrollBuffer;
@@ -73,7 +82,7 @@ export class NumberAxisAdapter extends SnapAxisAdapter {
     const end = round(adjustedEnd / this._snapInterval) + 1;
 
     for (let x = start; x < end; x++) {
-      const cell = this._modularCellFactory.useInstance();
+      const cell = this._numberCellFactory.useInstance();
 
       const value = x;
       const position = x * this._snapInterval - this.start;

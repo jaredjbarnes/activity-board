@@ -313,20 +313,20 @@ export class AxisAdapter implements IAxisPort {
 
     if (offset > this._maxOffset) {
       if (delta >= 0.9) {
-        this._deltaOffset *= 1 - (offset - this._maxOffset) / 200;
+        this._deltaOffset *= 1 - (offset - this._maxOffset) / 100;
       } else {
         this.reset();
-        this.animateOffsetTo(this._maxOffset, 800, customBoundsEasing, () => {
+        this.animateOffsetTo(this._maxOffset, 400, customBoundsEasing, () => {
           this.processScrollEnd();
         });
         return true;
       }
     } else if (offset < this.minOffset) {
       if (delta <= -0.9) {
-        this._deltaOffset *= 1 - (this.minOffset - offset) / 200;
+        this._deltaOffset *= 1 - (this.minOffset - offset) / 100;
       } else {
         this.reset();
-        this.animateOffsetTo(this._minOffset, 800, customBoundsEasing, () => {
+        this.animateOffsetTo(this._minOffset, 400, customBoundsEasing, () => {
           this.processScrollEnd();
         });
         return true;

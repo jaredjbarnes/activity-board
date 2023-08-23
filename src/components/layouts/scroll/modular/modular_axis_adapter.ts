@@ -10,6 +10,22 @@ export class ModularAxisAdapter extends SnapAxisAdapter {
   protected _modularCellFactory: Factory<IModularCell>;
   protected _scrollBuffer: number;
 
+  get maxValue() {
+    return this.max / this._snapInterval;
+  }
+
+  set maxValue(value: number) {
+    this.max = value * this._snapInterval;
+  }
+
+  get minValue() {
+    return this.min / this._snapInterval;
+  }
+
+  set minValue(value: number) {
+    this.min = value * this._snapInterval;
+  }
+
   constructor(
     modulus: number = 10,
     snapInterval = 100,

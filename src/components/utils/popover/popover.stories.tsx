@@ -3,6 +3,7 @@ import { Button } from "src/components/controls/buttons/button.tsx";
 import { HStack } from "src/components/layouts/stacks/h_stack/index.tsx";
 import { Spacer } from "src/components/layouts/stacks/spacer.tsx";
 import { VStack } from "src/components/layouts/stacks/v_stack/index.tsx";
+import { UpArrow } from "src/components/utils/arrows/up_arrow.tsx";
 import { Popover } from "src/components/utils/popover/popover.tsx";
 import { PopoverPresenter } from "src/components/utils/popover/popover_presenter.ts";
 
@@ -29,19 +30,16 @@ export function Example() {
           Open
         </Button>
         <Popover anchorRef={anchorRef} presenter={presenter}>
-          <div
-            style={{
-              backgroundColor: "white",
-              borderRadius: "4px",
-              width: "300px",
-              height: "100px",
-              boxShadow: "0px 0px 10px rgba(0,0,0,0.25)",
-              display: "grid",
-              placeItems: "center center",
-            }}
+          <HStack
+            background="white"
+            width="100px"
+            height="50px"
+            borderRadius="10px"
+            boxShadow="0px 0px 20px rgba(0,0,0,0.25)"
           >
             Hello Popover
-          </div>
+            <UpArrow position="start" color="white" offset={10} />
+          </HStack>
         </Popover>
       </HStack>
       <Spacer />

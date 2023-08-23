@@ -14,7 +14,7 @@ export function DefaultVModularScroll() {
 
   return (
     <VModularScroll
-      modularAxisAdapter={modularAxisAdapter}
+      adapter={modularAxisAdapter}
       style={{
         width: "100%",
         height: `100%`,

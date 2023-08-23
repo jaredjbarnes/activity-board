@@ -73,7 +73,6 @@ export class DateFieldAdapter implements FieldPort<Date> {
     );
 
     this._yearAxis = new NumberAxisAdapter(
-      value.getFullYear(),
       34,
       100,
       requestAnimationFrame,

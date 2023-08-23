@@ -37,6 +37,7 @@
 
 .text-field input,
 .text-field .input {
+  transition: border-color 200ms ease-out;
   font-size: 20px;
   padding-left: 4px;
   border: 3px solid black;

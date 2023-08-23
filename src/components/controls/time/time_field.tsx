@@ -2,31 +2,34 @@ import React from "react";
 import { useAsyncValue } from "@m/hex/hooks/use_async_value";
 import { useRef } from "react";
 import { classnames } from "src/utils/classnames.ts";
-import { DateFieldAdapter } from "src/components/controls/date/date_field_adapter.ts";
+import { TimeFieldAdapter } from "src/components/controls/time/time_field_adapter.ts";
 import { HStack } from "src/components/layouts/stacks/h_stack/index.tsx";
 import { VStack } from "src/components/layouts/stacks/v_stack/index.tsx";
 import { useForkRef } from "src/components/utils/hooks/use_fork_ref.ts";
-import { monthMap } from "src/components/controls/date_scroller/month.tsx";
-import { DateSelector } from "src/components/controls/date/date_selector.tsx";
+import { TimeSelector } from "src/components/controls/time/time_selector.tsx";
 import { Popover } from "src/components/utils/popover/popover.tsx";
 
-export interface DateFieldProps {
-  adapter: DateFieldAdapter;
+export interface TimeFieldProps {
+  adapter: TimeFieldAdapter;
   width?: string | number;
   style?: React.CSSProperties;
   className?: string;
 }
 
-export const DateField = React.forwardRef(function DateField(
-  { adapter, width, style, className }: DateFieldProps,
+export const TimeField = React.forwardRef(function TimeField(
+  { adapter, width, style, className }: TimeFieldProps,
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
+  useAsyncValue(adapter.valueBroadcast);
+
   const fieldRef = useRef<HTMLElement | null>(null);
   const inputRef = useRef<HTMLDivElement | null>(null);
   const id = useAsyncValue(adapter.idBroadcast);
-  const value = useAsyncValue(adapter.valueBroadcast);
   const label = useAsyncValue(adapter.labelBroadcast);
   const forkedRef = useForkRef(ref, fieldRef);
+  const hours = adapter.getHours().toString().padStart(2, "0");
+  const minutes = adapter.getMinutes().toString().padStart(2, "0");
+  const meridiem = adapter.getMeridiem() === 0 ? "AM" : "PM";
   const isSelectorOpen = useAsyncValue(
     adapter.popoverPresenter.isOpenBroadcast
   );
@@ -61,12 +64,10 @@ export const DateField = React.forwardRef(function DateField(
         }}
         onClick={showDateSelector}
       >
-        {`${
-          monthMap[value.getMonth()]
-        } ${value.getDate()}, ${value.getFullYear()}`}
+        {`${adapter.getHoursLabel()}:${adapter.getMinutesLabel()} ${adapter.getMeridiemLabel()}`}
         {isSelectorOpen && (
           <Popover presenter={adapter.popoverPresenter} anchorRef={inputRef}>
-            <DateSelector adapter={adapter} />
+            <TimeSelector adapter={adapter} />
           </Popover>
         )}
       </div>
