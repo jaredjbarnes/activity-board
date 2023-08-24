@@ -80,6 +80,7 @@ export class TimeFieldAdapter implements FieldPort<number> {
       requestAnimationFrame,
       cancelAnimationFrame
     );
+    this._meridiemAxis._stiffness = 2;
     this._meridiemAxis.minValue = 0;
     this._meridiemAxis.maxValue = 1;
 
