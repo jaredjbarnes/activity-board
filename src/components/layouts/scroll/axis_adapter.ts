@@ -242,7 +242,7 @@ export class AxisAdapter implements IAxisPort {
       if (offset < this._minOffset) {
         this.animateOffsetTo(
           this._minOffset,
-          800 / this._stiffness,
+          800,
           customBoundsEasing,
           () => {
             this.processScrollEnd();
@@ -251,7 +251,7 @@ export class AxisAdapter implements IAxisPort {
       } else if (offset > this.maxOffset) {
         this.animateOffsetTo(
           this._maxOffset,
-          800 / this._stiffness,
+          800,
           customBoundsEasing,
           () => {
             this.processScrollEnd();
@@ -329,14 +329,9 @@ export class AxisAdapter implements IAxisPort {
           1 - (offset - this._maxOffset) / (200 / this._stiffness);
       } else {
         this.reset();
-        this.animateOffsetTo(
-          this._maxOffset,
-          800 / this._stiffness,
-          customBoundsEasing,
-          () => {
-            this.processScrollEnd();
-          }
-        );
+        this.animateOffsetTo(this._maxOffset, 700, customBoundsEasing, () => {
+          this.processScrollEnd();
+        });
         return true;
       }
     } else if (offset < this.minOffset) {
@@ -345,14 +340,9 @@ export class AxisAdapter implements IAxisPort {
           1 - (this.minOffset - offset) / (200 / this._stiffness);
       } else {
         this.reset();
-        this.animateOffsetTo(
-          this._minOffset,
-          800 / this._stiffness,
-          customBoundsEasing,
-          () => {
-            this.processScrollEnd();
-          }
-        );
+        this.animateOffsetTo(this._minOffset, 700, customBoundsEasing, () => {
+          this.processScrollEnd();
+        });
         return true;
       }
     }
