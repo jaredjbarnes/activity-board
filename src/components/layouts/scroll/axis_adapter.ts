@@ -242,7 +242,7 @@ export class AxisAdapter implements IAxisPort {
       if (offset < this._minOffset) {
         this.animateOffsetTo(
           this._minOffset,
-          800,
+          700,
           customBoundsEasing,
           () => {
             this.processScrollEnd();
@@ -251,7 +251,7 @@ export class AxisAdapter implements IAxisPort {
       } else if (offset > this.maxOffset) {
         this.animateOffsetTo(
           this._maxOffset,
-          800,
+          700,
           customBoundsEasing,
           () => {
             this.processScrollEnd();

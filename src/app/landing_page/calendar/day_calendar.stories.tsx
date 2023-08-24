@@ -27,6 +27,17 @@ export function SidebarCalendar() {
   );
 }
 
+function getAmountOfDaysInMonth(month: number, year: number) {
+  const date = new Date();
+  date.setHours(0, 0, 0, 0);
+  date.setDate(1);
+  date.setMonth(month + 1);
+  date.setFullYear(year);
+  date.setDate(0);
+
+  return date.getDate();
+}
+
 export function MonthHeaderExample() {
   const [monthAxisAdapter] = useState(() => {
     const monthAxisAdapter = new MonthAxisAdapter();
@@ -160,7 +171,14 @@ export function BasicCalendar() {
         currentDate.getFullYear() !== currentMonthDate.getFullYear()
       ) {
         const newDate = new Date(currentDate);
-        newDate.setDate(1);
+        const date = Math.min(
+          dateAxisAdapter.getCurrentDate().getDate(),
+          getAmountOfDaysInMonth(
+            currentDate.getMonth(),
+            currentDate.getFullYear()
+          )
+        );
+        newDate.setDate(date);
         newDate.setHours(0, 0, 0, 0);
 
         currentMonthDate = newDate;
