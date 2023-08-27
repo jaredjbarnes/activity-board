@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button } from "src/components/controls/buttons/button.tsx";
 import { DateField } from "src/components/controls/date/date_field.tsx";
 import { DateFieldAdapter } from "src/components/controls/date/date_field_adapter.ts";
+import { DateTimeField } from "src/components/controls/date_time/date_time_field.tsx";
+import { DateTimeFieldAdapter } from "src/components/controls/date_time/date_time_field_adapter.ts";
 import { TextField } from "src/components/controls/text/text_field.tsx";
 import { TextFieldAdapter } from "src/components/controls/text/text_field_adapter.ts";
 import { TextareaField } from "src/components/controls/textarea/textarea_field.tsx";
@@ -25,6 +27,7 @@ export function Base() {
       notes: new TextareaFieldAdapter("Notes", ""),
       birthDate: new DateFieldAdapter("Birth Date", new Date("June 11, 1982")),
       time: new TimeFieldAdapter("Time", 0),
+      dateTime: new DateTimeFieldAdapter("Date Time", new Date()),
     };
   });
 
@@ -40,6 +43,8 @@ export function Base() {
       <DateField adapter={fields.birthDate} />
       <Spacer height="8px" />
       <TimeField adapter={fields.time} />
+      <Spacer height="8px" />
+      <DateTimeField adapter={fields.dateTime} />
       <Spacer height="8px" />
       <HStack height="50px">
         <FlexBox></FlexBox>

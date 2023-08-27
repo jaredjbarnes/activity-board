@@ -20,51 +20,47 @@ export const TimeScroller = React.forwardRef(function TimeScroller(
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
   return (
-    <div ref={ref} style={{ display: "inline-block", position: "relative" }}>
-      <VStack
-        className="text-field date-selector"
-        style={{
-          width: "250px",
-          height: "142px",
-          overflow: "hidden",
-        }}
+    <div
+      ref={ref}
+      className="text-field date-selector"
+      style={{
+        display: "inline-block",
+        position: "relative",
+      }}
+    >
+      <Box
+        height="102px"
+        width="250px"
+        className="input"
+        style={{ overflow: "hidden" }}
       >
         <HStack
-          height="40px"
-          verticalAlignment="center"
-          horizontalAlignment="center"
+          height="34px"
+          style={{ position: "absolute", top: "31px", left: "0px" }}
         >
-          Choose Time
+          <Spacer />
+          <VModularScroll width="50px" adapter={adapter.hourAxis}>
+            {(cell, _, index) => {
+              return <Time key={index} cell={cell} modulusValue="12" />;
+            }}
+          </VModularScroll>
+          <HStack width="8px">:</HStack>
+          <VModularScroll width="50px" adapter={adapter.minuteAxis}>
+            {(cell, _, index) => {
+              return <Time key={index} cell={cell} modulusValue="0" />;
+            }}
+          </VModularScroll>
+          <Spacer width="8px" />
+          <VNumberScroll width="50px" adapter={adapter.meridiemAxis}>
+            {(cell, _, index) => {
+              return <Meridiem key={index} cell={cell} />;
+            }}
+          </VNumberScroll>
+          <Spacer />
         </HStack>
-        <Box height="102px" className="input" style={{ overflow: "hidden" }}>
-          <HStack
-            height="34px"
-            style={{ position: "absolute", top: "31px", left: "0px" }}
-          >
-            <Spacer />
-            <VModularScroll width="50px" adapter={adapter.hourAxis}>
-              {(cell, _, index) => {
-                return <Time key={index} cell={cell} modulusValue="12" />;
-              }}
-            </VModularScroll>
-            <HStack width="8px">:</HStack>
-            <VModularScroll width="50px" adapter={adapter.minuteAxis}>
-              {(cell, _, index) => {
-                return <Time key={index} cell={cell} modulusValue="0" />;
-              }}
-            </VModularScroll>
-            <Spacer width="8px" />
-            <VNumberScroll width="50px" adapter={adapter.meridiemAxis}>
-              {(cell, _, index) => {
-                return <Meridiem key={index} cell={cell} />;
-              }}
-            </VNumberScroll>
-            <Spacer />
-          </HStack>
-          <TopScrollerVeil />
-          <BottomScrollerVeil />
-        </Box>
-      </VStack>
+        <TopScrollerVeil />
+        <BottomScrollerVeil />
+      </Box>
     </div>
   );
 });

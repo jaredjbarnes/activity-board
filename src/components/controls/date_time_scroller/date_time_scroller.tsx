@@ -3,6 +3,7 @@ import { DateFieldAdapter } from "src/components/controls/date/date_field_adapte
 import { DateScroller } from "src/components/controls/date_scroller/date_scroller.tsx";
 import { TimeFieldAdapter } from "src/components/controls/time/time_field_adapter.ts";
 import { TimeScroller } from "src/components/controls/time_scroller/time_scroller.tsx";
+import { Spacer } from "src/components/layouts/stacks/spacer.tsx";
 
 export interface DateTimeScrollerProps {
   dateFieldAdapter: DateFieldAdapter;
@@ -16,7 +17,7 @@ export const DateTimeScroller = React.forwardRef(function DateTimeScroller(
   return (
     <div style={{ display: "inline-block", position: "relative" }} ref={ref}>
       <DateScroller adapter={dateFieldAdapter} />
-      <br />
+      <Spacer height="8px" />
       <TimeScroller adapter={timeFieldAdapter} />
     </div>
   );

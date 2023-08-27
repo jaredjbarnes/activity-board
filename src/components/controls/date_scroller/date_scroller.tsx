@@ -21,50 +21,40 @@ export const DateScroller = React.forwardRef(function DateScroller(
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
   return (
-    <div ref={ref} style={{ display: "inline-block", position: "relative" }}>
-      <VStack
-        className="text-field date-selector"
-        style={{
-          width: "250px",
-          height: "142px",
-          overflow: "hidden",
-        }}
+    <div
+      ref={ref}
+      className="text-field date-selector"
+      style={{ display: "inline-block", position: "relative" }}
+    >
+      <Box
+        height="102px"
+        width="250px"
+        className="input"
+        style={{ overflow: "hidden" }}
       >
         <HStack
-          height="40px"
-          verticalAlignment="center"
-          horizontalAlignment="center"
+          height="34px"
+          style={{ position: "absolute", top: "31px", left: "0px" }}
         >
-          Choose Date
+          <VModularScroll width="125px" adapter={adapter.monthAxis}>
+            {(cell, _, index) => {
+              return <Month key={index} cell={cell} />;
+            }}
+          </VModularScroll>
+          <VModularScroll width="50px" adapter={adapter.dateAxis}>
+            {(cell, _, index) => {
+              return <DateNumber key={index} cell={cell} />;
+            }}
+          </VModularScroll>
+          <VNumberScroll width="75px" adapter={adapter.yearAxis}>
+            {(cell, _, index) => {
+              return <Year key={index} cell={cell} />;
+            }}
+          </VNumberScroll>
         </HStack>
-        <Box height="102px" className="input" style={{ overflow: "hidden" }}>
-          <HStack
-            height="34px"
-            style={{ position: "absolute", top: "31px", left: "0px" }}
-          >
-            <VModularScroll
-              width="125px"
-              adapter={adapter.monthAxis}
-            >
-              {(cell, _, index) => {
-                return <Month key={index} cell={cell} />;
-              }}
-            </VModularScroll>
-            <VModularScroll width="50px" adapter={adapter.dateAxis}>
-              {(cell, _, index) => {
-                return <DateNumber key={index} cell={cell} />;
-              }}
-            </VModularScroll>
-            <VNumberScroll width="75px" adapter={adapter.yearAxis}>
-              {(cell, _, index) => {
-                return <Year key={index} cell={cell} />;
-              }}
-            </VNumberScroll>
-          </HStack>
-          <TopScrollerVeil />
-          <BottomScrollerVeil />
-        </Box>
-      </VStack>
+        <TopScrollerVeil />
+        <BottomScrollerVeil />
+      </Box>
     </div>
   );
 });
