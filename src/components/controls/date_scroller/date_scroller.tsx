@@ -10,7 +10,6 @@ import { Box } from "src/components/layouts/box/index.tsx";
 import { VModularScroll } from "src/components/layouts/scroll/modular/v_modular_scroll.tsx";
 import { VNumberScroll } from "src/components/layouts/scroll/number/v_number_scroll.tsx";
 import { HStack } from "src/components/layouts/stacks/h_stack/index.tsx";
-import { VStack } from "src/components/layouts/stacks/v_stack/index.tsx";
 
 export interface DateScrollerProps {
   adapter: DateFieldAdapter;

@@ -16,6 +16,7 @@ export function Popover({ presenter, children, anchorRef }: PopoverProps) {
   const popoverRef = useRef<HTMLDivElement | null>(null);
   const opacity = useAsyncValue(presenter.revealer.opacityBroadcast);
   const offset = useAsyncValue(presenter.revealer.offsetBroadcast);
+  const isClosing = useAsyncValue(presenter.revealer.isClosingBroadcast);
 
   const updateRects = useCallback(() => {
     const popoverElement = popoverRef.current;
@@ -78,7 +79,10 @@ export function Popover({ presenter, children, anchorRef }: PopoverProps) {
 
   return (
     <Portal presenter={presenter.portalPresenter}>
-      <PopoverVeil style={{ opacity }} onClick={close} />
+      <PopoverVeil
+        style={{ opacity, pointerEvents: isClosing ? "none" : "auto" }}
+        onClick={close}
+      />
       <div
         ref={popoverRef}
         style={{

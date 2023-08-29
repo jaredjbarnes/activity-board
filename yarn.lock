@@ -3990,7 +3990,7 @@ __metadata:
     hammerjs: ^2.0.8
     howler: ^2.2.3
     jest: ^29.5.0
-    motion-ux: ^7.2.21
+    motion-ux: ^8.0.1
     prop-types: ^15.8.1
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -7925,12 +7925,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"motion-ux@npm:^7.2.21":
-  version: 7.2.21
-  resolution: "motion-ux@npm:7.2.21"
+"motion-ux@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "motion-ux@npm:8.0.1"
   dependencies:
     clarity-pattern-parser: 3.0.8
-  checksum: 9b96a0a8d84d207b1f49ec85af983c712b5b97e10a2c565b2f703ded6ec5a3fa755a2da8e9da1f96826e28c91aef130e8727b23ba25ee3cea32857f54fdb7c75
+  checksum: 4cb834fa2f52d0db07d003dfaaeccd6a7e3fb15b26094a9a669dc819542d6284a028c3f80957ec34362a7d3bd1098ecff8cc8c067433af70d70e0f0d4ecd1be1
   languageName: node
   linkType: hard
 

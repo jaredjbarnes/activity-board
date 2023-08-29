@@ -115,12 +115,15 @@ export class AxisAdapter implements IAxisPort {
     ) => number = window.requestAnimationFrame,
     cancelAnimationFrame: (id: number) => void = window.cancelAnimationFrame
   ) {
-    this._motion = new Motion(({ currentValues }) => {
-      this._offset.transformValue((o) =>
-        this.updateFromAnimation(o, currentValues.offset)
-      );
-      this.processScroll();
-    }, true);
+    this._motion = new Motion(
+      ({ currentValues }) => {
+        this._offset.transformValue((o) =>
+          this.updateFromAnimation(o, currentValues.offset)
+        );
+        this.processScroll();
+      },
+      { offset: 0 }
+    );
 
     this._requestAnimationFrame = requestAnimationFrame;
     this._cancelAnimationFrame = cancelAnimationFrame;
@@ -156,7 +159,7 @@ export class AxisAdapter implements IAxisPort {
   }
 
   initialize(value: number) {
-    this._motion.segueTo(createAnimation({ offset: value }), 32);
+    this._motion.segueTo(createAnimation({ offset: value }));
   }
 
   reset() {
@@ -240,23 +243,13 @@ export class AxisAdapter implements IAxisPort {
       });
     } else {
       if (offset < this._minOffset) {
-        this.animateOffsetTo(
-          this._minOffset,
-          700,
-          customBoundsEasing,
-          () => {
-            this.processScrollEnd();
-          }
-        );
+        this.animateOffsetTo(this._minOffset, 700, customBoundsEasing, () => {
+          this.processScrollEnd();
+        });
       } else if (offset > this.maxOffset) {
-        this.animateOffsetTo(
-          this._maxOffset,
-          700,
-          customBoundsEasing,
-          () => {
-            this.processScrollEnd();
-          }
-        );
+        this.animateOffsetTo(this._maxOffset, 700, customBoundsEasing, () => {
+          this.processScrollEnd();
+        });
       } else {
         this.processScrollEnd();
       }
