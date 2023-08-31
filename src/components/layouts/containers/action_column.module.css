@@ -1,0 +1,4 @@
+.v-stack {
+  border-left: 1px solid var(--border, black);
+  border-right: 1px solid var(--border, black);
+}

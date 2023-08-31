@@ -1,0 +1,9 @@
+:root {
+  --text-color-primary: rgba(0, 0, 0);
+  --text-color-secondary: rgb(102, 102, 102);
+  --action-color: rgb(0, 132, 255);
+  --action-color-transparent: rgba(0, 132, 255, 0.25);
+  --disabled-color: rgb(200, 200, 200);
+  --boundary-color: rgba(0, 0, 0);
+  --transparent:  rgba(0, 0, 0, 0);
+}

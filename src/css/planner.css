@@ -1,3 +1,5 @@
+@import url("./palette.css");
+
 .calendar .day-of-week {
   font-size: 36px;
   user-select: none;
@@ -27,12 +29,12 @@
 /* Controls */
 .text-field {
   font-family: Arial, Helvetica, sans-serif;
-  color: black;
+  color: var(--text-color-primary);
 }
 
 .text-field label {
   font-size: 16px;
-  color: #666;
+  color: var(--text-color-secondary);
 }
 
 .text-field input,
@@ -40,20 +42,20 @@
   transition: border-color 200ms ease-out;
   font-size: 20px;
   padding-left: 4px;
-  border: 3px solid black;
+  border: 3px solid var(--boundary-color);
   border-radius: 5px;
   outline: none !important;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: var(--transparent);
 }
 
 .text-field input:focus,
 .text-field .input:focus,
 .text-field .input.date.open {
-  border: 3px solid rgb(0, 132, 255);
+  border: 3px solid var(--action-color);
 }
 
 .text-field .input.date {
-  color: rgb(0, 132, 255);
+  color: var(--action-color);
 }
 
 .date-selector {
@@ -68,62 +70,62 @@ button {
 }
 
 button:disabled {
-  border: 3px solid rgb(200, 200, 200);
-  background-color: rgb(200, 200, 200);
+  border: 3px solid var(--disabled-color);
+  background-color: var(--disabled-color);
   color: white;
   cursor: not-allowed;
 }
 
 button.secondary {
-  border: 3px solid rgb(0, 132, 255);
-  background-color: rgba(0, 0, 0, 0);
-  color: rgb(0, 132, 255);
+  border: 3px solid var(--action-color);
+  background-color: var(--transparent);
+  color: var(--action-color);
 }
 
 button.secondary:active {
-  border: 3px solid rgb(0, 132, 255);
-  color: rgb(0, 132, 255);
-  background-color: rgba(0, 132, 255, 0.25);
+  border: 3px solid var(--action-color);
+  color: var(--action-color);
+  background-color: var(--action-color-transparent);
 }
 
 button.secondary:disabled {
-  border: 3px solid rgb(200, 200, 200);
-  background-color: rgba(0, 0, 0, 0);
-  color: rgb(200, 200, 200);
+  border: 3px solid var(--disabled-color);
+  background-color: var(--transparent);
+  color: var(--disabled-color);
 }
 
 button.primary {
-  border: 3px solid rgb(0, 132, 255);
-  background-color: rgb(0, 132, 255);
+  border: 3px solid var(--action-color);
+  background-color: var(--action-color);
   color: white;
 }
 
 button.primary:active {
-  color: rgb(0, 132, 255);
-  background-color: rgba(0, 132, 255, 0.25);
+  color: var(--action-color);
+  background-color: var(--action-color-transparent);
 }
 
 button.primary:disabled {
-  border: 3px solid rgb(200, 200, 200);
-  background-color: rgb(200, 200, 200);
+  border: 3px solid var(--disabled-color);
+  background-color: var(--disabled-color);
   color: white;
 }
 
 button.tertiary {
-  border: 3px solid rgba(0, 0, 0, 0);
-  background-color: rgba(0, 0, 0, 0);
-  color: rgb(0, 132, 255);
+  border: 3px solid var(--transparent);
+  background-color: var(--transparent);
+  color: var(--action-color);
 }
 
 button.tertiary:active {
   transition: border 150ms ease-out;
-  border: 3px solid rgb(0, 132, 255);
-  color: rgb(0, 132, 255);
-  background-color: rgba(0, 132, 255, 0.25);
+  border: 3px solid var(--action-color);
+  color: var(--action-color);
+  background-color: var(--action-color-transparent);
 }
 
 button.tertiary:disabled {
-  border: 3px solid rgba(0, 0, 0, 0);
-  background-color: rgba(0, 0, 0, 0);
-  color: rgb(200, 200, 200);
+  border: 3px solid var(--transparent);
+  background-color: var(--transparent);
+  color: var(--disabled-color);
 }

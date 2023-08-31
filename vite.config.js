@@ -11,4 +11,9 @@ export default defineConfig({
       static: path.resolve("static/"),
     },
   },
+  css: {
+    modules: {
+      localsConvention: "camelCaseOnly",
+    },
+  },
 });

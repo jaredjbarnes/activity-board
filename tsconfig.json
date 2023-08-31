@@ -19,5 +19,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*", ".storybook/**/*"],
+  "include": ["typings.d.ts", "src/**/*", ".storybook/**/*"]
 }
