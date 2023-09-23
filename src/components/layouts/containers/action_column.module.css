@@ -1,4 +1,15 @@
-.v-stack {
-  border-left: 1px solid var(--border, black);
-  border-right: 1px solid var(--border, black);
+.action-column {
+  display: inline-grid;
+}
+
+.action-column-boundary {
+  border-left: 2px solid var(--boundary-color);
+  border-right: 2px solid var(--boundary-color);
+}
+
+.action-column-header {
+  border-bottom: 1px solid var(--boundary-color);
+  outline-width: 8px;
+  outline-color: transparent;
+  outline-style: solid;
 }

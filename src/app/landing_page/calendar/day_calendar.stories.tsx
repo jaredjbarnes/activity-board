@@ -1,8 +1,12 @@
 import { useLayoutEffect, useState } from "react";
 import { DayCalendar } from "src/app/landing_page/calendar/day_calendar.tsx";
 import { MonthHeader } from "src/app/landing_page/calendar/month_header.tsx";
+import { ActionColumn } from "src/components/layouts/containers/action_column.tsx";
 import { DateAxisAdapter } from "src/components/layouts/scroll/date/date_axis_adapter.ts";
 import { MonthAxisAdapter } from "src/components/layouts/scroll/month/month_axis_adapter.ts";
+import { HStack } from "src/components/layouts/stacks/h_stack/index.tsx";
+import { Spacer } from "src/components/layouts/stacks/spacer.tsx";
+import { VStack } from "src/components/layouts/stacks/v_stack/index.tsx";
 
 export default {
   title: "Landing Page/Day Calendar",
@@ -249,6 +253,64 @@ export function BasicCalendar() {
           height: "100px",
         }}
       />
+      <div
+        style={{
+          position: "absolute",
+          top: "100px",
+          left: "85px",
+          right: "0px",
+          bottom: "0px",
+        }}
+      >
+        <VStack>
+          <Spacer height="6px" />
+          <HStack>
+            <Spacer width="6px" />
+            <ActionColumn
+              width="400px"
+              header={
+                <HStack horizontalAlignment="end">
+                  <Spacer />
+                  <div style={{ fontSize: "26px" }}>SCHEDULE</div>
+                </HStack>
+              }
+            />
+            <Spacer width="6px" />
+            <ActionColumn
+              width="300px"
+              header={
+                <HStack horizontalAlignment="end">
+                  <Spacer />
+                  <div style={{ fontSize: "26px" }}>HEALTH</div>
+                </HStack>
+              }
+            />
+            <Spacer width="6px" />
+            <ActionColumn
+              width="300px"
+              header={
+                <HStack horizontalAlignment="end">
+                  <Spacer />
+                  <div style={{ fontSize: "26px" }}>PRIORITY LIST</div>
+                </HStack>
+              }
+            />
+            <Spacer width="6px" />
+            <ActionColumn
+              width="300px"
+              header={
+                <HStack horizontalAlignment="end">
+                  <Spacer />
+                  <div style={{ fontSize: "26px" }}>CHORES</div>
+                </HStack>
+              }
+            />
+
+            <Spacer />
+          </HStack>
+          <Spacer height="6px" />
+        </VStack>
+      </div>
     </>
   );
 }
