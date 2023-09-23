@@ -1,7 +1,9 @@
+import { useAsyncValue } from "@m/hex/hooks/use_async_value";
 import { TimeFieldAdapter } from "src/components/controls/time/time_field_adapter.ts";
 import { TimeScroller } from "src/components/controls/time_scroller/time_scroller.tsx";
 import { HStack } from "src/components/layouts/stacks/h_stack/index.tsx";
 import { Spacer } from "src/components/layouts/stacks/spacer.tsx";
+import { DownArrow } from "src/components/utils/arrows/down_arrow.tsx";
 import { UpArrow } from "src/components/utils/arrows/up_arrow.tsx";
 
 export interface TimeSelectorProps {
@@ -9,6 +11,9 @@ export interface TimeSelectorProps {
 }
 
 export function TimeSelector({ adapter }: TimeSelectorProps) {
+  const isUpArrow = adapter.popoverPresenter.anchorVerticalOrigin === "bottom";
+  useAsyncValue(adapter.popoverPresenter.popoverPositionBroadcast);
+  
   return (
     <div
       style={{
@@ -25,7 +30,7 @@ export function TimeSelector({ adapter }: TimeSelectorProps) {
       </HStack>
       <Spacer height="8px" />
       <TimeScroller adapter={adapter} />
-      <UpArrow />
+      {isUpArrow ? <UpArrow /> : <DownArrow />}
     </div>
   );
 }

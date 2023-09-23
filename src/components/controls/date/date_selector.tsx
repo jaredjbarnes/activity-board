@@ -1,7 +1,9 @@
+import { useAsyncValue } from "@m/hex/hooks/use_async_value";
 import { DateFieldAdapter } from "src/components/controls/date/date_field_adapter.ts";
 import { DateScroller } from "src/components/controls/date_scroller/date_scroller.tsx";
 import { HStack } from "src/components/layouts/stacks/h_stack/index.tsx";
 import { Spacer } from "src/components/layouts/stacks/spacer.tsx";
+import { DownArrow } from "src/components/utils/arrows/down_arrow.tsx";
 import { UpArrow } from "src/components/utils/arrows/up_arrow.tsx";
 
 export interface DateSelectorProps {
@@ -9,6 +11,9 @@ export interface DateSelectorProps {
 }
 
 export function DateSelector({ adapter }: DateSelectorProps) {
+  const isUpArrow = adapter.popoverPresenter.anchorVerticalOrigin === "bottom";
+  useAsyncValue(adapter.popoverPresenter.popoverPositionBroadcast);
+
   return (
     <div
       style={{
@@ -20,10 +25,12 @@ export function DateSelector({ adapter }: DateSelectorProps) {
         boxShadow: "0px 0px 30px rgba(0,0,0,0.25)",
       }}
     >
-      <HStack height="30px" style={{fontSize: "20px"}}>Choose Date</HStack>
+      <HStack height="30px" style={{ fontSize: "20px" }}>
+        Choose Date
+      </HStack>
       <Spacer height="8px" />
       <DateScroller adapter={adapter} />
-      <UpArrow />
+      {isUpArrow ? <UpArrow /> : <DownArrow />}
     </div>
   );
 }

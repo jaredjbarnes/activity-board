@@ -27,9 +27,7 @@ export const TimeField = React.forwardRef(function TimeField(
   const id = useAsyncValue(adapter.idBroadcast);
   const label = useAsyncValue(adapter.labelBroadcast);
   const forkedRef = useForkRef(ref, fieldRef);
-  const hours = adapter.getHours().toString().padStart(2, "0");
-  const minutes = adapter.getMinutes().toString().padStart(2, "0");
-  const meridiem = adapter.getMeridiem() === 0 ? "AM" : "PM";
+  
   const isSelectorOpen = useAsyncValue(
     adapter.popoverPresenter.isOpenBroadcast
   );
