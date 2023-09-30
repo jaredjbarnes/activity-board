@@ -43,7 +43,6 @@ export function useViewportCaptureAdapter(
             );
           });
         }
-        
       };
 
       visualViewport.addEventListener("resize", cacheViewport);

@@ -1,6 +1,7 @@
 import React, { useLayoutEffect } from "react";
 import { IPointerPort } from "src/components/layouts/scroll/i_pointer_port.ts";
 import "hammerjs";
+import { GestureCapture } from "src/components/layouts/scroll/gesture_capture.ts";
 
 declare var Hammer: any;
 
@@ -29,6 +30,7 @@ export function useVerticalPanning(
 
       manager.on("panstart", (e: any) => {
         pointerAdapter.pointerStart(e.center.y);
+        GestureCapture.manager.makeExclusive(manager, e);
       });
 
       manager.on("panmove", (e: any) => {
@@ -51,9 +53,14 @@ export function useVerticalPanning(
         pointerAdapter.pressUp(e.center.y);
       });
 
+      GestureCapture.manager.register(manager, (event)=>{
+        manager.emit("pancancel", event);
+      });
+
       return () => {
         manager.stop();
         manager.destroy();
+        GestureCapture.manager.unregister(manager);
       };
     }
   }, [pointerAdapter, onTap, div]);
