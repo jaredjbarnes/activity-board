@@ -3628,6 +3628,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/hammerjs@npm:^2.0.42":
+  version: 2.0.42
+  resolution: "@types/hammerjs@npm:2.0.42"
+  checksum: 25dbaafbfb39e20dece86e60a1319697d518bd3b780b3ad5154766cc1dce39a33b95d338bff9dda631bbc43c8692967be91fad8f19e178e4095eb558b2a7ffa3
+  languageName: node
+  linkType: hard
+
 "@types/howler@npm:^2.2.7":
   version: 2.2.7
   resolution: "@types/howler@npm:2.2.7"
@@ -3982,6 +3989,7 @@ __metadata:
     "@storybook/react": ^7.0.21
     "@storybook/react-vite": ^7.0.21
     "@storybook/testing-library": ^0.0.14-next.2
+    "@types/hammerjs": ^2.0.42
     "@types/howler": ^2.2.7
     "@types/jest": ^29.5.2
     "@types/react": ^18.2.12

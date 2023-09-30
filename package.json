@@ -26,6 +26,7 @@
   "homepage": "https://github.com/jaredjbarnes/activity-board#readme",
   "dependencies": {
     "@m/hex": "^0.0.1-master.1685647763664",
+    "@types/hammerjs": "^2.0.42",
     "@types/jest": "^29.5.2",
     "@types/react": "^18.2.12",
     "@types/react-dom": "^18.2.5",
