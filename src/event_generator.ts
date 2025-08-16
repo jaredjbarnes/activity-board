@@ -16,7 +16,7 @@ import { StandardEventGenerator } from "./event_generators/standard_event_genera
 
 type EventTemplate = IEventTemplate<IAnchoredEventType | IStandardEventType | IWeekOfMonthEventType | IDaysOfWeekEventType | IYearlyRecurringEventType>;
 
-export interface SchedulerPort {
+export interface EventGeneratorPort {
     getEventTemplates(): Promise<EventTemplate[]>;
     removeEventTemplate(templateId: string): Promise<void>;
     updateEventTemplate(template: EventTemplate): Promise<void>;
@@ -25,8 +25,8 @@ export interface SchedulerPort {
     alterEvent(alteration: IEventAlteration): Promise<void>;
 }
 
-export class Scheduler {
-    private port: SchedulerPort;
+export class EventGenerator {
+    private port: EventGeneratorPort;
     private eventTemplates: Map<string, EventTemplate>;
     private alterationEventGenerator: AlterationEventGenerator;
     private dayOfWeekEventGenerator: WeeklyEventGenerator;
@@ -34,7 +34,7 @@ export class Scheduler {
     private yearlyEventGenerator: YearlyEventGenerator;
     private standardEventGenerator: StandardEventGenerator;
     
-    constructor(port: SchedulerPort) {
+    constructor(port: EventGeneratorPort) {
         this.port = port;
         this.eventTemplates = new Map<string, EventTemplate>();
         this.alterationEventGenerator = new AlterationEventGenerator(this.eventTemplates);

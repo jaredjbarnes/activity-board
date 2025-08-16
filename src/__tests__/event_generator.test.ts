@@ -1,4 +1,4 @@
-import { Scheduler, SchedulerPort } from "src/scheduler.ts";
+import { EventGenerator, EventGeneratorPort } from "src/event_generator.ts";
 import { IEventTemplate } from "src/models/i_event_template.ts";
 import { IStandardEventType } from "src/models/event_template_types/i_standard_event_type.ts";
 import { IDaysOfWeekEventType } from "src/models/event_template_types/i_days_of_week_event_type.ts";
@@ -11,7 +11,7 @@ import { Days } from "src/models/event_template_types/days.ts";
 import { Months } from "src/models/months.ts";
 
 // Mock implementations for testing
-class MockSchedulerPort implements SchedulerPort {
+class MockSchedulerPort implements EventGeneratorPort {
   private eventTemplates: IEventTemplate<IStandardEventType | IDaysOfWeekEventType | IWeekOfMonthEventType | IYearlyRecurringEventType | IAnchoredEventType>[] = [];
   private alterations: IEventAlteration[] = [];
 
@@ -121,12 +121,12 @@ const createAlteration = (generatedEventTimestamp: number, templateId: string): 
 });
 
 describe('Scheduler', () => {
-  let scheduler: Scheduler;
+  let scheduler: EventGenerator;
   let mockPort: MockSchedulerPort;
 
   beforeEach(() => {
     mockPort = new MockSchedulerPort();
-    scheduler = new Scheduler(mockPort);
+    scheduler = new EventGenerator(mockPort);
   });
 
   describe('getEvents', () => {
@@ -144,7 +144,7 @@ describe('Scheduler', () => {
       const template = createStandardTemplate('standard-1', startTime, duration);
       
       mockPort = new MockSchedulerPort([template]);
-      scheduler = new Scheduler(mockPort);
+      scheduler = new EventGenerator(mockPort);
 
       const events = await scheduler.getEvents(startDate, endDate);
       
@@ -160,7 +160,7 @@ describe('Scheduler', () => {
       const template = createWeeklyTemplate('weekly-1', [Days.Monday, Days.Wednesday, Days.Friday], startTime, duration); // Monday, Wednesday, Friday
       
       mockPort = new MockSchedulerPort([template]);
-      scheduler = new Scheduler(mockPort);
+      scheduler = new EventGenerator(mockPort);
 
       const events = await scheduler.getEvents(startDate, endDate);
       
@@ -180,7 +180,7 @@ describe('Scheduler', () => {
       const template = createWeekOfMonthTemplate('wom-1', 2, Days.Monday, startTime, duration); // 2nd week, Monday
       
       mockPort = new MockSchedulerPort([template]);
-      scheduler = new Scheduler(mockPort);
+      scheduler = new EventGenerator(mockPort);
 
       const events = await scheduler.getEvents(startDate, endDate);
       
@@ -194,7 +194,7 @@ describe('Scheduler', () => {
       const template = createYearlyTemplate('yearly-1', Months.August, 15, startTime, duration); // August 15
       
       mockPort = new MockSchedulerPort([template]);
-      scheduler = new Scheduler(mockPort);
+      scheduler = new EventGenerator(mockPort);
 
       const events = await scheduler.getEvents(startDate, endDate);
       
@@ -207,7 +207,7 @@ describe('Scheduler', () => {
       const weeklyTemplate = createWeeklyTemplate('weekly-1', [Days.Monday], 9 * 60 * 60 * 1000, 2 * 60 * 60 * 1000);
       
       mockPort = new MockSchedulerPort([standardTemplate, weeklyTemplate]);
-      scheduler = new Scheduler(mockPort);
+      scheduler = new EventGenerator(mockPort);
 
       const events = await scheduler.getEvents(startDate, endDate);
       
@@ -226,7 +226,7 @@ describe('Scheduler', () => {
       const alteration = createAlteration(startTime, 'standard-1');
       
       mockPort = new MockSchedulerPort([template], [alteration]);
-      scheduler = new Scheduler(mockPort);
+      scheduler = new EventGenerator(mockPort);
 
       const events = await scheduler.getEvents(startDate, endDate);
       
@@ -241,7 +241,7 @@ describe('Scheduler', () => {
       const template = createStandardTemplate('future-1', futureStartTime, duration);
       
       mockPort = new MockSchedulerPort([template]);
-      scheduler = new Scheduler(mockPort);
+      scheduler = new EventGenerator(mockPort);
 
       const events = await scheduler.getEvents(startDate, endDate);
       
@@ -254,7 +254,7 @@ describe('Scheduler', () => {
       const template = createStandardTemplate('intersect-1', startTime, duration);
       
       mockPort = new MockSchedulerPort([template]);
-      scheduler = new Scheduler(mockPort);
+      scheduler = new EventGenerator(mockPort);
 
       const events = await scheduler.getEvents(startDate, endDate);
       
@@ -269,7 +269,7 @@ describe('Scheduler', () => {
       const template = createStandardTemplate('standard-1', startTime, duration);
       
       mockPort = new MockSchedulerPort([template], []);
-      scheduler = new Scheduler(mockPort);
+      scheduler = new EventGenerator(mockPort);
 
       const events = await scheduler.getEvents(startDate, endDate);
       
@@ -285,7 +285,7 @@ describe('Scheduler', () => {
       const alteration2 = createAlteration(startTime, 'standard-1');
       
       mockPort = new MockSchedulerPort([template], [alteration1, alteration2]);
-      scheduler = new Scheduler(mockPort);
+      scheduler = new EventGenerator(mockPort);
 
       const events = await scheduler.getEvents(startDate, endDate);
       
@@ -298,10 +298,10 @@ describe('Scheduler', () => {
   describe('constructor', () => {
     test('should initialize with provided port', () => {
       const port = new MockSchedulerPort();
-      const scheduler = new Scheduler(port);
+      const scheduler = new EventGenerator(port);
       
       // The scheduler should be properly initialized
-      expect(scheduler).toBeInstanceOf(Scheduler);
+      expect(scheduler).toBeInstanceOf(EventGenerator);
     });
   });
 
@@ -314,7 +314,7 @@ describe('Scheduler', () => {
       const template = createStandardTemplate('short-1', startTime, duration);
       
       mockPort = new MockSchedulerPort([template]);
-      scheduler = new Scheduler(mockPort);
+      scheduler = new EventGenerator(mockPort);
 
       const events = await scheduler.getEvents(startDate, endDate);
       
@@ -329,7 +329,7 @@ describe('Scheduler', () => {
       const template = createStandardTemplate('long-1', startTime, duration);
       
       mockPort = new MockSchedulerPort([template]);
-      scheduler = new Scheduler(mockPort);
+      scheduler = new EventGenerator(mockPort);
 
       const events = await scheduler.getEvents(startDate, endDate);
       
@@ -342,7 +342,7 @@ describe('Scheduler', () => {
       const template = createStandardTemplate('zero-1', startTime, duration);
       
       mockPort = new MockSchedulerPort([template]);
-      scheduler = new Scheduler(mockPort);
+      scheduler = new EventGenerator(mockPort);
 
       const events = await scheduler.getEvents(new Date(2023, 7, 1), new Date(2023, 7, 31));
       
