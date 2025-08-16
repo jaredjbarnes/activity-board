@@ -69,7 +69,7 @@ export class YearlyEventGenerator
           events.push(event);
         }
       }
-      currentYear++;
+      currentYear += template.eventType.repeatIntervalByYear;
     }
     return events;
   }

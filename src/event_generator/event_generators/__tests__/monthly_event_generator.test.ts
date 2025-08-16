@@ -153,4 +153,70 @@ describe("MonthlyEventGenerator", () => {
     expect(events[1].startTimestamp).toBe(new Date(2023, 0, 27, 9).getTime());
     expect(events[1].endTimestamp).toBe(new Date(2023, 0, 27, 10).getTime());
   });
+
+  it("respects the repeatIntervalByMonth", () => {
+    template.eventType.repeatIntervalByMonth = 2; // Every 2 months
+    template.eventType.repeatOnWeek = 2; // Second week
+    template.eventType.repeatOnDays = [Days.Monday]; // Monday
+
+    const startDate = new Date(2023, 0, 1); // January 1, 2023
+    const endDate = new Date(2023, 5, 30); // June 30, 2023
+
+    const events = generator.generate(template, startDate, endDate, new Map());
+
+    expect(events.length).toBe(3); // Jan, Mar, May
+    expect(events[0].startTimestamp).toBe(new Date(2023, 0, 9, 9).getTime()); // Jan 9, 2023
+    expect(events[1].startTimestamp).toBe(new Date(2023, 2, 13, 9).getTime()); // Mar 13, 2023
+    expect(events[2].startTimestamp).toBe(new Date(2023, 4, 8, 9).getTime()); // May 8, 2023
+  });
+
+  it("respects the repeatIntervalByMonth with every 3 months", () => {
+    template.eventType.repeatIntervalByMonth = 3; // Every 3 months
+    template.eventType.repeatOnWeek = 1; // First week
+    template.eventType.repeatOnDays = [Days.Friday]; // Friday
+
+    const startDate = new Date(2023, 0, 1); // January 1, 2023
+    const endDate = new Date(2023, 11, 31); // December 31, 2023
+
+    const events = generator.generate(template, startDate, endDate, new Map());
+
+    expect(events.length).toBe(4); // Jan, Apr, Jul, Oct
+    expect(events[0].startTimestamp).toBe(new Date(2023, 0, 6, 9).getTime()); // Jan 6, 2023 (first Friday)
+    expect(events[1].startTimestamp).toBe(new Date(2023, 3, 7, 9).getTime()); // Apr 7, 2023 (first Friday)
+    expect(events[2].startTimestamp).toBe(new Date(2023, 6, 7, 9).getTime()); // Jul 7, 2023 (first Friday)
+    expect(events[3].startTimestamp).toBe(new Date(2023, 9, 6, 9).getTime()); // Oct 6, 2023 (first Friday)
+  });
+
+  it("respects the repeatIntervalByMonth with every 6 months", () => {
+    template.eventType.repeatIntervalByMonth = 6; // Every 6 months
+    template.eventType.repeatOnWeek = -1; // Last week
+    template.eventType.repeatOnDays = [Days.Wednesday]; // Wednesday
+
+    const startDate = new Date(2023, 0, 1); // January 1, 2023
+    const endDate = new Date(2024, 11, 31); // December 31, 2024
+
+    const events = generator.generate(template, startDate, endDate, new Map());
+
+    expect(events.length).toBe(4); // Jan 2023, Jul 2023, Jan 2024, Jul 2024
+    expect(events[0].startTimestamp).toBe(new Date(2023, 0, 25, 9).getTime()); // Jan 25, 2023 (last Wednesday)
+    expect(events[1].startTimestamp).toBe(new Date(2023, 6, 26, 9).getTime()); // Jul 26, 2023 (last Wednesday)
+    expect(events[2].startTimestamp).toBe(new Date(2024, 0, 31, 9).getTime()); // Jan 31, 2024 (last Wednesday)
+    expect(events[3].startTimestamp).toBe(new Date(2024, 6, 31, 9).getTime()); // Jul 31, 2024 (last Wednesday)
+  });
+
+  it("handles large repeatIntervalByMonth values", () => {
+    template.eventType.repeatIntervalByMonth = 12; // Every 12 months (yearly)
+    template.eventType.repeatOnWeek = 2; // Second week
+    template.eventType.repeatOnDays = [Days.Monday]; // Monday
+
+    const startDate = new Date(2023, 0, 1); // January 1, 2023
+    const endDate = new Date(2025, 11, 31); // December 31, 2025
+
+    const events = generator.generate(template, startDate, endDate, new Map());
+
+    expect(events.length).toBe(3); // Jan 2023, Jan 2024, Jan 2025
+    expect(events[0].startTimestamp).toBe(new Date(2023, 0, 9, 9).getTime()); // Jan 9, 2023
+    expect(events[1].startTimestamp).toBe(new Date(2024, 0, 8, 9).getTime()); // Jan 8, 2024
+    expect(events[2].startTimestamp).toBe(new Date(2025, 0, 13, 9).getTime()); // Jan 13, 2025
+  });
 });

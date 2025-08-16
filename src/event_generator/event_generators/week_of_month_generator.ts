@@ -31,11 +31,11 @@ export class WeekOfMonthEventGenerator
     if (template.eventType.name === EventTypeName.WeekOfMonth) {
       const eventType = template.eventType;
 
-      // iterate over each month
+      // iterate over each month with repeat interval
       for (
         let d = new Date(startDate.getTime());
         d <= endDate;
-        d.setMonth(d.getMonth() + 1)
+        d.setMonth(d.getMonth() + eventType.repeatIntervalByMonth)
       ) {
         // iterate over each repeat day
         for (let repeatDay of eventType.repeatOnDays) {
