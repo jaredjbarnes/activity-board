@@ -16,10 +16,13 @@ import { StandardEventGenerator } from "./event_generators/standard_event_genera
 
 type EventTemplate = IEventTemplate<IAnchoredEventType | IStandardEventType | IWeekOfMonthEventType | IDaysOfWeekEventType | IYearlyRecurringEventType>;
 
+// Delta template type for partial updates - only id is required
+type EventTemplateDelta = Partial<Omit<EventTemplate, 'id'>> & { id: string };
+
 export interface EventGeneratorPort {
     getEventTemplates(startDate: Date, endDate: Date): Promise<EventTemplate[]>;
     removeEventTemplate(templateId: string): Promise<void>;
-    updateEventTemplate(template: EventTemplate): Promise<void>;
+    updateEventTemplate(template: EventTemplateDelta): Promise<void>;
     addEventTemplate(template: EventTemplate): Promise<void>;
     getAlterations(startDate: Date, endDate: Date): Promise<IEventAlteration[]>;
     alterEvent(alteration: IEventAlteration): Promise<void>;
