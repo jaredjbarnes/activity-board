@@ -2,7 +2,7 @@ import { Days } from "src/event_generator/models/event_template_types/days.ts";
 import { IDaysOfWeekEventType } from "src/event_generator/models/event_template_types/i_days_of_week_event_type.ts";
 import { EventTypeName } from "src/event_generator/models/event_template_types/event_type_name.ts";
 import { IEventTemplate } from "src/event_generator/models/i_event_template.ts";
-import { WeeklyEventGenerator } from "src/event_generator/event_generators/weekly_event_generator.ts";
+import { DaysOfWeekGenerator } from "src/event_generator/event_generators/days_of_week_generator.ts";
 
 function createTemplate(
   startDay: number,
@@ -27,7 +27,7 @@ function createTemplate(
 
 describe("WeeklyEventGenerator", () => {
   it("generates regular weekly events within the range", () => {
-    const generator = new WeeklyEventGenerator();
+    const generator = new DaysOfWeekGenerator();
     const template = createTemplate(
       new Date(2023, 6, 2).getTime(),
       [Days.Monday, Days.Wednesday, Days.Friday],
@@ -46,7 +46,7 @@ describe("WeeklyEventGenerator", () => {
   });
 
   it("does not generate events after the endOn date", () => {
-    const generator = new WeeklyEventGenerator();
+    const generator = new DaysOfWeekGenerator();
     const template = createTemplate(
       new Date(2023, 6, 2).getTime(),
       [Days.Monday, Days.Wednesday, Days.Friday],
@@ -65,7 +65,7 @@ describe("WeeklyEventGenerator", () => {
   });
 
   it("respects the repeatInterval", () => {
-    const generator = new WeeklyEventGenerator();
+    const generator = new DaysOfWeekGenerator();
     const template = createTemplate(
       new Date(2023, 6, 1).getTime(),
       [Days.Monday],
@@ -83,7 +83,7 @@ describe("WeeklyEventGenerator", () => {
   });
 
   it("does not generate events for non-weekly templates", () => {
-    const generator = new WeeklyEventGenerator();
+    const generator = new DaysOfWeekGenerator();
     const template = createTemplate(
       new Date(2023, 6, 2).getTime(),
       [Days.Monday, Days.Wednesday, Days.Friday],
@@ -101,7 +101,7 @@ describe("WeeklyEventGenerator", () => {
   });
 
   it("does not generate events if startDate is after endDate", () => {
-    const generator = new WeeklyEventGenerator();
+    const generator = new DaysOfWeekGenerator();
     const template = createTemplate(
       new Date(2023, 6, 2).getTime(),
       [Days.Monday, Days.Wednesday, Days.Friday],

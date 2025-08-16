@@ -9,7 +9,7 @@ import { IEventType } from "./models/i_event_type.ts";
 import { IEventTemplate } from "./models/i_event_template.ts";
 import { EventTypeName } from "./models/event_template_types/event_type_name.ts";
 import { AlterationEventGenerator } from "./event_generators/alteration_event_generator.ts";
-import { WeeklyEventGenerator } from "./event_generators/weekly_event_generator.ts";
+import { DaysOfWeekGenerator } from "./event_generators/days_of_week_generator.ts";
 import { WeekOfMonthEventGenerator } from "./event_generators/week_of_month_generator.ts";
 import { YearlyEventGenerator } from "./event_generators/yearly_event_generator.ts";
 import { StandardEventGenerator } from "./event_generators/standard_event_generator.ts";
@@ -31,7 +31,7 @@ export interface EventGeneratorPort {
 export class EventGenerator {
     private port: EventGeneratorPort;
     private alterationEventGenerator: AlterationEventGenerator;
-    private dayOfWeekEventGenerator: WeeklyEventGenerator;
+    private dayOfWeekEventGenerator: DaysOfWeekGenerator;
     private weekOfMonthEventGenerator: WeekOfMonthEventGenerator;
     private yearlyEventGenerator: YearlyEventGenerator;
     private standardEventGenerator: StandardEventGenerator;
@@ -39,7 +39,7 @@ export class EventGenerator {
     constructor(port: EventGeneratorPort) {
         this.port = port;
         this.alterationEventGenerator = new AlterationEventGenerator();
-        this.dayOfWeekEventGenerator = new WeeklyEventGenerator();
+        this.dayOfWeekEventGenerator = new DaysOfWeekGenerator();
         this.weekOfMonthEventGenerator = new WeekOfMonthEventGenerator();
         this.yearlyEventGenerator = new YearlyEventGenerator();
         this.standardEventGenerator = new StandardEventGenerator();

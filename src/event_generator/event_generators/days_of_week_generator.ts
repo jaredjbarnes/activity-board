@@ -15,7 +15,7 @@ function intersects(
   return Math.max(startA, startB) < Math.min(endA, endB);
 }
 
-export class WeeklyEventGenerator
+export class DaysOfWeekGenerator
   implements EventGenerator<IDaysOfWeekEventType>
 {
   generate(
