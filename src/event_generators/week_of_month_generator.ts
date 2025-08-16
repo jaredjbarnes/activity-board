@@ -1,8 +1,9 @@
 import { IWeekOfMonthEventType } from "src/models/event_template_types/i_week_of_month_event_type.ts";
 import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
-import { IEvent } from "src/models/i_event.ts";
+import { IGeneratedEvent } from "src/models/i_generated_event.ts";
 import { IEventTemplate } from "src/models/i_event_template.ts";
 import { EventGenerator } from "src/event_generators/event_generator.ts";
+import { IEventAlteration } from "src/models/event_template_types/i_event_alteration.ts";
 
 export class WeekOfMonthEventGenerator
   implements EventGenerator<IWeekOfMonthEventType>
@@ -10,9 +11,10 @@ export class WeekOfMonthEventGenerator
   generate(
     template: IEventTemplate<IWeekOfMonthEventType>,
     startDate: Date,
-    endDate: Date
-  ): IEvent<IWeekOfMonthEventType>[] {
-    let events: IEvent<IWeekOfMonthEventType>[] = [];
+    endDate: Date,
+    alterations: Map<number, IEventAlteration[]>
+  ): IGeneratedEvent<IWeekOfMonthEventType>[] {
+    let events: IGeneratedEvent<IWeekOfMonthEventType>[] = [];
 
     // Quickly get out if there isn't an intersection.
     if (
@@ -73,12 +75,21 @@ export class WeekOfMonthEventGenerator
             const startTimestamp = eventStart + eventType.startTime;
             const endTimestamp = startTimestamp + eventType.duration;
 
-            events.push({
-              template: template,
-              startTimestamp: startTimestamp,
-              endTimestamp: endTimestamp,
-              generatedTimestamp: eventStart,
-            });
+            // Check if this event has any alterations that would prevent it from being generated
+            const eventAlterations = alterations.get(eventStart) || [];
+            const hasAlteration = eventAlterations.some((alteration: IEventAlteration) => 
+              alteration.templateId === template.id
+            );
+
+            // Only generate the event if there are no alterations for it
+            if (!hasAlteration) {
+              events.push({
+                template: template,
+                startTimestamp: startTimestamp,
+                endTimestamp: endTimestamp,
+                generatedTimestamp: eventStart,
+              });
+            }
           }
         }
       }

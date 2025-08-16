@@ -7,18 +7,18 @@ import { YearlyEventGenerator } from "src/event_generators/yearly_event_generato
 function getYearlyTemplate(): IEventTemplate<IYearlyRecurringEventType> {
   return {
     id: "1",
-    title: "Yearly event",
-    notes: "This is a yearly event",
+    title: "Yearly Event",
+    notes: null,
     eventType: {
       name: EventTypeName.Yearly,
+      startTime: 9 * 60 * 60 * 1000, // 9:00 AM
+      duration: 60 * 60 * 1000, // 1 hour
+      startOn: new Date(2023, Months.January, 1).getTime(),
+      endOn: new Date(2025, Months.December, 31).getTime(),
       repeatOnMonth: Months.January,
       repeatOnDay: 1,
       repeatIntervalByYear: 1,
-      startTime: 9 * 60 * 60 * 1000, // 9:00 AM
-      duration: 3600000, // 1 hour
-      startOn: new Date(2023, Months.January, 1).getTime(),
-      endOn: null,
-    },
+    } as IYearlyRecurringEventType,
   };
 }
 
@@ -30,7 +30,8 @@ describe("YearlyEventGenerator", () => {
     const events = generator.generate(
       template,
       new Date(2023, Months.January, 1),
-      new Date(2025, Months.December, 31)
+      new Date(2025, Months.December, 31),
+      new Map()
     );
     expect(events.length).toBe(3);
     expect(events.map((e) => new Date(e.startTimestamp).getFullYear())).toEqual(
@@ -43,7 +44,8 @@ describe("YearlyEventGenerator", () => {
     const events = generator.generate(
       template,
       new Date(2024, Months.January, 2),
-      new Date(2025, Months.December, 31)
+      new Date(2025, Months.December, 31),
+      new Map()
     );
     expect(events.length).toBe(1);
     expect(events.map((e) => new Date(e.startTimestamp).getFullYear())).toEqual(
@@ -56,7 +58,8 @@ describe("YearlyEventGenerator", () => {
     const events = generator.generate(
       template,
       new Date(2023, Months.January, 1),
-      new Date(2023, Months.December, 31)
+      new Date(2023, Months.December, 31),
+      new Map()
     );
     expect(events[0].endTimestamp - events[0].startTimestamp).toBe(
       template.eventType.duration
@@ -68,7 +71,8 @@ describe("YearlyEventGenerator", () => {
     const events = generator.generate(
       template,
       new Date(2023, Months.January, 1),
-      new Date(2023, Months.December, 31)
+      new Date(2023, Months.December, 31),
+      new Map()
     );
     const date = new Date(events[0].startTimestamp);
     expect(date.getHours()).toBe(9);
@@ -80,7 +84,8 @@ describe("YearlyEventGenerator", () => {
     const events = generator.generate(
       template,
       new Date(2023, Months.January, 1),
-      new Date(2023, Months.December, 31)
+      new Date(2023, Months.December, 31),
+      new Map()
     );
     const date = new Date(events[0].startTimestamp);
     expect(date.getDate()).toBe(template.eventType.repeatOnDay);
@@ -92,7 +97,8 @@ describe("YearlyEventGenerator", () => {
     const events = generator.generate(
       template,
       new Date(2023, Months.January, 1),
-      new Date(2024, Months.January, 1)
+      new Date(2024, Months.January, 1),
+      new Map()
     );
     expect(events.length).toBe(1);
   });
@@ -104,7 +110,8 @@ describe("YearlyEventGenerator", () => {
     const events = generator.generate(
       template,
       new Date(2023, Months.January, 1),
-      new Date(2024, Months.December, 31)
+      new Date(2024, Months.December, 31),
+      new Map()
     );
     expect(events.length).toBe(2);
     expect(new Date(events[0].startTimestamp).getDate()).toBe(28);
@@ -119,7 +126,8 @@ describe("YearlyEventGenerator", () => {
     const events = generator.generate(
       template,
       new Date(2023, Months.January, 1),
-      new Date(2025, Months.December, 31)
+      new Date(2025, Months.December, 31),
+      new Map()
     );
     expect(events.length).toBe(3);
   });

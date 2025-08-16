@@ -1,7 +1,8 @@
-import { IEvent } from "src/models/i_event.ts";
+import { IGeneratedEvent } from "src/models/i_generated_event.ts";
 import { IEventTemplate } from "src/models/i_event_template.ts";
 import { IYearlyRecurringEventType } from "src/models/event_template_types/i_yearly_event_type.ts";
 import { EventGenerator } from "src/event_generators/event_generator.ts";
+import { IEventAlteration } from "src/models/event_template_types/i_event_alteration.ts";
 
 export class YearlyEventGenerator
   implements EventGenerator<IYearlyRecurringEventType>
@@ -9,9 +10,10 @@ export class YearlyEventGenerator
   generate(
     template: IEventTemplate<IYearlyRecurringEventType>,
     startDate: Date,
-    endDate: Date
-  ): IEvent<IYearlyRecurringEventType>[] {
-    let events: IEvent<IYearlyRecurringEventType>[] = [];
+    endDate: Date,
+    alterations: Map<number, IEventAlteration[]>
+  ): IGeneratedEvent<IYearlyRecurringEventType>[] {
+    let events: IGeneratedEvent<IYearlyRecurringEventType>[] = [];
     let currentYear = startDate.getFullYear();
 
     // Quickly get out if there isn't an intersection.
@@ -50,13 +52,22 @@ export class YearlyEventGenerator
           endDate.getTime()
         )
       ) {
-        const event: IEvent<IYearlyRecurringEventType> = {
-          template: template,
-          startTimestamp: startTimestamp,
-          endTimestamp: endTimestamp,
-          generatedTimestamp: startTimestamp,
-        };
-        events.push(event);
+        // Check if this event has any alterations that would prevent it from being generated
+        const eventAlterations = alterations.get(startTimestamp) || [];
+        const hasAlteration = eventAlterations.some((alteration: IEventAlteration) => 
+          alteration.templateId === template.id
+        );
+
+        // Only generate the event if there are no alterations for it
+        if (!hasAlteration) {
+          const event: IGeneratedEvent<IYearlyRecurringEventType> = {
+            template: template,
+            startTimestamp: startTimestamp,
+            endTimestamp: endTimestamp,
+            generatedTimestamp: startTimestamp,
+          };
+          events.push(event);
+        }
       }
       currentYear++;
     }

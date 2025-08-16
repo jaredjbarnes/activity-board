@@ -32,7 +32,7 @@ describe("MonthlyEventGenerator", () => {
     const startDate = new Date(2023, 0, 1); // January 1, 2023
     const endDate = new Date(2023, 2, 31); // March 31, 2023
 
-    const events = generator.generate(template, startDate, endDate);
+    const events = generator.generate(template, startDate, endDate, new Map());
 
     expect(events.length).toBe(3);
     expect(events[0].startTimestamp).toBe(new Date(2023, 0, 9, 9).getTime());
@@ -46,7 +46,7 @@ describe("MonthlyEventGenerator", () => {
   it("returns empty array when startDate is after endDate", () => {
     const startDate = new Date(2023, 2, 31); // March 31, 2023
     const endDate = new Date(2023, 0, 1); // January 1, 2023
-    const events = generator.generate(template, startDate, endDate);
+    const events = generator.generate(template, startDate, endDate, new Map());
 
     expect(events.length).toBe(0);
   });
@@ -57,7 +57,7 @@ describe("MonthlyEventGenerator", () => {
     const startDate = new Date(2023, 0, 1);
     const endDate = new Date(2023, 1, 28);
 
-    const events = generator.generate(template, startDate, endDate);
+    const events = generator.generate(template, startDate, endDate, new Map());
 
     expect(events.length).toBe(2);
     expect(events[0].startTimestamp).toBe(new Date(2023, 0, 30, 9).getTime());
@@ -72,7 +72,7 @@ describe("MonthlyEventGenerator", () => {
     const startDate = new Date(2023, 0, 1); // January 1, 2023
     const endDate = new Date(2023, 2, 31); // March 31, 2023
 
-    const events = generator.generate(template, startDate, endDate);
+    const events = generator.generate(template, startDate, endDate, new Map());
 
     expect(events.length).toBe(3);
     // Add more checks to ensure no events from 2022 are included
@@ -91,7 +91,7 @@ describe("MonthlyEventGenerator", () => {
     const startDate = new Date(2023, 0, 1);
     const endDate = new Date(2023, 1, 28);
 
-    const events = generator.generate(template, startDate, endDate);
+    const events = generator.generate(template, startDate, endDate, new Map());
 
     expect(events.length).toBe(2);
     expect(events[0].startTimestamp).toBe(new Date(2023, 0, 23, 9).getTime());
@@ -111,7 +111,7 @@ describe("MonthlyEventGenerator", () => {
     const startDate = new Date(2023, 1, 1);
     const endDate = new Date(2023, 1, 28);
 
-    const events = generator.generate(template, startDate, endDate);
+    const events = generator.generate(template, startDate, endDate, new Map());
 
     expect(events.length).toBe(3);
     expect(events[0].startTimestamp).toBe(new Date(2023, 1, 27, 9).getTime());
@@ -129,7 +129,7 @@ describe("MonthlyEventGenerator", () => {
     const startDate = new Date(2023, 0, 1); 
     const endDate = new Date(2023, 2, 31); 
 
-    const events = generator.generate(template, startDate, endDate);
+    const events = generator.generate(template, startDate, endDate, new Map());
     expect(events.length).toBe(3);
     expect(events[0].startTimestamp).toBe(new Date(2023, 0, 30, 9).getTime());
     expect(events[0].endTimestamp).toBe(new Date(2023, 0, 30, 10).getTime());
@@ -146,7 +146,7 @@ describe("MonthlyEventGenerator", () => {
     const startDate = new Date(2023, 0, 26);
     const endDate = new Date(2023, 1, 1); 
 
-    const events = generator.generate(template, startDate, endDate);
+    const events = generator.generate(template, startDate, endDate, new Map());
     expect(events.length).toBe(2);
     expect(events[0].startTimestamp).toBe(new Date(2023, 0, 30, 9).getTime());
     expect(events[0].endTimestamp).toBe(new Date(2023, 0, 30, 10).getTime());

@@ -10,7 +10,7 @@ export interface IEventAlteration {
     type: EventAlterationType;
     eventName: EventTypeName;
     templateId: string;
-    generatedTimestamp: number; 
+    generatedEventTimestamp: number; 
     startTimestamp: number;
     duration: number;
 }

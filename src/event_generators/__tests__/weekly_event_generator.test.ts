@@ -37,7 +37,7 @@ describe("WeeklyEventGenerator", () => {
     const startDate = new Date(2023, 6, 2); // July 2, 2023
     const endDate = new Date(2023, 6, 8); // July 8, 2023
 
-    const events = generator.generate(template, startDate, endDate);
+    const events = generator.generate(template, startDate, endDate, new Map());
 
     expect(events.length).toBe(3);
     expect(events[0].startTimestamp).toBe(new Date(2023, 6, 3, 9).getTime()); // July 3, 2023, 9:00 AM
@@ -57,7 +57,7 @@ describe("WeeklyEventGenerator", () => {
     const startDate = new Date(2023, 6, 2); // July 2, 2023
     const endDate = new Date(2023, 6, 8); // July 8, 2023
 
-    const events = generator.generate(template, startDate, endDate);
+    const events = generator.generate(template, startDate, endDate, new Map());
 
     expect(events.length).toBe(2);
     expect(events[0].startTimestamp).toBe(new Date(2023, 6, 3, 9).getTime()); // July 3, 2023, 9:00 AM
@@ -75,7 +75,7 @@ describe("WeeklyEventGenerator", () => {
     const startDate = new Date(2023, 6, 1); // July 1, 2023
     const endDate = new Date(2023, 6, 31); // July 31, 2023
 
-    const events = generator.generate(template, startDate, endDate);
+    const events = generator.generate(template, startDate, endDate, new Map());
 
     expect(events.length).toBe(2);
     expect(events[0].startTimestamp).toBe(new Date(2023, 6, 3, 9).getTime()); // July 3, 2023, 9:00 AM
@@ -95,7 +95,7 @@ describe("WeeklyEventGenerator", () => {
     const startDate = new Date(2023, 6, 2); // July 2, 2023
     const endDate = new Date(2023, 6, 8); // July 8, 2023
 
-    const events = generator.generate(template, startDate, endDate);
+    const events = generator.generate(template, startDate, endDate, new Map());
 
     expect(events.length).toBe(0);
   });
@@ -111,7 +111,7 @@ describe("WeeklyEventGenerator", () => {
     const startDate = new Date(2023, 6, 8); // July 8, 2023
     const endDate = new Date(2023, 6, 2); // July 2, 2023
 
-    const events = generator.generate(template, startDate, endDate);
+    const events = generator.generate(template, startDate, endDate, new Map());
 
     expect(events.length).toBe(0);
   });
