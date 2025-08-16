@@ -1,8 +1,8 @@
-import { IEventTemplate } from "src/models/i_event_template.ts";
-import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
-import { Days } from "src/models/event_template_types/days.ts";
-import { WeekOfMonthEventGenerator } from "src/event_generators/week_of_month_generator.ts";
-import { IWeekOfMonthEventType } from "src/models/event_template_types/i_week_of_month_event_type.ts";
+import { IEventTemplate } from "src/event_generator/models/i_event_template.ts";
+import { EventTypeName } from "src/event_generator/models/event_template_types/event_type_name.ts";
+import { Days } from "src/event_generator/models/event_template_types/days.ts";
+import { WeekOfMonthEventGenerator } from "src/event_generator/event_generators/week_of_month_generator.ts";
+import { IWeekOfMonthEventType } from "src/event_generator/models/event_template_types/i_week_of_month_event_type.ts";
 
 describe("MonthlyEventGenerator", () => {
   let generator: WeekOfMonthEventGenerator;

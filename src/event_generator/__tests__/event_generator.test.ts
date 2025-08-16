@@ -1,17 +1,17 @@
-import { EventGenerator, EventGeneratorPort } from "src/event_generator.ts";
-import { IEventTemplate } from "src/models/i_event_template.ts";
-import { IStandardEventType } from "src/models/event_template_types/i_standard_event_type.ts";
-import { IDaysOfWeekEventType } from "src/models/event_template_types/i_days_of_week_event_type.ts";
-import { IWeekOfMonthEventType } from "src/models/event_template_types/i_week_of_month_event_type.ts";
-import { IYearlyRecurringEventType } from "src/models/event_template_types/i_yearly_event_type.ts";
-import { IAnchoredEventType } from "src/models/event_template_types/i_anchored_event_type.ts";
-import { IEventAlteration, EventAlterationType } from "src/models/event_template_types/i_event_alteration.ts";
-import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
-import { Days } from "src/models/event_template_types/days.ts";
-import { Months } from "src/models/months.ts";
+import { EventGenerator, EventGeneratorPort } from "src/event_generator/event_generator.ts";
+import { IEventTemplate } from "src/event_generator/models/i_event_template.ts";
+import { IStandardEventType } from "src/event_generator/models/event_template_types/i_standard_event_type.ts";
+import { IDaysOfWeekEventType } from "src/event_generator/models/event_template_types/i_days_of_week_event_type.ts";
+import { IWeekOfMonthEventType } from "src/event_generator/models/event_template_types/i_week_of_month_event_type.ts";
+import { IYearlyRecurringEventType } from "src/event_generator/models/event_template_types/i_yearly_event_type.ts";
+import { IAnchoredEventType } from "src/event_generator/models/event_template_types/i_anchored_event_type.ts";
+import { IEventAlteration, EventAlterationType } from "src/event_generator/models/event_template_types/i_event_alteration.ts";
+import { EventTypeName } from "src/event_generator/models/event_template_types/event_type_name.ts";
+import { Days } from "src/event_generator/models/event_template_types/days.ts";
+import { Months as Month } from "src/event_generator/models/months.ts";
 
 // Mock implementations for testing
-class MockSchedulerPort implements EventGeneratorPort {
+class MockEventGeneratorAdapter implements EventGeneratorPort {
   private eventTemplates: IEventTemplate<IStandardEventType | IDaysOfWeekEventType | IWeekOfMonthEventType | IYearlyRecurringEventType | IAnchoredEventType>[] = [];
   private alterations: IEventAlteration[] = [];
 
@@ -23,7 +23,7 @@ class MockSchedulerPort implements EventGeneratorPort {
     this.alterations = alterations;
   }
 
-  async getEventTemplates() {
+  async getEventTemplates(startDate: Date, endDate: Date) {
     return this.eventTemplates;
   }
 
@@ -42,12 +42,16 @@ class MockSchedulerPort implements EventGeneratorPort {
     this.eventTemplates.push(template);
   }
 
-  async getAlterations() {
+  async getAlterations(startDate: Date, endDate: Date) {
     return this.alterations;
   }
 
   async alterEvent(alteration: IEventAlteration) {
     this.alterations.push(alteration);
+  }
+
+  async addAlterations(alterations: IEventAlteration[]) {
+    this.alterations.push(...alterations);
   }
 }
 
@@ -94,7 +98,7 @@ const createWeekOfMonthTemplate = (id: string, weekOfMonth: number, dayOfWeek: D
   },
 });
 
-const createYearlyTemplate = (id: string, month: Months, day: number, startTime: number, duration: number): IEventTemplate<IYearlyRecurringEventType> => ({
+const createYearlyTemplate = (id: string, month: Month, day: number, startTime: number, duration: number): IEventTemplate<IYearlyRecurringEventType> => ({
   id,
   title: `Yearly Event ${id}`,
   notes: null,
@@ -120,13 +124,23 @@ const createAlteration = (generatedEventTimestamp: number, templateId: string): 
   duration: 60 * 60 * 1000, // 1 hour
 });
 
+const createAlterationWithNewDate = (generatedEventTimestamp: number, templateId: string, newDate: Date): IEventAlteration => ({
+  id: `alteration-${generatedEventTimestamp}`,
+  type: EventAlterationType.Reschedule,
+  eventName: EventTypeName.Standard,
+  templateId,
+  generatedEventTimestamp,
+  startTimestamp: newDate.getTime(),
+  duration: 60 * 60 * 1000, // 1 hour
+});
+
 describe('Scheduler', () => {
-  let scheduler: EventGenerator;
-  let mockPort: MockSchedulerPort;
+  let eventGenerator: EventGenerator;
+  let mockPort: MockEventGeneratorAdapter;
 
   beforeEach(() => {
-    mockPort = new MockSchedulerPort();
-    scheduler = new EventGenerator(mockPort);
+    mockPort = new MockEventGeneratorAdapter();
+    eventGenerator = new EventGenerator(mockPort);
   });
 
   describe('getEvents', () => {
@@ -134,7 +148,7 @@ describe('Scheduler', () => {
     const endDate = new Date(2023, 7, 31); // August 31, 2023
 
     test('should return empty array when no templates exist', async () => {
-      const events = await scheduler.getEvents(startDate, endDate);
+      const events = await eventGenerator.getEvents(startDate, endDate);
       expect(events).toEqual([]);
     });
 
@@ -143,10 +157,10 @@ describe('Scheduler', () => {
       const duration = 2 * 24 * 60 * 60 * 1000; // 2 days
       const template = createStandardTemplate('standard-1', startTime, duration);
       
-      mockPort = new MockSchedulerPort([template]);
-      scheduler = new EventGenerator(mockPort);
+      mockPort = new MockEventGeneratorAdapter([template]);
+      eventGenerator = new EventGenerator(mockPort);
 
-      const events = await scheduler.getEvents(startDate, endDate);
+      const events = await eventGenerator.getEvents(startDate, endDate);
       
       expect(events.length).toBe(1);
       expect(events[0].template.id).toBe('standard-1');
@@ -159,10 +173,10 @@ describe('Scheduler', () => {
       const duration = 2 * 60 * 60 * 1000; // 2 hours
       const template = createWeeklyTemplate('weekly-1', [Days.Monday, Days.Wednesday, Days.Friday], startTime, duration); // Monday, Wednesday, Friday
       
-      mockPort = new MockSchedulerPort([template]);
-      scheduler = new EventGenerator(mockPort);
+      mockPort = new MockEventGeneratorAdapter([template]);
+      eventGenerator = new EventGenerator(mockPort);
 
-      const events = await scheduler.getEvents(startDate, endDate);
+      const events = await eventGenerator.getEvents(startDate, endDate);
       
       // August 2023 has 5 weeks, and we expect events on Monday, Wednesday, Friday
       // This should generate multiple events
@@ -179,10 +193,10 @@ describe('Scheduler', () => {
       const duration = 1 * 60 * 60 * 1000; // 1 hour
       const template = createWeekOfMonthTemplate('wom-1', 2, Days.Monday, startTime, duration); // 2nd week, Monday
       
-      mockPort = new MockSchedulerPort([template]);
-      scheduler = new EventGenerator(mockPort);
+      mockPort = new MockEventGeneratorAdapter([template]);
+      eventGenerator = new EventGenerator(mockPort);
 
-      const events = await scheduler.getEvents(startDate, endDate);
+      const events = await eventGenerator.getEvents(startDate, endDate);
       
       expect(events.length).toBe(1);
       expect(events[0].template.id).toBe('wom-1');
@@ -191,12 +205,12 @@ describe('Scheduler', () => {
     test('should generate yearly events', async () => {
       const startTime = 10 * 60 * 60 * 1000; // 10 AM
       const duration = 3 * 60 * 60 * 1000; // 3 hours
-      const template = createYearlyTemplate('yearly-1', Months.August, 15, startTime, duration); // August 15
+      const template = createYearlyTemplate('yearly-1', Month.August, 15, startTime, duration); // August 15
       
-      mockPort = new MockSchedulerPort([template]);
-      scheduler = new EventGenerator(mockPort);
+      mockPort = new MockEventGeneratorAdapter([template]);
+      eventGenerator = new EventGenerator(mockPort);
 
-      const events = await scheduler.getEvents(startDate, endDate);
+      const events = await eventGenerator.getEvents(startDate, endDate);
       
       expect(events.length).toBe(1);
       expect(events[0].template.id).toBe('yearly-1');
@@ -206,10 +220,10 @@ describe('Scheduler', () => {
       const standardTemplate = createStandardTemplate('standard-1', new Date(2023, 7, 10).getTime(), 24 * 60 * 60 * 1000);
       const weeklyTemplate = createWeeklyTemplate('weekly-1', [Days.Monday], 9 * 60 * 60 * 1000, 2 * 60 * 60 * 1000);
       
-      mockPort = new MockSchedulerPort([standardTemplate, weeklyTemplate]);
-      scheduler = new EventGenerator(mockPort);
+      mockPort = new MockEventGeneratorAdapter([standardTemplate, weeklyTemplate]);
+      eventGenerator = new EventGenerator(mockPort);
 
-      const events = await scheduler.getEvents(startDate, endDate);
+      const events = await eventGenerator.getEvents(startDate, endDate);
       
       expect(events.length).toBeGreaterThan(1);
       const standardEvents = events.filter(e => e.template.id === 'standard-1');
@@ -225,14 +239,15 @@ describe('Scheduler', () => {
       const template = createStandardTemplate('standard-1', startTime, duration);
       const alteration = createAlteration(startTime, 'standard-1');
       
-      mockPort = new MockSchedulerPort([template], [alteration]);
-      scheduler = new EventGenerator(mockPort);
+      mockPort = new MockEventGeneratorAdapter([template], [alteration]);
+      eventGenerator = new EventGenerator(mockPort);
 
-      const events = await scheduler.getEvents(startDate, endDate);
+      const events = await eventGenerator.getEvents(startDate, endDate);
       
-      // Should have the original event (alteration generator doesn't have templates in its map)
-      expect(events.length).toBe(1);
-      expect(events[0].template.id).toBe('standard-1');
+      // Should have both the original event and the alteration event
+      expect(events.length).toBe(2);
+      const standardEvents = events.filter(e => e.template.id === 'standard-1');
+      expect(standardEvents.length).toBe(2);
     });
 
     test('should filter events outside the date range', async () => {
@@ -240,10 +255,10 @@ describe('Scheduler', () => {
       const duration = 24 * 60 * 60 * 1000;
       const template = createStandardTemplate('future-1', futureStartTime, duration);
       
-      mockPort = new MockSchedulerPort([template]);
-      scheduler = new EventGenerator(mockPort);
+      mockPort = new MockEventGeneratorAdapter([template]);
+      eventGenerator = new EventGenerator(mockPort);
 
-      const events = await scheduler.getEvents(startDate, endDate);
+      const events = await eventGenerator.getEvents(startDate, endDate);
       
       expect(events.length).toBe(0);
     });
@@ -253,10 +268,10 @@ describe('Scheduler', () => {
       const duration = 5 * 24 * 60 * 60 * 1000; // 5 days (extends into August)
       const template = createStandardTemplate('intersect-1', startTime, duration);
       
-      mockPort = new MockSchedulerPort([template]);
-      scheduler = new EventGenerator(mockPort);
+      mockPort = new MockEventGeneratorAdapter([template]);
+      eventGenerator = new EventGenerator(mockPort);
 
-      const events = await scheduler.getEvents(startDate, endDate);
+      const events = await eventGenerator.getEvents(startDate, endDate);
       
       expect(events.length).toBe(1);
       expect(events[0].startTimestamp).toBe(startTime);
@@ -268,10 +283,10 @@ describe('Scheduler', () => {
       const duration = 24 * 60 * 60 * 1000;
       const template = createStandardTemplate('standard-1', startTime, duration);
       
-      mockPort = new MockSchedulerPort([template], []);
-      scheduler = new EventGenerator(mockPort);
+      mockPort = new MockEventGeneratorAdapter([template], []);
+      eventGenerator = new EventGenerator(mockPort);
 
-      const events = await scheduler.getEvents(startDate, endDate);
+      const events = await eventGenerator.getEvents(startDate, endDate);
       
       expect(events.length).toBe(1);
       expect(events[0].template.id).toBe('standard-1');
@@ -284,20 +299,21 @@ describe('Scheduler', () => {
       const alteration1 = createAlteration(startTime, 'standard-1');
       const alteration2 = createAlteration(startTime, 'standard-1');
       
-      mockPort = new MockSchedulerPort([template], [alteration1, alteration2]);
-      scheduler = new EventGenerator(mockPort);
+      mockPort = new MockEventGeneratorAdapter([template], [alteration1, alteration2]);
+      eventGenerator = new EventGenerator(mockPort);
 
-      const events = await scheduler.getEvents(startDate, endDate);
+      const events = await eventGenerator.getEvents(startDate, endDate);
       
-      // Should have the original event (alteration generator doesn't have templates in its map)
-      expect(events.length).toBe(1);
-      expect(events[0].template.id).toBe('standard-1');
+      // Should have the original event plus two alteration events
+      expect(events.length).toBe(3);
+      const standardEvents = events.filter(e => e.template.id === 'standard-1');
+      expect(standardEvents.length).toBe(3);
     });
   });
 
   describe('constructor', () => {
     test('should initialize with provided port', () => {
-      const port = new MockSchedulerPort();
+      const port = new MockEventGeneratorAdapter();
       const scheduler = new EventGenerator(port);
       
       // The scheduler should be properly initialized
@@ -313,10 +329,10 @@ describe('Scheduler', () => {
       const duration = 2 * 60 * 60 * 1000; // 2 hours
       const template = createStandardTemplate('short-1', startTime, duration);
       
-      mockPort = new MockSchedulerPort([template]);
-      scheduler = new EventGenerator(mockPort);
+      mockPort = new MockEventGeneratorAdapter([template]);
+      eventGenerator = new EventGenerator(mockPort);
 
-      const events = await scheduler.getEvents(startDate, endDate);
+      const events = await eventGenerator.getEvents(startDate, endDate);
       
       expect(events.length).toBe(1);
     });
@@ -328,10 +344,10 @@ describe('Scheduler', () => {
       const duration = 24 * 60 * 60 * 1000;
       const template = createStandardTemplate('long-1', startTime, duration);
       
-      mockPort = new MockSchedulerPort([template]);
-      scheduler = new EventGenerator(mockPort);
+      mockPort = new MockEventGeneratorAdapter([template]);
+      eventGenerator = new EventGenerator(mockPort);
 
-      const events = await scheduler.getEvents(startDate, endDate);
+      const events = await eventGenerator.getEvents(startDate, endDate);
       
       expect(events.length).toBe(1);
     });
@@ -341,13 +357,32 @@ describe('Scheduler', () => {
       const duration = 1; // Use 1ms instead of 0 to avoid potential issues
       const template = createStandardTemplate('zero-1', startTime, duration);
       
-      mockPort = new MockSchedulerPort([template]);
-      scheduler = new EventGenerator(mockPort);
+      mockPort = new MockEventGeneratorAdapter([template]);
+      eventGenerator = new EventGenerator(mockPort);
 
-      const events = await scheduler.getEvents(new Date(2023, 7, 1), new Date(2023, 7, 31));
+      const events = await eventGenerator.getEvents(new Date(2023, 7, 1), new Date(2023, 7, 31));
       
       expect(events.length).toBe(1);
       expect(events[0].endTimestamp - events[0].startTimestamp).toBe(1);
+    });
+  });
+
+  describe('custom events', () => {
+    test('Birthdays', async()=>{
+
+
+      const johnsTemplate = createYearlyTemplate('johns-birthday', Month.January, 1, 0, 24 * 60 * 60 * 1000);
+      const janesTemplate = createYearlyTemplate('janes-birthday', Month.January, 1, 0, 24 * 60 * 60 * 1000);
+      const joesTemplate = createYearlyTemplate('joes-birthday', Month.January, 1, 0, 24 * 60 * 60 * 1000);
+
+      mockPort = new MockEventGeneratorAdapter([johnsTemplate, janesTemplate, joesTemplate]);
+      eventGenerator = new EventGenerator(mockPort);
+
+      const joesBirthdayAlteration = createAlterationWithNewDate(new Date(2025, 0, 1).getTime(), 'joes-birthday', new Date(2025, 0, 2));
+      mockPort.addAlterations([joesBirthdayAlteration]);
+      const events = await eventGenerator.getEvents(new Date(2025, 0, 1), new Date(2026, 0, 1));
+      
+      expect(events.length).toBe(3);
     });
   });
 });

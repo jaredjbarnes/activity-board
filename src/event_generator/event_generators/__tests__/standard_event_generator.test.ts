@@ -1,7 +1,7 @@
-import { IStandardEventType } from "src/models/event_template_types/i_standard_event_type.ts";
-import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
-import { IEventTemplate } from "src/models/i_event_template.ts";
-import { StandardEventGenerator } from "src/event_generators/standard_event_generator.ts";
+import { IStandardEventType } from "src/event_generator/models/event_template_types/i_standard_event_type.ts";
+import { EventTypeName } from "src/event_generator/models/event_template_types/event_type_name.ts";
+import { IEventTemplate } from "src/event_generator/models/i_event_template.ts";
+import { StandardEventGenerator } from "src/event_generator/event_generators/standard_event_generator.ts";
 
 
 const standardTemplate = (start: number, duration: number): IEventTemplate<IStandardEventType> => {
@@ -26,7 +26,7 @@ describe('StandardEventGenerator', () => {
     const startTime = new Date(2023, 7, 5).getTime();
     const duration = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
     const template = standardTemplate(startTime, duration);
-    const events = generator.generate(template, startRange, endRange, new Map());
+    const events = generator.generate(template, startRange, endRange);
     expect(events.length).toBe(1);
     expect(events[0].startTimestamp).toBe(template.eventType.startOn);
     expect(events[0].endTimestamp).toBe(template.eventType.startOn + template.eventType.duration);
@@ -36,7 +36,7 @@ describe('StandardEventGenerator', () => {
     const startTime = new Date(2023, 6, 25).getTime();
     const duration = 15 * 24 * 60 * 60 * 1000; // 15 days in milliseconds
     const template = standardTemplate(startTime, duration);
-    const events = generator.generate(template, startRange, endRange, new Map());
+    const events = generator.generate(template, startRange, endRange);
     expect(events.length).toBe(1);
     expect(events[0].startTimestamp).toBe(template.eventType.startOn);
     expect(events[0].endTimestamp).toBe(template.eventType.startOn + template.eventType.duration);
@@ -46,7 +46,7 @@ describe('StandardEventGenerator', () => {
     const startTime = new Date(2023, 7, 25).getTime();
     const duration = 10 * 24 * 60 * 60 * 1000; // 10 days in milliseconds
     const template = standardTemplate(startTime, duration);
-    const events = generator.generate(template, startRange, endRange, new Map());
+    const events = generator.generate(template, startRange, endRange);
     expect(events.length).toBe(1);
     expect(events[0].startTimestamp).toBe(template.eventType.startOn);
     expect(events[0].endTimestamp).toBe(template.eventType.startOn + template.eventType.duration);
@@ -56,7 +56,7 @@ describe('StandardEventGenerator', () => {
     const startTime = new Date(2023, 8, 1).getTime();
     const duration = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
     const template = standardTemplate(startTime, duration);
-    const events = generator.generate(template, startRange, endRange, new Map());
+    const events = generator.generate(template, startRange, endRange);
     expect(events.length).toBe(0);
   });
 
@@ -64,7 +64,7 @@ describe('StandardEventGenerator', () => {
     const startTime = startRange.getTime();
     const duration = endRange.getTime() - startRange.getTime();
     const template = standardTemplate(startTime, duration);
-    const events = generator.generate(template, startRange, endRange, new Map());
+    const events = generator.generate(template, startRange, endRange);
     expect(events.length).toBe(1);
     expect(events[0].startTimestamp).toBe(template.eventType.startOn);
     expect(events[0].endTimestamp).toBe(template.eventType.startOn + template.eventType.duration);

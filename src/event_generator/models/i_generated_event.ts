@@ -1,5 +1,5 @@
-import { IEventTemplate } from "src/models/i_event_template.ts";
-import { IEventType } from "src/models/i_event_type.ts";
+import { IEventTemplate } from "src/event_generator/models/i_event_template.ts";
+import { IEventType } from "src/event_generator/models/i_event_type.ts";
 
 export interface IGeneratedEvent<T extends IEventType> {
   template: IEventTemplate<T>;

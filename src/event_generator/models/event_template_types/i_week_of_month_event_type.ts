@@ -1,6 +1,6 @@
-import { Days } from "src/models/event_template_types/days.ts";
-import { IRecurringEventType } from "src/models/event_template_types/i_recurring_event_type.ts";
-import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
+import { Days } from "src/event_generator/models/event_template_types/days.ts";
+import { IRecurringEventType } from "src/event_generator/models/event_template_types/i_recurring_event_type.ts";
+import { EventTypeName } from "src/event_generator/models/event_template_types/event_type_name.ts";
 
 export interface IWeekOfMonthEventType extends IRecurringEventType {
   name: EventTypeName.WeekOfMonth;

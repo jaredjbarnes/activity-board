@@ -1,9 +1,9 @@
-import { IDaysOfWeekEventType } from "src/models/event_template_types/i_days_of_week_event_type.ts";
-import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
-import { IGeneratedEvent } from "src/models/i_generated_event.ts";
-import { IEventTemplate } from "src/models/i_event_template.ts";
-import { EventGenerator } from "src/event_generators/event_generator.ts";
-import { IEventAlteration, EventAlterationType } from "src/models/event_template_types/i_event_alteration.ts";
+import { IDaysOfWeekEventType } from "src/event_generator/models/event_template_types/i_days_of_week_event_type.ts";
+import { EventTypeName } from "src/event_generator/models/event_template_types/event_type_name.ts";
+import { IGeneratedEvent } from "src/event_generator/models/i_generated_event.ts";
+import { IEventTemplate } from "src/event_generator/models/i_event_template.ts";
+import { EventGenerator } from "src/event_generator/event_generators/event_generator.ts";
+import { IEventAlteration, EventAlterationType } from "src/event_generator/models/event_template_types/i_event_alteration.ts";
 
 // Utility function to check intersection of two date ranges
 function intersects(

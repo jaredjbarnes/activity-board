@@ -1,8 +1,8 @@
-import { IYearlyRecurringEventType } from "src/models/event_template_types/i_yearly_event_type.ts";
-import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
-import { IEventTemplate } from "src/models/i_event_template.ts";
-import { Months } from "src/models/months.ts";
-import { YearlyEventGenerator } from "src/event_generators/yearly_event_generator.ts";
+import { IYearlyRecurringEventType } from "src/event_generator/models/event_template_types/i_yearly_event_type.ts";
+import { EventTypeName } from "src/event_generator/models/event_template_types/event_type_name.ts";
+import { IEventTemplate } from "src/event_generator/models/i_event_template.ts";
+import { Months } from "src/event_generator/models/months.ts";
+import { YearlyEventGenerator } from "src/event_generator/event_generators/yearly_event_generator.ts";
 
 function getYearlyTemplate(): IEventTemplate<IYearlyRecurringEventType> {
   return {

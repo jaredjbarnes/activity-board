@@ -1,21 +1,16 @@
-import { IGeneratedEvent } from "src/models/i_generated_event.ts";
-import { IEventTemplate } from "src/models/i_event_template.ts";
-import { IEventType } from "src/models/i_event_type.ts";
-import { IEventAlteration, EventAlterationType } from "src/models/event_template_types/i_event_alteration.ts";
+import { IGeneratedEvent } from "src/event_generator/models/i_generated_event.ts";
+import { IEventTemplate } from "src/event_generator/models/i_event_template.ts";
+import { IEventType } from "src/event_generator/models/i_event_type.ts";
+import { IEventAlteration, EventAlterationType } from "src/event_generator/models/event_template_types/i_event_alteration.ts";
 
 export class AlterationEventGenerator {
   private alterations: IEventAlteration[] = [];
-  private templates: Map<string, IEventTemplate<IEventType>>;
-
-  constructor(templates: Map<string, IEventTemplate<IEventType>>) {
-    this.templates = templates;
-  }
 
   setAlterations(alterations: IEventAlteration[]): void {
     this.alterations = alterations;
   }
 
-  generate(startDate: Date, endDate: Date): IGeneratedEvent<IEventType>[] {
+  generate(startDate: Date, endDate: Date, templates: Map<string, IEventTemplate<IEventType>>): IGeneratedEvent<IEventType>[] {
     let events: IGeneratedEvent<IEventType>[] = [];
 
     // Filter alterations that are within the date range
@@ -32,7 +27,7 @@ export class AlterationEventGenerator {
     for (const alteration of relevantAlterations) {
       if (alteration.type === EventAlterationType.Reschedule) {
         // Look up the original template
-        const template = this.templates.get(alteration.templateId);
+        const template = templates.get(alteration.templateId);
         
         // Only generate event if we can find the template
         if (template) {

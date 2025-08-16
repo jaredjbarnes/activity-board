@@ -1,4 +1,4 @@
-import { IEventType } from "src/models/i_event_type.ts";
+import { IEventType } from "src/event_generator/models/i_event_type.ts";
 
 export interface IEventTemplate<T extends IEventType> {
   id: string;

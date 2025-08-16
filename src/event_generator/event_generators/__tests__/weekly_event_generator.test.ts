@@ -1,8 +1,8 @@
-import { Days } from "src/models/event_template_types/days.ts";
-import { IDaysOfWeekEventType } from "src/models/event_template_types/i_days_of_week_event_type.ts";
-import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
-import { IEventTemplate } from "src/models/i_event_template.ts";
-import { WeeklyEventGenerator } from "src/event_generators/weekly_event_generator.ts";
+import { Days } from "src/event_generator/models/event_template_types/days.ts";
+import { IDaysOfWeekEventType } from "src/event_generator/models/event_template_types/i_days_of_week_event_type.ts";
+import { EventTypeName } from "src/event_generator/models/event_template_types/event_type_name.ts";
+import { IEventTemplate } from "src/event_generator/models/i_event_template.ts";
+import { WeeklyEventGenerator } from "src/event_generator/event_generators/weekly_event_generator.ts";
 
 function createTemplate(
   startDay: number,

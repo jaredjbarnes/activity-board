@@ -1,5 +1,5 @@
-import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
-import { IEventType } from "src/models/i_event_type.ts";
+import { EventTypeName } from "src/event_generator/models/event_template_types/event_type_name.ts";
+import { IEventType } from "src/event_generator/models/i_event_type.ts";
 
 export interface IStandardEventType extends IEventType {
   name: EventTypeName.Standard;

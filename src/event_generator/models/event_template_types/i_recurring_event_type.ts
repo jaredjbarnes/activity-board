@@ -1,4 +1,4 @@
-import { IEventType } from "src/models/i_event_type.ts";
+import { IEventType } from "src/event_generator/models/i_event_type.ts";
 
 export interface IRecurringEventType extends IEventType {
   startTime: number; // In milliseconds, 0 to 86400000 (24 * 60 * 60 * 1000)

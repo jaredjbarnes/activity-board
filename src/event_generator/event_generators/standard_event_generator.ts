@@ -1,8 +1,7 @@
-import { IGeneratedEvent } from "src/models/i_generated_event.ts";
-import { IEventTemplate } from "src/models/i_event_template.ts";
-import { IStandardEventType } from "src/models/event_template_types/i_standard_event_type.ts";
-import { EventGenerator } from "src/event_generators/event_generator.ts";
-import { IEventAlteration } from "src/models/event_template_types/i_event_alteration.ts";
+import { IGeneratedEvent } from "src/event_generator/models/i_generated_event.ts";
+import { IEventTemplate } from "src/event_generator/models/i_event_template.ts";
+import { IStandardEventType } from "src/event_generator/models/event_template_types/i_standard_event_type.ts";
+import { EventGenerator } from "src/event_generator/event_generators/event_generator.ts";
 
 export class StandardEventGenerator
   implements EventGenerator<IStandardEventType>
@@ -11,7 +10,6 @@ export class StandardEventGenerator
     template: IEventTemplate<IStandardEventType>,
     startDate: Date,
     endDate: Date,
-    alterations: Map<number, IEventAlteration[]>
   ): IGeneratedEvent<IStandardEventType>[] {
     let events: IGeneratedEvent<IStandardEventType>[] = [];
 

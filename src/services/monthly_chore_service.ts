@@ -1,5 +1,5 @@
-import { IMonthlyChore } from "src/models/i_chore.ts";
-import { IChoreRecord } from "src/models/i_chore_record.ts";
+import { IMonthlyChore } from "src/event_generator/models/i_chore.ts";
+import { IChoreRecord } from "src/event_generator/models/i_chore_record.ts";
 import { ITimeRepositoryPort } from "src/services/i_time_repository_port.ts";
 
 export class MonthlyChoreService {

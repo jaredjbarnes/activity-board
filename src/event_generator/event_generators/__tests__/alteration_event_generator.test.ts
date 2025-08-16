@@ -1,8 +1,8 @@
 import { AlterationEventGenerator } from "../alteration_event_generator.ts";
-import { IEventAlteration, EventAlterationType } from "src/models/event_template_types/i_event_alteration.ts";
-import { IEventTemplate } from "src/models/i_event_template.ts";
-import { IAnchoredEventType } from "src/models/event_template_types/i_anchored_event_type.ts";
-import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
+import { IEventAlteration, EventAlterationType } from "src/event_generator/models/event_template_types/i_event_alteration.ts";
+import { IEventTemplate } from "src/event_generator/models/i_event_template.ts";
+import { IAnchoredEventType } from "src/event_generator/models/event_template_types/i_anchored_event_type.ts";
+import { EventTypeName } from "src/event_generator/models/event_template_types/event_type_name.ts";
 
 describe("AlterationEventGenerator", () => {
   let generator: AlterationEventGenerator;
@@ -76,7 +76,7 @@ describe("AlterationEventGenerator", () => {
       },
     ];
 
-    generator = new AlterationEventGenerator(templates);
+    generator = new AlterationEventGenerator();
     generator.setAlterations(alterations);
   });
 
@@ -85,7 +85,7 @@ describe("AlterationEventGenerator", () => {
       const startDate = new Date("2024-01-01T00:00:00Z");
       const endDate = new Date("2024-01-05T23:59:59Z");
 
-      const events = generator.generate(startDate, endDate);
+      const events = generator.generate(startDate, endDate, templates);
 
       expect(events).toHaveLength(2);
       
@@ -112,7 +112,7 @@ describe("AlterationEventGenerator", () => {
       const startDate = new Date("2024-01-01T00:00:00Z");
       const endDate = new Date("2024-01-05T23:59:59Z");
 
-      const events = generator.generate(startDate, endDate);
+      const events = generator.generate(startDate, endDate, templates);
 
       // Should include both rescheduled events, but not the cancelled one
       expect(events).toHaveLength(2);
@@ -133,7 +133,7 @@ describe("AlterationEventGenerator", () => {
       const startDate = new Date("2024-01-01T00:00:00Z");
       const endDate = new Date("2024-01-05T23:59:59Z");
 
-      const events = generator.generate(startDate, endDate);
+      const events = generator.generate(startDate, endDate, templates);
 
       // Should include alterations for both template-1 and template-2
       expect(events).toHaveLength(2);
@@ -145,18 +145,18 @@ describe("AlterationEventGenerator", () => {
       const startDate = new Date("2024-01-03T00:00:00Z");
       const endDate = new Date("2024-01-03T23:59:59Z");
 
-      const events = generator.generate(startDate, endDate);
+      const events = generator.generate(startDate, endDate, templates);
 
       // Should not include the rescheduled event on Jan 2nd as it's outside the range
       expect(events).toHaveLength(0);
     });
 
     it("should handle empty alterations array", () => {
-      const emptyGenerator = new AlterationEventGenerator(templates);
+      const emptyGenerator = new AlterationEventGenerator();
       const startDate = new Date("2024-01-01T00:00:00Z");
       const endDate = new Date("2024-01-05T23:59:59Z");
 
-      const events = emptyGenerator.generate(startDate, endDate);
+      const events = emptyGenerator.generate(startDate, endDate, templates);
 
       expect(events).toHaveLength(0);
     });
@@ -174,12 +174,12 @@ describe("AlterationEventGenerator", () => {
         },
       ];
 
-      const generatorWithMissingTemplate = new AlterationEventGenerator(templates);
+      const generatorWithMissingTemplate = new AlterationEventGenerator();
       generatorWithMissingTemplate.setAlterations(alterationsWithMissingTemplate);
       const startDate = new Date("2024-01-01T00:00:00Z");
       const endDate = new Date("2024-01-05T23:59:59Z");
 
-      const events = generatorWithMissingTemplate.generate(startDate, endDate);
+      const events = generatorWithMissingTemplate.generate(startDate, endDate, templates);
 
       expect(events).toHaveLength(0);
     });

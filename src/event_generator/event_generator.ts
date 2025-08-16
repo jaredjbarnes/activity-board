@@ -17,17 +17,16 @@ import { StandardEventGenerator } from "./event_generators/standard_event_genera
 type EventTemplate = IEventTemplate<IAnchoredEventType | IStandardEventType | IWeekOfMonthEventType | IDaysOfWeekEventType | IYearlyRecurringEventType>;
 
 export interface EventGeneratorPort {
-    getEventTemplates(): Promise<EventTemplate[]>;
+    getEventTemplates(startDate: Date, endDate: Date): Promise<EventTemplate[]>;
     removeEventTemplate(templateId: string): Promise<void>;
     updateEventTemplate(template: EventTemplate): Promise<void>;
     addEventTemplate(template: EventTemplate): Promise<void>;
-    getAlterations(): Promise<IEventAlteration[]>;
+    getAlterations(startDate: Date, endDate: Date): Promise<IEventAlteration[]>;
     alterEvent(alteration: IEventAlteration): Promise<void>;
 }
 
 export class EventGenerator {
     private port: EventGeneratorPort;
-    private eventTemplates: Map<string, EventTemplate>;
     private alterationEventGenerator: AlterationEventGenerator;
     private dayOfWeekEventGenerator: WeeklyEventGenerator;
     private weekOfMonthEventGenerator: WeekOfMonthEventGenerator;
@@ -36,8 +35,7 @@ export class EventGenerator {
     
     constructor(port: EventGeneratorPort) {
         this.port = port;
-        this.eventTemplates = new Map<string, EventTemplate>();
-        this.alterationEventGenerator = new AlterationEventGenerator(this.eventTemplates);
+        this.alterationEventGenerator = new AlterationEventGenerator();
         this.dayOfWeekEventGenerator = new WeeklyEventGenerator();
         this.weekOfMonthEventGenerator = new WeekOfMonthEventGenerator();
         this.yearlyEventGenerator = new YearlyEventGenerator();
@@ -45,8 +43,8 @@ export class EventGenerator {
     }
 
     async getEvents(startDate: Date, endDate: Date): Promise<IGeneratedEvent<IEventType>[]> {
-        const eventTemplates = await this.port.getEventTemplates();
-        const alterations = await this.port.getAlterations();
+        const eventTemplates = await this.port.getEventTemplates(startDate, endDate);
+        const alterations = await this.port.getAlterations(startDate, endDate);
 
         // Create a map of timestamps to alterations for fast lookup
         const alterationsMap = new Map<number, IEventAlteration[]>();
@@ -63,7 +61,7 @@ export class EventGenerator {
             // Use the appropriate generator based on the event type
             switch (template.eventType.name) {
                 case EventTypeName.Standard:
-                    generatedEvents = this.standardEventGenerator.generate(template as IEventTemplate<IStandardEventType>, startDate, endDate, alterationsMap);
+                    generatedEvents = this.standardEventGenerator.generate(template as IEventTemplate<IStandardEventType>, startDate, endDate);
                     break;
                 case EventTypeName.DayOfWeek:
                     generatedEvents = this.dayOfWeekEventGenerator.generate(template as IEventTemplate<IDaysOfWeekEventType>, startDate, endDate, alterationsMap);
@@ -80,9 +78,18 @@ export class EventGenerator {
         });
 
         // Add alteration events
-        const alterationEvents = this.alterationEventGenerator.generate(startDate, endDate);
+        this.alterationEventGenerator.setAlterations(alterations);
+        const alterationEvents = this.alterationEventGenerator.generate(startDate, endDate, this._makeTemplatesMap(eventTemplates));
         events.push(...alterationEvents);
 
         return events;
+    }
+
+    private _makeTemplatesMap(templates: EventTemplate[]): Map<string, EventTemplate> {
+        const map = new Map<string, EventTemplate>();
+        templates.forEach(template => {
+            map.set(template.id, template);
+        });
+        return map;
     }
 }
