@@ -1,5 +1,5 @@
-import { IWeeklyRecurringEventType } from "src/models/event_template_types/i_weekly_recurring_event_type.ts";
-import { EventTypeName } from "src/models/event_type_name.ts";
+import { IDaysOfWeekEventType } from "src/models/event_template_types/i_days_of_week_event_type.ts";
+import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
 import { IEvent } from "src/models/i_event.ts";
 import { IEventTemplate } from "src/models/i_event_template.ts";
 import { EventGenerator } from "src/event_generators/event_generator.ts";
@@ -15,13 +15,13 @@ function intersects(
 }
 
 export class WeeklyEventGenerator
-  implements EventGenerator<IWeeklyRecurringEventType>
+  implements EventGenerator<IDaysOfWeekEventType>
 {
   generate(
-    template: IEventTemplate<IWeeklyRecurringEventType>,
+    template: IEventTemplate<IDaysOfWeekEventType>,
     startDate: Date,
     endDate: Date
-  ): IEvent<IWeeklyRecurringEventType>[] {
+  ): IEvent<IDaysOfWeekEventType>[] {
     // Quickly get out if there isn't an intersection.
     if (
       !this.intersects(
@@ -34,13 +34,13 @@ export class WeeklyEventGenerator
       return [];
     }
 
-    const events: IEvent<IWeeklyRecurringEventType>[] = [];
+    const events: IEvent<IDaysOfWeekEventType>[] = [];
 
-    if (template.eventType.name !== EventTypeName.Weekly) {
+    if (template.eventType.name !== EventTypeName.DayOfWeek) {
       return events;
     }
 
-    const weeklyTemplate = template.eventType as IWeeklyRecurringEventType;
+    const weeklyTemplate = template.eventType as IDaysOfWeekEventType;
 
     const current = new Date(
       Math.max(startDate.getTime(), weeklyTemplate.startOn)
@@ -78,12 +78,13 @@ export class WeeklyEventGenerator
             template: template,
             startTimestamp: eventStart,
             endTimestamp: eventEnd,
+            generatedTimestamp: eventStart,
           });
         }
       }
 
       // Skip to the start of the same day in the next week
-      current.setDate(current.getDate() + 7 * weeklyTemplate.repeatInterval);
+      current.setDate(current.getDate() + 7 * weeklyTemplate.repeatIntervalByWeek);
     }
 
     return events;

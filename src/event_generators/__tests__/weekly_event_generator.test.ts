@@ -1,6 +1,6 @@
-import { Days } from "src/models/days.ts";
-import { IWeeklyRecurringEventType } from "src/models/event_template_types/i_weekly_recurring_event_type.ts";
-import { EventTypeName } from "src/models/event_type_name.ts";
+import { Days } from "src/models/event_template_types/days.ts";
+import { IDaysOfWeekEventType } from "src/models/event_template_types/i_days_of_week_event_type.ts";
+import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
 import { IEventTemplate } from "src/models/i_event_template.ts";
 import { WeeklyEventGenerator } from "src/event_generators/weekly_event_generator.ts";
 
@@ -8,20 +8,20 @@ function createTemplate(
   startDay: number,
   days: Days[],
   interval: number
-): IEventTemplate<IWeeklyRecurringEventType> {
+): IEventTemplate<IDaysOfWeekEventType> {
   return {
     id: "1",
     title: "Weekly Meeting",
     notes: null,
     eventType: {
-      name: EventTypeName.Weekly,
+      name: EventTypeName.DayOfWeek,
       startTime: 9 * 60 * 60 * 1000, // 9:00 AM
       duration: 60 * 60 * 1000, // 1 hour
       startOn: startDay,
       endOn: null,
       repeatOnDays: days,
-      repeatInterval: interval,
-    } as IWeeklyRecurringEventType,
+      repeatIntervalByWeek: interval,
+    } as IDaysOfWeekEventType,
   };
 }
 
@@ -90,7 +90,7 @@ describe("WeeklyEventGenerator", () => {
       1
     ) as any;
     
-    template.eventType.name = EventTypeName.Monthly; // Change to monthly
+    template.eventType.name = EventTypeName.WeekOfMonth; // Change to monthly
 
     const startDate = new Date(2023, 6, 2); // July 2, 2023
     const endDate = new Date(2023, 6, 8); // July 8, 2023

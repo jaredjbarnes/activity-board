@@ -1,11 +1,1 @@
-# Event Templates to make
-All of these should be simple to implement within the current architecture.
-
-First Day of the Week
-First Day of the Month
-
-Last Day of the Week
-Last Day of the Month
-
-Number Day of the Month --> Repeat every 2nd Sunday of the Month
-Number Day of the Year --> Repeat every 3rd Sunday of March
+If an event type chages, which would be for recurrance purposes, it removes all alterations. You can alter generated events and they will be stored as alteration events that match the timestamp of the generated event. This timestamp should be checked while generating and not generate the event that was altered. Altered events will be generated independently and point to the original event type.

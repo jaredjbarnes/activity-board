@@ -1,6 +1,7 @@
 export enum EventTypeName {
   Standard = 0,
-  Weekly,
-  Monthly,
+  Anchored,
+  DayOfWeek,
+  WeekOfMonth,
   Yearly,
 }

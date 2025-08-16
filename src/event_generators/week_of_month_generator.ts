@@ -1,18 +1,18 @@
-import { IMonthlyRecurringEventType } from "src/models/event_template_types/i_monthly_recurring_event_type.ts";
-import { EventTypeName } from "src/models/event_type_name.ts";
+import { IWeekOfMonthEventType } from "src/models/event_template_types/i_week_of_month_event_type.ts";
+import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
 import { IEvent } from "src/models/i_event.ts";
 import { IEventTemplate } from "src/models/i_event_template.ts";
 import { EventGenerator } from "src/event_generators/event_generator.ts";
 
-export class MonthlyEventGenerator
-  implements EventGenerator<IMonthlyRecurringEventType>
+export class WeekOfMonthEventGenerator
+  implements EventGenerator<IWeekOfMonthEventType>
 {
   generate(
-    template: IEventTemplate<IMonthlyRecurringEventType>,
+    template: IEventTemplate<IWeekOfMonthEventType>,
     startDate: Date,
     endDate: Date
-  ): IEvent<IMonthlyRecurringEventType>[] {
-    let events: IEvent<IMonthlyRecurringEventType>[] = [];
+  ): IEvent<IWeekOfMonthEventType>[] {
+    let events: IEvent<IWeekOfMonthEventType>[] = [];
 
     // Quickly get out if there isn't an intersection.
     if (
@@ -26,7 +26,7 @@ export class MonthlyEventGenerator
       return [];
     }
 
-    if (template.eventType.name === EventTypeName.Monthly) {
+    if (template.eventType.name === EventTypeName.WeekOfMonth) {
       const eventType = template.eventType;
 
       // iterate over each month
@@ -39,7 +39,7 @@ export class MonthlyEventGenerator
         for (let repeatDay of eventType.repeatOnDays) {
           let targetDate: Date;
 
-          if (eventType.repeatOnWeekNumber < 0) {
+          if (eventType.repeatOnWeek < 0) {
             let lastDateOfMonth = new Date(
               d.getFullYear(),
               d.getMonth() + 1,
@@ -48,14 +48,14 @@ export class MonthlyEventGenerator
             targetDate = this.findTargetDateFromEndOfMonth(
               lastDateOfMonth,
               repeatDay,
-              eventType.repeatOnWeekNumber
+              eventType.repeatOnWeek
             );
           } else {
             let firstDateOfMonth = new Date(d.getFullYear(), d.getMonth(), 1);
             targetDate = this.findTargetDateFromStartOfMonth(
               firstDateOfMonth,
               repeatDay,
-              eventType.repeatOnWeekNumber
+              eventType.repeatOnWeek
             );
           }
 
@@ -77,6 +77,7 @@ export class MonthlyEventGenerator
               template: template,
               startTimestamp: startTimestamp,
               endTimestamp: endTimestamp,
+              generatedTimestamp: eventStart,
             });
           }
         }

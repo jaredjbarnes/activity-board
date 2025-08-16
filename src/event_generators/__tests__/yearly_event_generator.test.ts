@@ -1,5 +1,5 @@
-import { IYearlyRecurringEventType } from "src/models/event_template_types/i_yearly_recurring_event_type.ts";
-import { EventTypeName } from "src/models/event_type_name.ts";
+import { IYearlyRecurringEventType } from "src/models/event_template_types/i_yearly_event_type.ts";
+import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
 import { IEventTemplate } from "src/models/i_event_template.ts";
 import { Months } from "src/models/months.ts";
 import { YearlyEventGenerator } from "src/event_generators/yearly_event_generator.ts";
@@ -13,6 +13,7 @@ function getYearlyTemplate(): IEventTemplate<IYearlyRecurringEventType> {
       name: EventTypeName.Yearly,
       repeatOnMonth: Months.January,
       repeatOnDay: 1,
+      repeatIntervalByYear: 1,
       startTime: 9 * 60 * 60 * 1000, // 9:00 AM
       duration: 3600000, // 1 hour
       startOn: new Date(2023, Months.January, 1).getTime(),

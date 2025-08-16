@@ -1,24 +1,25 @@
 import { IEventTemplate } from "src/models/i_event_template.ts";
-import { EventTypeName } from "src/models/event_type_name.ts";
-import { Days } from "src/models/days.ts";
-import { MonthlyEventGenerator } from "src/event_generators/monthly_event_generator.ts";
-import { IMonthlyRecurringEventType } from "src/models/event_template_types/i_monthly_recurring_event_type.ts";
+import { EventTypeName } from "src/models/event_template_types/event_type_name.ts";
+import { Days } from "src/models/event_template_types/days.ts";
+import { WeekOfMonthEventGenerator } from "src/event_generators/week_of_month_generator.ts";
+import { IWeekOfMonthEventType } from "src/models/event_template_types/i_week_of_month_event_type.ts";
 
 describe("MonthlyEventGenerator", () => {
-  let generator: MonthlyEventGenerator;
-  let template: IEventTemplate<IMonthlyRecurringEventType>;
+  let generator: WeekOfMonthEventGenerator;
+  let template: IEventTemplate<IWeekOfMonthEventType>;
 
   beforeEach(() => {
-    generator = new MonthlyEventGenerator();
+    generator = new WeekOfMonthEventGenerator();
 
     template = {
       id: "1",
       title: "Test event",
       notes: null,
       eventType: {
-        name: EventTypeName.Monthly,
+        name: EventTypeName.WeekOfMonth,
         repeatOnDays: [Days.Monday],
-        repeatOnWeekNumber: 2,
+        repeatOnWeek: 2,
+        repeatIntervalByMonth: 1,
         startTime: 9 * 60 * 60 * 1000, // 9:00 AM
         duration: 60 * 60 * 1000, // 1 hour
         startOn: new Date(2023, 0, 1).getTime(),
@@ -51,7 +52,7 @@ describe("MonthlyEventGenerator", () => {
   });
 
   it("correctly generates events when repeatOnWeekNumber is negative", () => {
-    template.eventType.repeatOnWeekNumber = -1; // Last week of the month
+    template.eventType.repeatOnWeek = -1; // Last week of the month
 
     const startDate = new Date(2023, 0, 1);
     const endDate = new Date(2023, 1, 28);
@@ -84,7 +85,7 @@ describe("MonthlyEventGenerator", () => {
   });
 
   it("generates events on the second last week of the month", () => {
-    template.eventType.repeatOnWeekNumber = -2; // Second last week of the month
+    template.eventType.repeatOnWeek = -2; // Second last week of the month
     template.eventType.repeatOnDays = [Days.Monday]; // Monday
 
     const startDate = new Date(2023, 0, 1);
@@ -100,7 +101,7 @@ describe("MonthlyEventGenerator", () => {
   });
 
   it("generates the right events with Monday Wednesday and Friday on different weeks.", () => {
-    template.eventType.repeatOnWeekNumber = -1; // Last week of the month
+    template.eventType.repeatOnWeek = -1; // Last week of the month
     template.eventType.repeatOnDays = [
       Days.Monday,
       Days.Wednesday,
@@ -122,7 +123,7 @@ describe("MonthlyEventGenerator", () => {
   });
 
   it("generates events on the last week of the month", () => {
-    template.eventType.repeatOnWeekNumber = -1; // Last week of the month
+    template.eventType.repeatOnWeek = -1; // Last week of the month
     template.eventType.repeatOnDays = [Days.Monday]; // Monday
 
     const startDate = new Date(2023, 0, 1); 
@@ -139,7 +140,7 @@ describe("MonthlyEventGenerator", () => {
   });
 
   it("generates correctly if the range is smaller than all the days", () => {
-    template.eventType.repeatOnWeekNumber = -1; // Last week of the month
+    template.eventType.repeatOnWeek = -1; // Last week of the month
     template.eventType.repeatOnDays = [Days.Monday, Days.Wednesday, Days.Friday]; 
 
     const startDate = new Date(2023, 0, 26);

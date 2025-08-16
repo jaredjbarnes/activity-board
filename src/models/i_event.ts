@@ -5,4 +5,5 @@ export interface IEvent<T extends IEventType> {
   template: IEventTemplate<T>;
   startTimestamp: number;
   endTimestamp: number;
+  generatedTimestamp: number; 
 }

@@ -13,11 +13,13 @@ export class StandardEventGenerator
   ): IEvent<IStandardEventType>[] {
     let events: IEvent<IStandardEventType>[] = [];
 
+    const eventEndTime = template.eventType.startOn + template.eventType.duration;
+
     // Check if event date intersects with the range [startDate, endDate]
     if (
       this.intersects(
         template.eventType.startOn,
-        template.eventType.endOn,
+        eventEndTime,
         startDate.getTime(),
         endDate.getTime()
       )
@@ -25,7 +27,8 @@ export class StandardEventGenerator
       const event: IEvent<IStandardEventType> = {
         template: template,
         startTimestamp: template.eventType.startOn,
-        endTimestamp: template.eventType.endOn,
+        endTimestamp: eventEndTime,
+        generatedTimestamp: template.eventType.startOn,
       };
       events.push(event);
     }
